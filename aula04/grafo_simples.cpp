@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <bits/stdc++.h>
+#include <fstream>
+#include <string>
+
 
 class Grafo{
     std::vector<std::vector<int>> matriz_adj;
@@ -49,13 +52,38 @@ class Grafo{
     }
 
     void print_matrix_adj(){
+        std::cout << "    ";
         for(int ii = 0; ii < qtd_vertices; ii++){
+            std::cout << ii+1 << " ";
+        }
+        std::cout << std::endl << std::endl;
+        for(int ii = 0; ii < qtd_vertices; ii++){
+            std::cout << (ii + 1) << "   ";
             for(int jj = 0; jj < qtd_vertices; jj++){
                 std::cout << matriz_adj[ii][jj] << " ";
             }
             std::cout << std::endl;
         }
             std::cout << std::endl;
+    }
+
+    void exportar_para_dot(const std::string& filename){
+        std::ofstream file(filename);
+        file << "graph G {\n"; // "graph" = não-direcionado, "digraph" = direcionado
+        
+        for(int i = 0; i < qtd_vertices; i++){
+            file << "  " << i << ";\n"; // declara o vértice
+        }
+
+        for(int i = 0; i < qtd_vertices; i++){
+            for(int j = i+1; j < qtd_vertices; j++){ // i+1 para não repetir
+                if(matriz_adj[i][j] == 1){
+                    file << "  " << i+1 << " -- " << j+1 << ";\n"; // "--" pq é grafo não direcionado
+                }
+            }
+        }
+
+        file << "}\n";
     }
 };
 
@@ -83,5 +111,7 @@ int main(){
     grafo_simples.remover_vertice(3);
 
     grafo_simples.print_matrix_adj();
+
+    grafo_simples.exportar_para_dot("grafo.dot");
 
 }

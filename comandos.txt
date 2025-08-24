@@ -1,0 +1,2 @@
+para gerar o arquivo em png, execute no terminal, estando na pasta "output":
+dot -Tpng grafo.dot -o grafo.png
