@@ -4,6 +4,8 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <cstdio>
+
 
 class Grafo{
     std::vector<std::vector<int>> matriz_adj;
@@ -166,34 +168,19 @@ class Grafo{
 
         file << "}\n";
     }
+
+    void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
+        std::string cmd = "dot -Tpng " + dotfile + " -o " + imgfile;
+        FILE* pipe = popen(cmd.c_str(), "r");
+        if (!pipe) {
+            std::cerr << "Erro ao executar Graphviz\n";
+        } else {
+            pclose(pipe);
+        }
+    }
 };
 
 int main(){
-    Grafo grafo_direcionado;
-
-    for(int ii = 0; ii < 6; ii++){
-        grafo_direcionado.inserir_vertice();
-    }
-
-    grafo_direcionado.inserir_aresta_dir(1, 4);
-    grafo_direcionado.inserir_aresta_dir(3, 2);
-    grafo_direcionado.inserir_aresta_dir(4, 2);
-    grafo_direcionado.inserir_aresta_dir(5, 4);
-    grafo_direcionado.inserir_aresta_dir(5, 6);
-    grafo_direcionado.inserir_aresta_dir(6, 3);
-
-    std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
-
-    grafo_direcionado.print_matrix_adj();
-
-    grafo_direcionado.gerar_matriz_inc(1);
-
-    std::cout << "Matriz de incidência do grafo direcionado:" << std::endl << std::endl;
-
-    grafo_direcionado.print_matrix_inc();
-
-    grafo_direcionado.exportar_para_dot("grafo_direcionado.dot", 1);
-
     /*    
     Grafo grafo_simples;
 
@@ -229,5 +216,32 @@ int main(){
     std::cout << "Lista de adjacência do grafo simples:" << std::endl;
     grafo_simples.print_lista_adj();
     */
+
+    Grafo grafo_direcionado;
+
+    for(int ii = 0; ii < 6; ii++){
+        grafo_direcionado.inserir_vertice();
+    }
+
+    grafo_direcionado.inserir_aresta_dir(1, 4);
+    grafo_direcionado.inserir_aresta_dir(3, 2);
+    grafo_direcionado.inserir_aresta_dir(4, 2);
+    grafo_direcionado.inserir_aresta_dir(5, 4);
+    grafo_direcionado.inserir_aresta_dir(5, 6);
+    grafo_direcionado.inserir_aresta_dir(6, 3);
+
+    std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
+
+    grafo_direcionado.print_matrix_adj();
+
+    grafo_direcionado.gerar_matriz_inc(1);
+
+    std::cout << "Matriz de incidência do grafo direcionado:" << std::endl << std::endl;
+
+    grafo_direcionado.print_matrix_inc();
+
+    grafo_direcionado.exportar_para_dot("grafo_direcionado.dot", 1);
+
+    grafo_direcionado.gerar_imagem("grafo_direcionado.dot", "grafo_direcionado.png");
 
 }
