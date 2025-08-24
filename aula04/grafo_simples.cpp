@@ -3,10 +3,11 @@
 #include <bits/stdc++.h>
 #include <fstream>
 #include <string>
-
+#include <map>
 
 class Grafo{
     std::vector<std::vector<int>> matriz_adj;
+    std::map<int, std::list<int>> lista_adj;
     int qtd_vertices = 0;
 
     public:
