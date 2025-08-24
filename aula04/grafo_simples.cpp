@@ -72,7 +72,7 @@ class Grafo{
         file << "graph G {\n"; // "graph" = não-direcionado, "digraph" = direcionado
         
         for(int i = 0; i < qtd_vertices; i++){
-            file << "  " << i << ";\n"; // declara o vértice
+            file << "  " << i+1 << ";\n"; // declara o vértice
         }
 
         for(int i = 0; i < qtd_vertices; i++){
