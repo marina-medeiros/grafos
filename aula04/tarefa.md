@@ -11,7 +11,7 @@ algoritmo que represente o grafo em lista de
 adjacência.
 
 3. [x] Dada uma representação de um grafo *direcionado*
-por matriz de adjacência, faça um algoritmo que
+por matriz de adjacência, faça um algoritmo quea
 represente o grafo em *matriz de incidência*.
 
 4. [] Dada uma representação de um grafo direcionado
