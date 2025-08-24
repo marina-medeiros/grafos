@@ -7,6 +7,7 @@
 
 class Grafo{
     std::vector<std::vector<int>> matriz_adj;
+    std::vector<std::vector<int>> matriz_inc;
     std::map<int, std::list<int>> lista_adj;
     int qtd_vertices = 0;
 
@@ -26,16 +27,7 @@ class Grafo{
         }
     }
 
-    void inserir_aresta(int u, int v){
-        matriz_adj[u-1][v-1] = 1;
-        matriz_adj[v-1][u-1] = 1;
-    }
-
-    void remover_aresta(int u, int v){
-        matriz_adj[u-1][v-1] = 0;
-        matriz_adj[v-1][u-1] = 0;
-    }
-
+    //remove linha e coluna correspondente ao vértice na matriz de adjacência
     void remover_vertice(int v){
         matriz_adj.erase(matriz_adj.begin() + v-1);
 
@@ -52,6 +44,52 @@ class Grafo{
         }
     }
 
+    void inserir_aresta_dir(int u, int v){
+        matriz_adj[u-1][v-1] = 1;
+    }
+
+    void inserir_aresta_ndir(int u, int v){
+        matriz_adj[u-1][v-1] = 1;
+        matriz_adj[v-1][u-1] = 1;
+    }
+
+    void remover_aresta_dir(int u, int v){
+        matriz_adj[u-1][v-1] = 0;
+    }
+
+    void remover_aresta_ndir(int u, int v){
+        matriz_adj[u-1][v-1] = 0;
+        matriz_adj[v-1][u-1] = 0;
+    }
+
+    void gerar_matriz_inc(int dir){
+        matriz_inc.clear();
+        for(int ii = 0; ii < qtd_vertices; ii++){
+            for(int jj = 0; jj < qtd_vertices; jj++){
+                if( matriz_adj[ii][jj] == 1){
+                    std::vector<int> aresta(qtd_vertices);
+                    aresta[ii] = 1;
+                    if(dir){
+                        aresta[jj] = -1;
+                    }else{
+                        aresta[jj] = 1;
+                    }
+                    matriz_inc.push_back(aresta);
+                }
+            }
+        }
+    }
+
+    void gerar_lista_adj(){
+        for(int ii = 0; ii < qtd_vertices; ii++){
+            for(int jj = 0; jj < qtd_vertices; jj++){
+                if( matriz_adj[ii][jj] == 1){
+                    lista_adj[ii].push_back(jj);
+                }
+            }
+        }
+    }
+
     void print_matrix_adj(){
         std::cout << "    ";
         for(int ii = 0; ii < qtd_vertices; ii++){
@@ -65,36 +103,7 @@ class Grafo{
             }
             std::cout << std::endl;
         }
-            std::cout << std::endl;
-    }
-
-    void exportar_para_dot(const std::string& filename){
-        std::ofstream file(filename);
-        file << "graph G {\n"; // "graph" = não-direcionado, "digraph" = direcionado
-        
-        for(int i = 0; i < qtd_vertices; i++){
-            file << "  " << i+1 << ";\n"; // declara o vértice
-        }
-
-        for(int i = 0; i < qtd_vertices; i++){
-            for(int j = i+1; j < qtd_vertices; j++){ // i+1 para não repetir
-                if(matriz_adj[i][j] == 1){
-                    file << "  " << i+1 << " -- " << j+1 << ";\n"; // "--" pq é grafo não direcionado
-                }
-            }
-        }
-
-        file << "}\n";
-    }
-
-    void gerar_lista_adj(){
-        for(int ii = 0; ii < qtd_vertices; ii++){
-            for(int jj = 0; jj < qtd_vertices; jj++){
-                if( matriz_adj[ii][jj] == 1){
-                    lista_adj[ii].push_back(jj);
-                }
-            }
-        }
+        std::cout << std::endl;
     }
 
     void print_lista_adj(){
@@ -106,37 +115,119 @@ class Grafo{
             std::cout << std::endl;
         }
     }
+
+    void print_matrix_inc(){
+        std::cout << "      ";
+
+        for(int ii = 0; ii < qtd_vertices; ii++){
+            std::cout << ii+1 << "  ";
+        }
+
+        std::cout << std::endl << std::endl;
+
+        for(int ii = 0; ii < int(matriz_inc.size()); ii++){
+            std::cout << "a" << (ii + 1) << "   ";
+
+            for(int jj = 0; jj < qtd_vertices; jj++){
+                if(matriz_inc[ii][jj] != -1){
+                    std::cout << " ";
+                }
+                std::cout << matriz_inc[ii][jj] << " ";
+            }
+
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+
+    void exportar_para_dot(const std::string& filename, int dir){
+        std::ofstream file(filename);
+        if(dir){
+            file << "digraph G {\n"; // "graph" = não-direcionado, "digraph" = direcionado
+        }else{
+            file << "graph G {\n";
+        }
+        
+        for(int i = 0; i < qtd_vertices; i++){
+            file << "  " << i+1 << ";\n"; // declara o vértice
+        }
+
+        for(int i = 0; i < qtd_vertices; i++){
+            for(int j = 0; j < qtd_vertices; j++){ 
+                    if(matriz_adj[i][j] == 1){
+                        if(dir){
+                        file << "  " << i+1 << " -> " << j+1 << ";\n"; // direcionado
+                    }else if(j > 1){
+                        file << "  " << i+1 << " -- " << j+1 << ";\n"; // não-direcionado
+                    }
+                }
+            }
+        }
+
+        file << "}\n";
+    }
 };
 
 int main(){
+    Grafo grafo_direcionado;
+
+    for(int ii = 0; ii < 6; ii++){
+        grafo_direcionado.inserir_vertice();
+    }
+
+    grafo_direcionado.inserir_aresta_dir(1, 4);
+    grafo_direcionado.inserir_aresta_dir(3, 2);
+    grafo_direcionado.inserir_aresta_dir(4, 2);
+    grafo_direcionado.inserir_aresta_dir(5, 4);
+    grafo_direcionado.inserir_aresta_dir(5, 6);
+    grafo_direcionado.inserir_aresta_dir(6, 3);
+
+    std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
+
+    grafo_direcionado.print_matrix_adj();
+
+    grafo_direcionado.gerar_matriz_inc(1);
+
+    std::cout << "Matriz de incidência do grafo direcionado:" << std::endl << std::endl;
+
+    grafo_direcionado.print_matrix_inc();
+
+    grafo_direcionado.exportar_para_dot("grafo_direcionado.dot", 1);
+
+    /*    
     Grafo grafo_simples;
 
     for(int ii = 0; ii < 6; ii++){
         grafo_simples.inserir_vertice();
     }
 
-    grafo_simples.inserir_aresta(1, 4);
-    grafo_simples.inserir_aresta(2, 4);
-    grafo_simples.inserir_aresta(2, 3);
-    grafo_simples.inserir_aresta(3, 4);
-    grafo_simples.inserir_aresta(5, 4);
-    grafo_simples.inserir_aresta(6, 4);
-    grafo_simples.inserir_aresta(5, 6);
+    grafo_simples.inserir_aresta_ndir(1, 4);
+    grafo_simples.inserir_aresta_ndir(2, 4);
+    grafo_simples.inserir_aresta_ndir(2, 3);
+    grafo_simples.inserir_aresta_ndir(3, 4);
+    grafo_simples.inserir_aresta_ndir(5, 4);
+    grafo_simples.inserir_aresta_ndir(6, 4);
+    grafo_simples.inserir_aresta_ndir(5, 6);
 
+    std::cout << "Matriz de adjacência do grafo simples:" << std::endl << std::endl;
     grafo_simples.print_matrix_adj();
 
-    grafo_simples.remover_aresta(5,6);
+    grafo_simples.remover_aresta_ndir(5,6);
 
+    std::cout << "Matriz de adjacência do grafo simples após remover a aresta(5-6):"  << std::endl << std::endl;
     grafo_simples.print_matrix_adj();
 
     grafo_simples.remover_vertice(3);
 
+    std::cout << "Matriz de adjacência do grafo simples após remover o vérice 3:" << std::endl << std::endl;
     grafo_simples.print_matrix_adj();
 
     grafo_simples.exportar_para_dot("grafo.dot");
 
     grafo_simples.gerar_lista_adj();
 
+    std::cout << "Lista de adjacência do grafo simples:" << std::endl;
     grafo_simples.print_lista_adj();
+    */
 
 }
