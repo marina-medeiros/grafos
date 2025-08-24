@@ -92,7 +92,7 @@ class Grafo{
         }
     }
 
-    void print_matrix_adj(){
+    void print_matriz_adj(){
         std::cout << "    ";
         for(int ii = 0; ii < qtd_vertices; ii++){
             std::cout << ii+1 << " ";
@@ -156,10 +156,10 @@ class Grafo{
 
         for(int i = 0; i < qtd_vertices; i++){
             for(int j = 0; j < qtd_vertices; j++){ 
-                    if(matriz_adj[i][j] == 1){
-                        if(dir){
+                if(matriz_adj[i][j] == 1){
+                    if(dir){
                         file << "  " << i+1 << " -> " << j+1 << ";\n"; // direcionado
-                    }else if(j > 1){
+                    }else if(j > i){
                         file << "  " << i+1 << " -- " << j+1 << ";\n"; // não-direcionado
                     }
                 }
@@ -168,6 +168,7 @@ class Grafo{
 
         file << "}\n";
     }
+};
 
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
         std::string cmd = "dot -Tpng " + dotfile + " -o " + imgfile;
@@ -178,10 +179,10 @@ class Grafo{
             pclose(pipe);
         }
     }
-};
 
 int main(){
-    /*    
+    // Grafo não direcionado --------------------------------------------------------------------
+
     Grafo grafo_simples;
 
     for(int ii = 0; ii < 6; ii++){
@@ -196,26 +197,33 @@ int main(){
     grafo_simples.inserir_aresta_ndir(6, 4);
     grafo_simples.inserir_aresta_ndir(5, 6);
 
-    std::cout << "Matriz de adjacência do grafo simples:" << std::endl << std::endl;
-    grafo_simples.print_matrix_adj();
+    std::cout << "----------- GRAFO NÃO DIRECIONADO ----------------------" << std::endl;
+
+    std::cout << "Matriz de adjacência:" << std::endl << std::endl;
+    grafo_simples.print_matriz_adj();
+
+    grafo_simples.exportar_para_dot("grafo_simples_inicial.dot", 0);
+    gerar_imagem("grafo_simples_inicial.dot", "grafo_simples_inicial.png");
 
     grafo_simples.remover_aresta_ndir(5,6);
 
-    std::cout << "Matriz de adjacência do grafo simples após remover a aresta(5-6):"  << std::endl << std::endl;
-    grafo_simples.print_matrix_adj();
+    std::cout << "Matriz de adjacência após remover a aresta(5-6):"  << std::endl << std::endl;
+    grafo_simples.print_matriz_adj();
 
     grafo_simples.remover_vertice(3);
 
-    std::cout << "Matriz de adjacência do grafo simples após remover o vérice 3:" << std::endl << std::endl;
-    grafo_simples.print_matrix_adj();
+    std::cout << "Matriz de adjacência após remover o vértice 3:" << std::endl << std::endl;
+    grafo_simples.print_matriz_adj();
 
-    grafo_simples.exportar_para_dot("grafo.dot");
+    grafo_simples.exportar_para_dot("grafo_simples.dot", 0);
+    gerar_imagem("grafo_simples.dot", "grafo_simples.png");
 
     grafo_simples.gerar_lista_adj();
 
-    std::cout << "Lista de adjacência do grafo simples:" << std::endl;
+    std::cout << "Lista de adjacência:" << std::endl;
     grafo_simples.print_lista_adj();
-    */
+
+    // Grafo direcionado --------------------------------------------------------------------
 
     Grafo grafo_direcionado;
 
@@ -230,9 +238,11 @@ int main(){
     grafo_direcionado.inserir_aresta_dir(5, 6);
     grafo_direcionado.inserir_aresta_dir(6, 3);
 
+    std::cout << "----------- GRAFO DIRECIONADO ----------------------" << std::endl;
+
     std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
 
-    grafo_direcionado.print_matrix_adj();
+    grafo_direcionado.print_matriz_adj();
 
     grafo_direcionado.gerar_matriz_inc(1);
 
@@ -241,7 +251,6 @@ int main(){
     grafo_direcionado.print_matrix_inc();
 
     grafo_direcionado.exportar_para_dot("grafo_direcionado.dot", 1);
-
-    grafo_direcionado.gerar_imagem("grafo_direcionado.dot", "grafo_direcionado.png");
+    gerar_imagem("grafo_direcionado.dot", "grafo_direcionado.png");
 
 }
