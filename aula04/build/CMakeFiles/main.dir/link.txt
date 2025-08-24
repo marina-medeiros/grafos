@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/source/estrela.cpp.o CMakeFiles/main.dir/source/grafo.cpp.o -o main 
