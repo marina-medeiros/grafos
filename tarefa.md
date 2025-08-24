@@ -5,14 +5,14 @@ um grafo simples, incluindo as funções de:
 [x] imprimir grafo. 
 Execute a instância do primeiro exemplo desta aula.
 
-2. [] Dada uma representação de um grafo não
+2. [x] Dada uma representação de um grafo não
 direcionado por matriz de adjacência, faça um
 algoritmo que represente o grafo em lista de
 adjacência.
 
-3. [] Dada uma representação de um grafo direcionado
+3. [] Dada uma representação de um grafo *direcionado*
 por matriz de adjacência, faça um algoritmo que
-represente o grafo em matriz de incidência.
+represente o grafo em *matriz de incidência*.
 
 4. [] Dada uma representação de um grafo direcionado
 por matriz de adjacência, faça um algoritmo que

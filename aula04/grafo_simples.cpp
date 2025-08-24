@@ -86,6 +86,26 @@ class Grafo{
 
         file << "}\n";
     }
+
+    void gerar_lista_adj(){
+        for(int ii = 0; ii < qtd_vertices; ii++){
+            for(int jj = 0; jj < qtd_vertices; jj++){
+                if( matriz_adj[ii][jj] == 1){
+                    lista_adj[ii].push_back(jj);
+                }
+            }
+        }
+    }
+
+    void print_lista_adj(){
+        for(auto i : lista_adj){
+            std::cout << (i.first)+1 << " -> ";
+            for(auto j : i.second){
+                std::cout << j+1 << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
 };
 
 int main(){
@@ -114,5 +134,9 @@ int main(){
     grafo_simples.print_matrix_adj();
 
     grafo_simples.exportar_para_dot("grafo.dot");
+
+    grafo_simples.gerar_lista_adj();
+
+    grafo_simples.print_lista_adj();
 
 }
