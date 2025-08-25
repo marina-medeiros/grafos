@@ -36,32 +36,44 @@ void Estrela::gerar_estrela(std::vector<std::vector<int>> matriz_adj){
         }
     }
 
-    
-    
-    for(int ii = 0; ii < qtd_vertices; ii++){
-        for(int jj = 0; jj < qtd_vertices; jj++){
-            if(matriz_adj[ii][jj] != 0){
-                pesos.push_back(matriz_adj[ii][jj]);
-                inicio_fim.push_back(std::make_pair(ii+1, jj+1));
+    //int vertice = 1;
+    pont[0] = 1;
+    pont[qtd_vertices] = qtd_arcos;
 
-                conta_arcos++;
-                if(arco_saindo == 0){
-                    pont.push_back(conta_arcos);
-                    if(linha_anterior_zerada){
-                        pont[ii-1] = conta_arcos;
-                        linha_anterior_zerada = 0;
-                    }
-                }
-                arco_saindo = 1;
-            }
+    for(int ii = 1; ii < qtd_vertices+1; ii++){
+        for(int jj = 0; jj < qtd_arcos; jj++){
+            if(inicio_fim[jj].first == qtd_vertices){
+                pont[jj] = ii;
+            }   
         }
-        if(arco_saindo == 0){
-            pont.push_back(-1); // guarda o lugar
-            linha_anterior_zerada = 1;
-        }
-        arco_saindo = 0;
     }
-    pont.push_back(conta_arcos+1);
+
+
+    
+    // for(int ii = 0; ii < qtd_vertices; ii++){
+    //     for(int jj = 0; jj < qtd_vertices; jj++){
+    //         if(matriz_adj[ii][jj] != 0){
+    //             pesos.push_back(matriz_adj[ii][jj]);
+    //             inicio_fim.push_back(std::make_pair(ii+1, jj+1));
+
+    //             conta_arcos++;
+    //             if(arco_saindo == 0){
+    //                 pont.push_back(conta_arcos);
+    //                 if(linha_anterior_zerada){
+    //                     pont[ii-1] = conta_arcos;
+    //                     linha_anterior_zerada = 0;
+    //                 }
+    //             }
+    //             arco_saindo = 1;
+    //         }
+    //     }
+    //     if(arco_saindo == 0){
+    //         pont.push_back(-1); // guarda o lugar
+    //         linha_anterior_zerada = 1;
+    //     }
+    //     arco_saindo = 0;
+    // }
+    // pont.push_back(conta_arcos+1);
 }
 
 void Estrela::imprimir_estrela(){
