@@ -20,21 +20,21 @@ void Estrela::gerar_estrela(std::vector<std::vector<int>> matriz_adj){
     int arco_saindo = 0;
     int linha_anterior_zerada = 0;
 
-    pesos.resize(qtd_arcos+1);
-    inicio_fim.resize(qtd_arcos+1);
-    pont.resize(qtd_vertices+1);
-
-
     for(int ii = 0; ii < qtd_vertices; ii++){
         for(int jj = 0; jj < qtd_vertices; jj++){
             if(matriz_adj[ii][jj] != 0){
-                qtd_arcos++;
+                qtd_arcos++; // conta quantos arcos tem
 
                 pesos.push_back(matriz_adj[ii][jj]);
                 inicio_fim.push_back(std::make_pair(ii+1, jj+1));
             }
         }
     }
+
+    // talvez isso seja desnecessário
+    pesos.resize(qtd_arcos+1); 
+    inicio_fim.resize(qtd_arcos+1);
+    pont.resize(qtd_vertices+1);
 
     //int vertice = 1;
     pont[0] = 1;
