@@ -16,8 +16,27 @@ funciona para o exemplo feito em sala, mas tem problemas:
 void Estrela::gerar_estrela(std::vector<std::vector<int>> matriz_adj){
     int qtd_vertices = int(matriz_adj.size());
     int conta_arcos = 0;
+    int qtd_arcos = 0;
     int arco_saindo = 0;
     int linha_anterior_zerada = 0;
+
+    pesos.resize(qtd_arcos+1);
+    inicio_fim.resize(qtd_arcos+1);
+    pont.resize(qtd_vertices+1);
+
+
+    for(int ii = 0; ii < qtd_vertices; ii++){
+        for(int jj = 0; jj < qtd_vertices; jj++){
+            if(matriz_adj[ii][jj] != 0){
+                qtd_arcos++;
+
+                pesos.push_back(matriz_adj[ii][jj]);
+                inicio_fim.push_back(std::make_pair(ii+1, jj+1));
+            }
+        }
+    }
+
+    
     
     for(int ii = 0; ii < qtd_vertices; ii++){
         for(int jj = 0; jj < qtd_vertices; jj++){
@@ -42,12 +61,14 @@ void Estrela::gerar_estrela(std::vector<std::vector<int>> matriz_adj){
         }
         arco_saindo = 0;
     }
+    pont.push_back(conta_arcos+1);
 }
 
 void Estrela::imprimir_estrela(){
+    std::cout << "Arco | " << "(início, fim) | " << "Pont" << std::endl;
     for(int ii = 0; ii < int(pesos.size()); ii++){
-        std::cout << pesos[ii] << " | ("; 
-        std::cout << inicio_fim[ii].first << "," << inicio_fim[ii].second << ") | ";
+        std::cout << pesos[ii] << "    | ("; 
+        std::cout << inicio_fim[ii].first << "," << inicio_fim[ii].second << ")         | ";
         if(ii < int(pont.size())){    
             std::cout << pont[ii];
         }else{
