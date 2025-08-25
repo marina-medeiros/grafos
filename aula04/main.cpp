@@ -115,5 +115,7 @@ int main(){
 
     Estrela estrela(grafo_estrela.get_matriz_adj());
 
+    std::cout << "Estrela direta do grafo direcionado:" << std::endl << std::endl;
+
     estrela.imprimir_estrela();
 }
