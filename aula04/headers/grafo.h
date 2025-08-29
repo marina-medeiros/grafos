@@ -6,12 +6,12 @@
 #include <map>
 #include <cstdio>
 #include <list>
+#include "estrela.h"
 
 class Grafo{
     std::vector<std::vector<int>> matriz_adj;
     std::vector<std::vector<int>> matriz_inc;
     std::map<int, std::list<int>> lista_adj;
-    std::vector<std::list<int>> estrela_direta;
     int qtd_vertices = 0;
 
     public:
