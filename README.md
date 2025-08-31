@@ -6,3 +6,5 @@ Para executar a tarefa de uma determinda aula, siga os passos:
 3. cmake ..
 4. make
 5. ./main
+
+Para gerar a imagem dos grafos, é necessário baixar o [Graphviz](https://graphviz.org/download/).
