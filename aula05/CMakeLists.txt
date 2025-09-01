@@ -15,6 +15,7 @@ include_directories(
 
 # Arquivos fonte comuns
 set(SOURCES
+    source/busca-profundidade.cpp
     ../aula04/source/estrela.cpp
     ../aula04/source/grafo.cpp
 )

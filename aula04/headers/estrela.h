@@ -4,7 +4,7 @@
 
 // Pensei em usar listas, mas elas não permitem o acesso aleatório
 
-class Estrela{
+class Estrela {
     std::vector<int> pesos;
     std::vector<std::pair<int, int>> inicio_fim;
     std::vector<int> pont;

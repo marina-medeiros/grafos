@@ -1,3 +1,6 @@
+#ifndef GRAFO_H
+#define GRAFO_H
+
 #include <iostream>
 #include <vector>
 #include <bits/stdc++.h>
@@ -7,7 +10,7 @@
 #include <cstdio>
 #include <list>
 
-class Grafo{
+class Grafo {
     std::vector<std::vector<int>> matriz_adj;
     std::vector<std::vector<int>> matriz_inc;
     std::map<int, std::list<int>> lista_adj;
@@ -32,5 +35,8 @@ class Grafo{
     void print_matriz_inc();
     void exportar_para_dot(const std::string& filename, int dir);
 
-    std::vector<std::vector<int>> get_matriz_adj(){ return matriz_adj;}
+    std::vector<std::vector<int>> get_matriz_adj() { return matriz_adj; }
+    int get_qtd_vertices() { return qtd_vertices; }
 };
+
+#endif
