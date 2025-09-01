@@ -15,12 +15,12 @@ class Grafo{
     int qtd_vertices = 0;
 
     public:
-    Grafo(){ 
+    Grafo() { 
         matriz_adj = std::vector<std::vector<int>> (0, std::vector<int>(0, 0));
     }
 
     void inserir_vertice();
-    void remover_vertice(int v); //remove linha e coluna correspondente ao vértice na matriz de adjacência
+    void remover_vertice(int v); // Remove linha e coluna correspondente ao vértice na matriz de adjacência
     void inserir_aresta_dir(int u, int v, int peso);
     void inserir_aresta_ndir(int u, int v, int peso);
     void remover_aresta_dir(int u, int v);
@@ -29,7 +29,7 @@ class Grafo{
     void gerar_lista_adj();
     void print_matriz_adj();
     void print_lista_adj();
-    void print_matrix_inc();
+    void print_matriz_inc();
     void exportar_para_dot(const std::string& filename, int dir);
 
     std::vector<std::vector<int>> get_matriz_adj(){ return matriz_adj;}
