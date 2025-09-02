@@ -76,6 +76,7 @@ void Grafo::gerar_matriz_inc(int dir) {
 }
 
 void Grafo::gerar_lista_adj() {
+    lista_adj.clear();
     for (int ii = 0; ii < qtd_vertices; ii++) {
         for (int jj = 0; jj < qtd_vertices; jj++) {
             if (matriz_adj[ii][jj] != 0) {

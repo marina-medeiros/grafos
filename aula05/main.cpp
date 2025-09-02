@@ -37,6 +37,12 @@ int main() {
     std::cout << "Busca em profundidade iterativa:" << std::endl << std::endl;
     std::map<int, int> arvore = busca_profundidade_matriz_adj_iterativa(grafo_simples, 4);
 
-    exportar_arvore_profundidade_para_dot("arvore_profundidade-grago_simples.dot", arvore);
-    gerar_imagem("arvore_profundidade-grago_simples.dot", "arvore_profundidade-grago_simples.png");
+    exportar_arvore_profundidade_para_dot("arvore_profundidade-grafo_simples.dot", arvore);
+    gerar_imagem("arvore_profundidade-grafo_simples.dot", "arvore_profundidade-grafo_simples.png");
+
+    std::cout << std::endl << "Busca em profundidade recursiva:" << std::endl << std::endl;
+    std::map<int, int> arvore_recursiva = busca_profundidade_lista_adj_recursiva(grafo_simples, 4);
+
+    exportar_arvore_profundidade_para_dot("arvore_profundidade-grafo_simples_recursivo.dot", arvore_recursiva);
+    gerar_imagem("arvore_profundidade-grafo_simples_recursivo.dot", "arvore_profundidade-grafo_simples_recursivo.png");
 }

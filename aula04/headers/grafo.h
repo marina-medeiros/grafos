@@ -36,6 +36,7 @@ class Grafo {
     void exportar_para_dot(const std::string& filename, int dir);
 
     std::vector<std::vector<int>> get_matriz_adj() { return matriz_adj; }
+    std::map<int, std::list<int>> get_lista_adj() { gerar_lista_adj(); return lista_adj; }
     int get_qtd_vertices() { return qtd_vertices; }
 };
 
