@@ -22,6 +22,12 @@ class Grafo {
         matriz_adj = std::vector<std::vector<int>> (0, std::vector<int>(0, 0));
     }
 
+    Grafo(int vertices){
+        this->qtd_vertices = vertices;  
+        matriz_adj = std::vector<std::vector<int>> (qtd_vertices, std::vector<int>(qtd_vertices, 0));
+    }
+
+
     void inserir_vertice();
     void remover_vertice(int v); // Remove linha e coluna correspondente ao vértice na matriz de adjacência
     void inserir_aresta_dir(int u, int v, int peso);

@@ -16,11 +16,7 @@ void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
 int main(){
     // Grafo não direcionado --------------------------------------------------------------------
 
-    Grafo grafo_simples;
-
-    for(int ii = 0; ii < 6; ii++){
-        grafo_simples.inserir_vertice();
-    }
+    Grafo grafo_simples(6);
 
     grafo_simples.inserir_aresta_ndir(1, 4, 3);
     grafo_simples.inserir_aresta_ndir(2, 4, 1);
@@ -63,11 +59,7 @@ int main(){
 
     // Grafo direcionado --------------------------------------------------------------------
 
-    Grafo grafo_direcionado;
-
-    for(int ii = 0; ii < 6; ii++){
-        grafo_direcionado.inserir_vertice();
-    }
+    Grafo grafo_direcionado(6);
 
     grafo_direcionado.inserir_aresta_dir(1, 4, 1);
     grafo_direcionado.inserir_aresta_dir(3, 2, 8);
@@ -93,11 +85,7 @@ int main(){
 
     std::cout << "----------- ESTRELA DIRETA ----------------------" << std::endl;
 
-    Grafo grafo_estrela;
-
-    for(int ii = 0; ii < 5; ii++){
-        grafo_estrela.inserir_vertice();
-    }
+    Grafo grafo_estrela(5);
 
     grafo_estrela.inserir_aresta_dir(1, 2, 3);
     grafo_estrela.inserir_aresta_dir(1, 3, 2);
