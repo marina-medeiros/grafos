@@ -9,6 +9,16 @@
 
 #include "../headers/grafo.h"
 
+void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
+    std::string cmd = "dot -Tpng " + dotfile + " -o " + imgfile;
+    FILE* pipe = popen(cmd.c_str(), "r");
+    if (!pipe) {
+        std::cerr << "Erro ao executar Graphviz\n";
+    } else {
+        pclose(pipe);
+    }
+}
+
 void Grafo::inserir_vertice() {
     qtd_vertices++;
     

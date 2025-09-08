@@ -27,7 +27,6 @@ class Grafo {
         matriz_adj = std::vector<std::vector<int>> (qtd_vertices, std::vector<int>(qtd_vertices, 0));
     }
 
-
     void inserir_vertice();
     void remover_vertice(int v); // Remove linha e coluna correspondente ao vértice na matriz de adjacência
     void inserir_aresta_dir(int u, int v, int peso);
@@ -45,5 +44,7 @@ class Grafo {
     std::map<int, std::list<int>> get_lista_adj() { gerar_lista_adj(); return lista_adj; }
     int get_qtd_vertices() { return qtd_vertices; }
 };
+
+    void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
 
 #endif
