@@ -39,6 +39,7 @@ void busca_largura_matriz_adj_iterativa(Grafo grafo, int verticeInicial){
     }
     std::cout << std::endl;
 }
+
 // Implemente o algoritmo para a busca em largura com lista de adjacência e com recorrência, salvando o predecessor.
 void busca_largura_lista_adj_recorrencia(Grafo grafo, int verticeInicial){
     std::vector<bool> visitado(grafo.get_qtd_vertices(), false);
@@ -102,17 +103,19 @@ Grafo busca_largura_arestas_retorno(Grafo grafo, int verticeInicial){
                 fila.push(vizinho);
             }else{
                 if(arvore.get_matriz_adj()[verticeAtual][vizinho] == 0){
+                    if(nivel[verticeAtual] + 1 == nivel[vizinho] &&
+                       verticeAtual != predecessor[vizinho]){
+                        std::cout<< "Tio: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
+                        peso = 4; 
+                    }
                     if(predecessor[verticeAtual] == predecessor[vizinho]){
                         std::cout<< "Irmãos: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
                         peso = 2; 
                     }
-                    if(nivel[vizinho] == nivel[verticeAtual] && predecessor[predecessor[verticeAtual]] != predecessor[predecessor[vizinho]]){
+                    if(nivel[vizinho] == nivel[verticeAtual] &&
+                       predecessor[verticeAtual] != predecessor[vizinho]){
                         std::cout<< "Primos: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
                         peso = 3; 
-                    }
-                    if(nivel[verticeAtual] == nivel[vizinho] && predecessor[verticeAtual] == predecessor[vizinho]){
-                        std::cout<< "Tio: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
-                        peso = 4; 
                     }
                     arvore.inserir_aresta_ndir(verticeAtual+1, vizinho+1, peso);
                 }
@@ -126,4 +129,45 @@ Grafo busca_largura_arestas_retorno(Grafo grafo, int verticeInicial){
     std::cout << std::endl;
 
     return arvore;
+}
+
+//teste
+void exportar_arvore_bfs(Grafo arvore, const std::string& filename,
+                         int raiz, const std::vector<int>& nivel) {
+    std::ofstream file(filename);
+    file << "digraph BFS_Arvore {\n";
+    file << "  rankdir=TB;\n"; // top-bottom (árvore vertical)
+
+    // Declara os nós
+    for (int i = 0; i < arvore.get_qtd_vertices(); i++) {
+        file << "  " << i+1 << " [label=\"" << i+1 << "\", shape=circle];\n";
+    }
+
+    // Cria arestas da árvore
+    auto matriz = arvore.get_matriz_adj();
+    for (int i = 0; i < arvore.get_qtd_vertices(); i++) {
+        for (int j = 0; j < arvore.get_qtd_vertices(); j++) {
+            if (matriz[i][j] != 0) {
+                file << "  " << i+1 << " -> " << j+1;
+                // Diferencia tipos de arestas pela cor
+                if (matriz[i][j] == 1) file << " [color=black, penwidth=2];\n"; // árvore
+                else if (matriz[i][j] == 2) file << " [color=blue, style=dashed];\n"; // irmãos
+                else if (matriz[i][j] == 3) file << " [color=green, style=dotted];\n"; // primos
+                else if (matriz[i][j] == 4) file << " [color=red, style=bold];\n";   // tios
+                else file << ";\n";
+            }
+        }
+    }
+
+    // Agrupa vértices por nível
+    int maxNivel = *max_element(nivel.begin(), nivel.end());
+    for (int d = 0; d <= maxNivel; d++) {
+        file << "  { rank = same; ";
+        for (int i = 0; i < arvore.get_qtd_vertices(); i++) {
+            if (nivel[i] == d) file << i+1 << "; ";
+        }
+        file << "}\n";
+    }
+
+    file << "}\n";
 }
