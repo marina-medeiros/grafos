@@ -53,8 +53,10 @@ int main(){
     grafo_retorno.exportar_para_dot("retorno.dot", 0);
     gerar_imagem("retorno.dot", "retorno.png");
 
-    Grafo arvore_retorno = busca_largura_arestas_retorno(grafo_retorno, 0);
-
-    arvore_retorno.exportar_para_dot("arvore.dot", 0);
+    ArvoreLargura arvore_retorno = busca_largura_arestas_retorno(grafo_retorno, 0);
+    arvore_retorno.exportar_arvore_bfs(arvore_retorno, "arvore.dot");
     gerar_imagem("arvore.dot", "arvore.png");
+
+    // arvore_retorno.exportar_para_dot("arvore.dot", 0);
+    // gerar_imagem("arvore.dot", "arvore.png");
 }
