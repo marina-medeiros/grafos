@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Nome do projeto
-project(aula06 LANGUAGES CXX)
+project(aula07 LANGUAGES CXX)
 
 # Define a versão do C++
 set(CMAKE_CXX_STANDARD 17)
