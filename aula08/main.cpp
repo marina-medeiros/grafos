@@ -4,59 +4,44 @@
 #include <map>
 
 #include "../../aula04/headers/grafo.h"
-#include "headers/busca-largura.h"
+#include "headers/busca-largura-digrafo.h"
+#include "headers/busca-profundidade-digrafo.h"
 
 int main(){
-    Grafo grafo_simples;
+    Grafo grafo_dir(8);
+    grafo_dir.inserir_aresta_dir(1, 2, 1);
+    grafo_dir.inserir_aresta_dir(1, 4, 1);
+    grafo_dir.inserir_aresta_dir(2, 5, 1);
+    grafo_dir.inserir_aresta_dir(4, 5, 1);
+    grafo_dir.inserir_aresta_dir(5, 1, 1);
+    grafo_dir.inserir_aresta_dir(3, 5, 1);
+    grafo_dir.inserir_aresta_dir(3, 1, 1);
+    grafo_dir.inserir_aresta_dir(6, 7, 1);
+    grafo_dir.inserir_aresta_dir(6, 3, 1);
+    grafo_dir.inserir_aresta_dir(7, 8, 1);
+    grafo_dir.inserir_aresta_dir(8, 7, 1);
 
-    for(int ii = 0; ii < 11; ii++){
-        grafo_simples.inserir_vertice();
-    }
+    std::cout << "----------- GRAFO DIRECIONADO ----------------------" << std::endl << std::endl;
 
-    grafo_simples.inserir_aresta_ndir(1, 2, 1);
-    grafo_simples.inserir_aresta_ndir(1, 3, 1);
-    grafo_simples.inserir_aresta_ndir(2, 3, 1);
-    grafo_simples.inserir_aresta_ndir(2, 4, 1);
-    grafo_simples.inserir_aresta_ndir(2, 8, 1);
-    grafo_simples.inserir_aresta_ndir(2, 11, 1);
-    grafo_simples.inserir_aresta_ndir(3, 4, 1);
-    grafo_simples.inserir_aresta_ndir(3, 5, 1);
-    grafo_simples.inserir_aresta_ndir(4, 8, 1);
-    grafo_simples.inserir_aresta_ndir(4, 7, 1);
-    grafo_simples.inserir_aresta_ndir(4, 9, 1);
-    grafo_simples.inserir_aresta_ndir(5, 6, 1);
-    grafo_simples.inserir_aresta_ndir(7, 10, 1);
-    grafo_simples.inserir_aresta_ndir(7, 11, 1);
-    grafo_simples.inserir_aresta_ndir(9, 11, 1);
-    grafo_simples.inserir_aresta_ndir(10, 11, 1);
+    std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
 
-    busca_largura_matriz_adj_iterativa(grafo_simples, 6);
-    busca_largura_lista_adj_recorrencia(grafo_simples, 6);
+    grafo_dir.print_matriz_adj();
 
-    Grafo grafo_retorno(10);
+    grafo_dir.gerar_matriz_inc(1);
 
-    grafo_retorno.inserir_aresta_ndir(1, 10, 1);
-    grafo_retorno.inserir_aresta_ndir(1, 4, 1);
-    grafo_retorno.inserir_aresta_ndir(1, 3, 1);
-    grafo_retorno.inserir_aresta_ndir(2, 10, 1);
-    grafo_retorno.inserir_aresta_ndir(2, 3, 1);
-    grafo_retorno.inserir_aresta_ndir(3, 4, 1);
-    grafo_retorno.inserir_aresta_ndir(3, 5, 1);
-    grafo_retorno.inserir_aresta_ndir(4, 5, 1);
-    grafo_retorno.inserir_aresta_ndir(4, 8, 1);
-    grafo_retorno.inserir_aresta_ndir(5, 6, 1);
-    grafo_retorno.inserir_aresta_ndir(5, 7, 1);
-    grafo_retorno.inserir_aresta_ndir(6, 7, 1);
-    grafo_retorno.inserir_aresta_ndir(7, 10, 1);
-    grafo_retorno.inserir_aresta_ndir(8, 9, 1);
+    std::cout << "Matriz de incidência do grafo direcionado:" << std::endl << std::endl;
 
-    grafo_retorno.exportar_para_dot("retorno.dot", 0);
-    gerar_imagem("retorno.dot", "retorno.png");
+    grafo_dir.print_matriz_inc();
 
-    ArvoreLargura arvore_retorno = busca_largura_arestas_retorno(grafo_retorno, 0);
-    arvore_retorno.exportar_arvore_bfs(arvore_retorno, "arvore.dot");
-    gerar_imagem("arvore.dot", "arvore.png");
+    std::cout << "Lista de Adjacência do grafo direcionado:" << std::endl << std::endl;
+    grafo_dir.gerar_lista_adj();
+    grafo_dir.print_lista_adj();
 
-    // arvore_retorno.exportar_para_dot("arvore.dot", 0);
-    // gerar_imagem("arvore.dot", "arvore.png");
+    busca_largura_digrafo(grafo_dir, 2);
+
+    busca_profundidade_digrafo_completa(grafo_dir, 2);
+
+    grafo_dir.exportar_para_dot("grafo_dir_bl.dot", 1);
+    gerar_imagem("grafo_dir_bl.dot", "grafo_dir_bl.png");
+    
 }
