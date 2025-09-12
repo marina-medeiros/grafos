@@ -39,9 +39,41 @@ int main(){
 
     busca_largura_digrafo(grafo_dir, 2);
 
-    busca_profundidade_digrafo_completa(grafo_dir, 2);
+    std::map<int, int> arvore = busca_profundidade_digrafo_completa(grafo_dir, 2);
 
     grafo_dir.exportar_para_dot("grafo_dir_bl.dot", 1);
     gerar_imagem("grafo_dir_bl.dot", "grafo_dir_bl.png");
+
+    Grafo grafo_p(10);
+    grafo_p.inserir_aresta_dir(1, 3, 1); // a -> c
+    grafo_p.inserir_aresta_dir(3, 2, 1); // c -> b
+    grafo_p.inserir_aresta_dir(3, 4, 1); // c -> d
+    grafo_p.inserir_aresta_dir(4, 1, 1); // d -> a
+    grafo_p.inserir_aresta_dir(4, 5, 1); // d -> e
+    grafo_p.inserir_aresta_dir(5, 3, 1); // e -> c
+    grafo_p.inserir_aresta_dir(6, 5, 1); // f -> e
+    grafo_p.inserir_aresta_dir(6, 7, 1); // f -> g
+    grafo_p.inserir_aresta_dir(7, 6, 1); // g -> f 
+    grafo_p.inserir_aresta_dir(8, 4, 1); // h -> d
+    grafo_p.inserir_aresta_dir(8, 9, 1); // h -> i
+    grafo_p.inserir_aresta_dir(10, 1, 1); // s -> a
+    grafo_p.inserir_aresta_dir(10, 2, 1); // s -> b
+    grafo_p.inserir_aresta_dir(10, 7, 1); // s -> h
+
+    // grafo_p.inserir_aresta_dir(1, 2, 1); // s -> a
+    // grafo_p.inserir_aresta_dir(1, 3, 1); // s -> b
+    // grafo_p.inserir_aresta_dir(1, 8, 1); // s -> h
+    // grafo_p.inserir_aresta_dir(2, 4, 1); // a -> c
+    // grafo_p.inserir_aresta_dir(4, 3, 1); // c -> b
+    // grafo_p.inserir_aresta_dir(4, 5, 1); // c -> d
+    // grafo_p.inserir_aresta_dir(5, 2, 1); // d -> a
+    // grafo_p.inserir_aresta_dir(5, 6, 1); // d -> e
+    // grafo_p.inserir_aresta_dir(6, 4, 1); // e -> c
+    // grafo_p.inserir_aresta_dir(7, 6, 1); // f -> e
+    // grafo_p.inserir_aresta_dir(7, 8, 1); // f -> g
+    // grafo_p.inserir_aresta_dir(8, 7, 1); // g -> f 
+    // grafo_p.inserir_aresta_dir(9, 5, 1); // h -> d
+    // grafo_p.inserir_aresta_dir(9, 10, 1); // h -> i
     
+    std::map<int, int> arvoreP = busca_profundidade_digrafo_completa(grafo_p, 9);
 }

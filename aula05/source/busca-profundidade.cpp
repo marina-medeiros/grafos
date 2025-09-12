@@ -7,7 +7,7 @@
 #include "../headers/busca-profundidade.h"
 
 /*
-    BuscaProfundiade(Grafo G, vértice V) {
+    BuscaProfundidade(Grafo G, vértice V) {
         Cria pilha vazia P;
         Empilha (P, v);
         Enquanto P.tamanho > 0 faça {

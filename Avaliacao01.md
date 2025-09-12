@@ -5,7 +5,7 @@
 1) [x] Criação do Grafo a partir da Lista de Adjacências
 2) [x]  Criação do Grafo a partir da Matriz de Adjacências
 3) [x]  Criação do Grafo a partir da Matriz de Incidência
-4) [x]  Conversão de matriz de adjacência para lista de Adjacências e vice-versa.
+4) [ ]  Conversão de matriz de adjacência para lista de Adjacências e vice-versa.
 5) [ ]  Função que calcula o grau de cada vértice.
 6) [ ]  Função que determina se dois vértices são adjacentes.
 7) [x]  Função que determina o número total de vértices.
