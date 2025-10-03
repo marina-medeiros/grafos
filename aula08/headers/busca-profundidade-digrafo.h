@@ -7,7 +7,7 @@
 
 
 enum class Cor { BRANCO, CINZA, PRETO };
-std::map<int, int> busca_profundidade_digrafo_completa(Grafo grafo, int verticeInicial);
+std::map<int, int> busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial);
 void busca_profundidade_digrafo_rec(int ultimoVertice, 
                                     std::map<int, std::list<int>>& lista_adj,
                                     std::vector<Cor>& cores,

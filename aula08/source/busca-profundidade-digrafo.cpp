@@ -7,7 +7,7 @@
 #include "../headers/busca-profundidade-digrafo.h"
 
 
-std::map<int, int> busca_profundidade_digrafo_completa(Grafo grafo, int verticeInicial){
+std::map<int, int> busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial){
     int qtd_vertices = grafo.get_qtd_vertices();
     std::vector<bool> visitado(qtd_vertices, false);
     std::vector<int> predecessor(qtd_vertices, -1);
@@ -79,8 +79,18 @@ void busca_profundidade_digrafo_rec(int ultimoVertice,
     tempo_entrada[ultimoVertice] = tempo1;
 
     std::cout << "Visitando vertice " << ultimoVertice + 1 << " [PE=" << tempo_entrada[ultimoVertice] << "]\n";
-lista_adj[ultimoVertice].sort();
 
+                                    
+    lista_adj[ultimoVertice].sort();
+
+    if (ultimoVertice == 0) { // Vamos checar apenas para o vértice 1
+        std::cout << "\n[PROVA REAL] A ordem de vizinhos para o vertice 1 e: ";
+        for (int v : lista_adj[ultimoVertice]) {
+            std::cout << v + 1 << " ";
+        }
+        std::cout << "\n\n";
+    }
+    
     for(int vizinho : lista_adj[ultimoVertice]) {
         std::cout << "  Aresta (" << ultimoVertice + 1 << " -> " << vizinho + 1 << "): ";
 
