@@ -79,7 +79,6 @@ std::map<int, int> busca_profundidade_matriz_adj_iterativa(Grafo grafo, int vert
     return predecessores;
 }
 
-//Coloquei o & aqui
 std::map<int, int> busca_profundidade_lista_adj_recursiva(Grafo& grafo, int vertice) {
     int qtd_vertices = grafo.get_qtd_vertices();
 
@@ -139,34 +138,3 @@ void exportar_arvore_profundidade_para_dot(const std::string& filename, std::map
     file << "}\n";
     file.close();
 }
-
-
-//Verificar cm grupo isso aqui
-
-// std::map<int, int> busca_profundidade_lista_adj_recursiva_referencia(Grafo& grafo, int vertice) {
-//     int qtd_vertices = grafo.get_qtd_vertices();
-
-//     if (vertice <= 0 || vertice > qtd_vertices) {
-//         std::cout << "Índice de vértice inválido, busca cancelada" << std::endl;
-//         return {};
-//     }
-
-//     std::map<int, std::list<int>> lista_adj = grafo.get_lista_adj();
-    
-//     std::vector<bool> visitados(qtd_vertices, false);
-//     std::map<int, int> predecessores;
-//     for (int i = 0; i < qtd_vertices; i++) {
-//         predecessores[i] = -1;
-//     }
-
-//     busca_profundidade_lista_adj_recursiva_util(vertice - 1, visitados, predecessores, lista_adj);
-
-//     std::cout << std::endl << std::endl;
-
-//     std::cout << "Mapa de Predecessores:" << std::endl;
-//     for (const auto& par : predecessores) {
-//         std::cout << "Vértice " << (par.first + 1) << " foi descoberto a partir de " << (par.second != -1 ? std::to_string(par.second + 1) : "Ninguém (raiz)") << "\n";
-//     }
-
-//     return predecessores;
-// }
