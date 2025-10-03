@@ -34,6 +34,7 @@ public:
     std::map<int, std::list<int>> get_lista_adj() { gerar_lista_adj(); return lista_adj; }
     int get_qtd_vertices() { return qtd_vertices; }
     bool isConexo();
+    bool isBipartido();
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
 };
 

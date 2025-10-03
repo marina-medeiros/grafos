@@ -18,7 +18,9 @@ set(SOURCES
     source/digrafo.cpp
     source/grafo.cpp
     source/busca-profundidade.cpp
-    source/conexo.cpp)
+    source/conexo.cpp
+    source/arvore-largura.cpp
+    source/busca-largura.cpp)
 
 # Executável principal
 add_executable(main

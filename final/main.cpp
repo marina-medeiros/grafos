@@ -64,6 +64,10 @@ int main(){
 
     isConexo(grafo_simples) ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
 
+    // 12 - Determinar se um grafo é bipartido
+
+    grafo_simples.isBipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
+
 
 
     // Grafo direcionado --------------------------------------------------------------------

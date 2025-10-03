@@ -9,6 +9,7 @@
 
 #include "../headers/grafo.h"
 #include "../headers/busca-profundidade.h"
+#include "../headers/busca-largura.h"
 
 
 Grafo::Grafo(int vertices) {
@@ -180,4 +181,25 @@ bool Grafo::isConexo(){
     int qtd_visitados = dfs.size();
 
     return qtd_visitados == qtd_vertices;
+
+}
+
+bool Grafo::isBipartido(){
+
+    if (qtd_vertices <= 1) {
+        return true;
+    }
+
+    std::vector<int> cores(qtd_vertices, -1);
+
+    for (int i = 0; i < qtd_vertices; ++i) {
+        
+        if (cores[i] == -1) {
+            if (!busca_largura_colorida(*this, i, cores)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
