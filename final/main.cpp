@@ -4,6 +4,7 @@
 #include <map>
 
 #include "headers/grafo.h"
+#include "headers/conexo.h"
 #include "headers/digrafo.h"
 
 int main(){
@@ -50,6 +51,20 @@ int main(){
 
     std::cout << "Lista de adjacência:" << std::endl;
     grafo_simples.print_lista_adj();
+
+    // 11 - Função que determina se um grafo é conexo ou não.
+
+    //No grafo.cpp
+
+    grafo_simples.isConexo() ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
+
+    //No conexo.cpp
+
+    //Ficará somente um desses, no caso, se ficar o acima, excluir os arquivos conexo.cpp/.h e caso fique o abaixo excluir os isConexe de grafo.h/cpp e excluir a duplicata em busca-profundidade
+
+    isConexo(grafo_simples) ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
+
+
 
     // Grafo direcionado --------------------------------------------------------------------
 

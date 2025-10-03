@@ -17,7 +17,8 @@ include_directories(
 set(SOURCES
     source/digrafo.cpp
     source/grafo.cpp
-)
+    source/busca-profundidade.cpp
+    source/conexo.cpp)
 
 # Executável principal
 add_executable(main

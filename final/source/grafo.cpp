@@ -8,7 +8,7 @@
 #include <list>
 
 #include "../headers/grafo.h"
-
+#include "../headers/busca-profundidade.h"
 
 
 Grafo::Grafo(int vertices) {
@@ -167,4 +167,17 @@ void Grafo::gerar_imagem(const std::string& dotfile, const std::string& imgfile)
     } else {
         pclose(pipe);
     }
+}
+
+bool Grafo::isConexo(){
+
+    if (qtd_vertices <= 1) {
+        return true;
+    }
+
+    std::map<int, int> dfs = busca_profundidade_lista_adj_recursiva(*this, 1);
+
+    int qtd_visitados = dfs.size();
+
+    return qtd_visitados == qtd_vertices;
 }
