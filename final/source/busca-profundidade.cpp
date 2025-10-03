@@ -91,10 +91,10 @@ std::map<int, int> busca_profundidade_lista_adj_recursiva(Grafo& grafo, int vert
     
     std::vector<bool> visitados(qtd_vertices, false);
     std::map<int, int> predecessores;
-    for (int i = 0; i < qtd_vertices; i++) {
-        predecessores[i] = -1;
-    }
 
+    predecessores[vertice - 1] = -1; 
+
+    
     busca_profundidade_lista_adj_recursiva_util(vertice - 1, visitados, predecessores, lista_adj);
 
     std::cout << std::endl << std::endl;

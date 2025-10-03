@@ -17,6 +17,7 @@ Grafo::Grafo(int vertices) {
     // Aqui você pode inicializar suas estruturas de dados.
     // Ex: Se estiver usando matriz de adjacência como no seu Grafo.h original
     matriz_adj.resize(vertices, std::vector<int>(vertices, 0));
+    rotulos_vertices.resize(vertices);
 }
 
 void Grafo::inserir_vertice() {
@@ -48,14 +49,14 @@ void Grafo::remover_vertice(int v) {
 
 
 void Grafo::inserir_aresta(int u, int v, int peso) {
-    matriz_adj[u-1][v-1] = peso;
-    matriz_adj[v-1][u-1] = peso;
+    matriz_adj[u][v] = peso;
+    matriz_adj[v][u] = peso;
 }
 
 
 void Grafo::remover_aresta(int u, int v) {
-    matriz_adj[u-1][v-1] = 0;
-    matriz_adj[v-1][u-1] = 0;
+    matriz_adj[u][v] = 0;
+    matriz_adj[v][u] = 0;
 }
 
 // Leva em consideração um valor negativo na origem e positivo no destino
@@ -139,20 +140,23 @@ void Grafo::print_matriz_inc() {
 
 void Grafo::exportar_para_dot(const std::string& filename) {
     std::ofstream file(filename);
-    
     file << "graph G {\n";
-    
-    
-    for (int i = 0; i < qtd_vertices; i++) {
-        file << "  " << i+1 << ";\n"; // declara o vértice
-    }
+
+    file << "  layout=neato;\n";
+    file << "  overlap=false;\n\n";
 
     for (int i = 0; i < qtd_vertices; i++) {
-        for (int j = 0; j < qtd_vertices; j++) { 
+        std::string rotulo = rotulos_vertices[i].empty() ? std::to_string(i + 1) : rotulos_vertices[i];
+        file << "  \"" << rotulo << "\";\n";
+    }
+    file << "\n";
+
+    for (int i = 0; i < qtd_vertices; i++) {
+        for (int j = i; j < qtd_vertices; j++) { 
             if (matriz_adj[i][j] != 0) {
-                if (j > i) {
-                    file << "  " << i+1 << " -- " << j+1 << ";\n"; 
-                }
+                std::string rotulo_i = rotulos_vertices[i].empty() ? std::to_string(i + 1) : rotulos_vertices[i];
+                std::string rotulo_j = rotulos_vertices[j].empty() ? std::to_string(j + 1) : rotulos_vertices[j];
+                file << "  \"" << rotulo_i << "\" -- \"" << rotulo_j << "\";\n";
             }
         }
     }
@@ -170,7 +174,7 @@ void Grafo::gerar_imagem(const std::string& dotfile, const std::string& imgfile)
     }
 }
 
-bool Grafo::isConexo(){
+bool Grafo::is_conexo(){
 
     if (qtd_vertices <= 1) {
         return true;
@@ -184,7 +188,7 @@ bool Grafo::isConexo(){
 
 }
 
-bool Grafo::isBipartido(){
+bool Grafo::is_bipartido(){
 
     if (qtd_vertices <= 1) {
         return true;
@@ -202,4 +206,10 @@ bool Grafo::isBipartido(){
     }
 
     return true;
+}
+
+void Grafo::set_rotulo_vertice(int indice, const std::string& rotulo) {
+    if (indice < rotulos_vertices.size()) {
+        rotulos_vertices[indice] = rotulo;
+    }
 }

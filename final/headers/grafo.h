@@ -12,6 +12,8 @@ protected: // Usamos protected para que a classe filha (Digrafo) possa acessar
     std::vector<std::vector<int>> matriz_adj;
     std::vector<std::vector<int>> matriz_inc;
     int qtd_vertices = 0;
+    std::vector<std::string> rotulos_vertices; 
+
 
 public:
     Grafo(int vertices);
@@ -33,8 +35,9 @@ public:
     std::vector<std::vector<int>> get_matriz_adj() { return matriz_adj; }
     std::map<int, std::list<int>> get_lista_adj() { gerar_lista_adj(); return lista_adj; }
     int get_qtd_vertices() { return qtd_vertices; }
-    bool isConexo();
-    bool isBipartido();
+    void set_rotulo_vertice(int indice, const std::string& rotulo);
+    bool is_conexo();
+    bool is_bipartido();
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
 };
 

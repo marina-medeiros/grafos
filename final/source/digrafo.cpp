@@ -11,11 +11,11 @@
 
 
 void Digrafo::inserir_aresta(int u, int v, int peso) {
-    matriz_adj[u-1][v-1] = peso;
+    matriz_adj[u][v] = peso;
 }
 
 void Digrafo::remover_aresta(int u, int v) {
-    matriz_adj[u-1][v-1] = 0;
+    matriz_adj[u][v] = 0;
 }
 
 // Leva em consideração um valor negativo na origem e positivo no destino
@@ -42,15 +42,21 @@ void Digrafo::exportar_para_dot(const std::string& filename) {
     
     file << "digraph G {\n";
     
-    
+    file << "  rankdir=TB;\n"; 
+    file << "  overlap=false;\n\n";
+
     for (int i = 0; i < qtd_vertices; i++) {
-        file << "  " << i+1 << ";\n"; // declara o vértice
+        std::string rotulo = rotulos_vertices[i].empty() ? std::to_string(i + 1) : rotulos_vertices[i];
+        file << "  \"" << rotulo << "\";\n"; 
     }
+    file << "\n";
 
     for (int i = 0; i < qtd_vertices; i++) {
         for (int j = 0; j < qtd_vertices; j++) { 
             if (matriz_adj[i][j] != 0) {
-                file << "  " << i+1 << " -> " << j+1 << ";\n"; // direcionado
+                std::string rotulo_i = rotulos_vertices[i].empty() ? std::to_string(i + 1) : rotulos_vertices[i];
+                std::string rotulo_j = rotulos_vertices[j].empty() ? std::to_string(j + 1) : rotulos_vertices[j];
+                file << "  \"" << rotulo_i << "\" -> \"" << rotulo_j << "\";\n";
             }
         }
     }
