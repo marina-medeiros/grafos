@@ -15,11 +15,14 @@ include_directories(
 
 # Arquivos fonte comuns
 set(SOURCES
-    source/digrafo.cpp
-    source/grafo.cpp
-    source/busca-profundidade.cpp
     source/arvore-largura.cpp
-    source/busca-largura.cpp)
+    source/busca-largura.cpp
+    source/busca-profundidade.cpp
+    source/digrafo.cpp
+    source/Grafo.cpp
+    source/GrafoListaAdj.cpp
+    source/GrafoMatrizAdj.cpp
+    source/GrafoMatrizInc.cpp)
 
 # Executável principal
 add_executable(main

@@ -1,7 +1,7 @@
 #ifndef DIGRAFO_H
 #define DIGRAFO_H
 
-#include "grafo.h"
+#include "Grafo.h"
 
 class Digrafo : public Grafo {
 public:
