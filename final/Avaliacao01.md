@@ -25,5 +25,6 @@ função lowpt.
 16) [ ]  Representação do Digrafo a partir da Matriz de Adjacências.
 17) [ ]  Representação do Digrafo a partir da Matriz de Incidência.
 18) [ ]  Determinação do Grafo subjacente **(OPC= 0,5 ponto)**
-19) [ ]  Busca em largura.
-20) [ ]  Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento.
+19) [x]  Busca em largura. (implementado em busca-largura-digrafo.cpp)
+20) [x]  Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento.
+(implementado em busca-profundidade-digrafo.cpp)

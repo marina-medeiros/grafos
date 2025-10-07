@@ -13,17 +13,15 @@
 
 
 Grafo::Grafo(int vertices) {
-    this->qtd_vertices = vertices;
-    // Aqui você pode inicializar suas estruturas de dados.
-    // Ex: Se estiver usando matriz de adjacência como no seu Grafo.h original
-    matriz_adj.resize(vertices, std::vector<int>(vertices, 0));
-    rotulos_vertices.resize(vertices);
+    this->qtd_vertices = vertices;  
+    matriz_adj = std::vector<std::vector<int>> (qtd_vertices, std::vector<int>(qtd_vertices, 0));
+    rotulos_vertices.resize(qtd_vertices, "");
 }
 
 void Grafo::inserir_vertice() {
     qtd_vertices++;
     
-    matriz_adj.resize(qtd_vertices);
+    matriz_adj.resize(qtd_vertices); 
 
     for (auto& row : matriz_adj) {
         row.resize(qtd_vertices, 0);
@@ -49,14 +47,24 @@ void Grafo::remover_vertice(int v) {
 
 
 void Grafo::inserir_aresta(int u, int v, int peso) {
-    matriz_adj[u][v] = peso;
-    matriz_adj[v][u] = peso;
+    if (u > 0 && u <= qtd_vertices && v > 0 && v <= qtd_vertices) {
+        // CORREÇÃO: Subtraia 1 para converter para índice base-0
+        matriz_adj[u - 1][v - 1] = peso;
+        matriz_adj[v - 1][u - 1] = peso;
+    } else {
+        std::cerr << "Erro: Tentativa de inserir aresta com vertice invalido.\n";
+    }
 }
 
 
 void Grafo::remover_aresta(int u, int v) {
-    matriz_adj[u][v] = 0;
-    matriz_adj[v][u] = 0;
+    if (u > 0 && u <= qtd_vertices && v > 0 && v <= qtd_vertices) {
+        // CORREÇÃO: Subtraia 1 também na remoção
+        matriz_adj[u - 1][v - 1] = 0;
+        matriz_adj[v - 1][u - 1] = 0;
+    } else {
+        std::cerr << "Erro: Tentativa de remover aresta com vertice invalido.\n";
+    }
 }
 
 // Leva em consideração um valor negativo na origem e positivo no destino

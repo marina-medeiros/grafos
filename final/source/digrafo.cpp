@@ -11,11 +11,29 @@
 
 
 void Digrafo::inserir_aresta(int u, int v, int peso) {
-    matriz_adj[u][v] = peso;
+    if (u > 0 && u <= get_qtd_vertices() && v > 0 && v <= get_qtd_vertices()) {
+        
+        // A LINHA CRUCIAL: converter de base-1 para base-0 antes de acessar a matriz
+        // Note que, por ser um dígrafo, só alteramos uma posição.
+        matriz_adj[u - 1][v - 1] = peso;
+
+    } else {
+        std::cerr << "ERRO (Digrafo): Tentativa de inserir aresta com vertice invalido. u=" 
+                  << u << ", v=" << v << std::endl;
+    }
 }
 
 void Digrafo::remover_aresta(int u, int v) {
-    matriz_adj[u][v] = 0;
+    if (u > 0 && u <= get_qtd_vertices() && v > 0 && v <= get_qtd_vertices()) {
+        
+        // A LINHA CRUCIAL: converter de base-1 para base-0 antes de acessar a matriz
+        // Note que, por ser um dígrafo, só alteramos uma posição.
+        matriz_adj[u - 1][v - 1] = 0;
+
+    } else {
+        std::cerr << "ERRO (Digrafo): Tentativa de inserir aresta com vertice invalido. u=" 
+                  << u << ", v=" << v << std::endl;
+    }
 }
 
 // Leva em consideração um valor negativo na origem e positivo no destino

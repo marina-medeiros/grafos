@@ -10,6 +10,7 @@
 
 #include "headers/grafo.h"
 #include "headers/digrafo.h"
+#include "headers/arvore_bfs.h"
 
 void menu(); 
 std::unique_ptr<Grafo> loadFile(const std::string& nome_arquivo);
@@ -122,6 +123,8 @@ void grafo(Grafo& grafo_simples, const std::string& nome_base){
     // 12 - Determinar se um grafo é bipartido
 
     grafo_simples.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
+
+
 
 }
 

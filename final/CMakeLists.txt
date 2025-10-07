@@ -19,11 +19,22 @@ set(SOURCES
     source/grafo.cpp
     source/busca-profundidade.cpp
     source/arvore-largura.cpp
-    source/busca-largura.cpp)
+    source/busca-largura.cpp
+    source/arvore_bfs.cpp
+    source/arvore_dfs.cpp
+    source/arvore_busca.cpp
+    source/busca-profundidade-digrafo.cpp
+    source/busca-largura-digrafo.cpp)
 
 # Executável principal
 add_executable(main
     main.cpp
+    
+    ${SOURCES}
+)
+
+add_executable(teste
+    teste.cpp
     
     ${SOURCES}
 )
