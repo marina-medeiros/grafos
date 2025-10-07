@@ -9,9 +9,16 @@ GrafoListaAdj::GrafoListaAdj(int vertices) : Grafo(vertices) {
     }
 }
 
+void GrafoListaAdj::limpar() {
+    this->lista_adj.clear();
+    this->rotulos.clear();
+    this->qtd_vertices = 0;
+    this->qtd_arestas = 0;
+}
+
 void GrafoListaAdj::inserir_vertice() {
-    int novo_vertice_idx = qtd_vertices;
-    lista_adj[novo_vertice_idx] = std::list<int>();
+    lista_adj[qtd_vertices] = std::list<int>();
+    rotulos.push_back(std::to_string(qtd_vertices));
     qtd_vertices++;
 }
 
@@ -29,6 +36,7 @@ void GrafoListaAdj::remover_vertice(int u) {
 
     // 2. Remove o vértice 'u' do mapa
     lista_adj.erase(u);
+    rotulos.erase(rotulos.begin() + u);
 
     // 3. Reindexa os vértices e arestas com índice > u
     std::map<int, std::list<int>> nova_lista_adj;
@@ -77,4 +85,27 @@ std::list<int> GrafoListaAdj::get_vizinhos(int v) const {
         return it->second;
     }
     return std::list<int>();
+}
+
+void GrafoListaAdj::print() const {
+    std::cout << "\n--- Imprimindo Lista de Adjacência ---\n";
+    if (qtd_vertices == 0) {
+        std::cout << "O grafo esta vazio.\n";
+        return;
+    }
+
+    for (int i = 0; i < qtd_vertices; ++i) {
+        std::cout << rotulos.at(i) << " (" << i << "): ";
+
+        const auto& vizinhos = lista_adj.at(i);
+        if (vizinhos.empty()) {
+            std::cout << "-> (nenhum)";
+        } else {
+            for (int vizinho_idx : vizinhos) {
+                std::cout << "-> " << rotulos.at(vizinho_idx) << " (" << vizinho_idx << ") ";
+            }
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "----------------------------------------\n";
 }

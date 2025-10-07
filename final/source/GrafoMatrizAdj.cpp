@@ -8,19 +8,26 @@ GrafoMatrizAdj::GrafoMatrizAdj(int vertices) : Grafo(vertices) {
     matriz_adj.resize(vertices, std::vector<int>(vertices, 0));
 }
 
+void GrafoMatrizAdj::limpar() {
+    this->matriz_adj.clear();
+    this->rotulos.clear();
+    this->qtd_vertices = 0;
+    this->qtd_arestas = 0;
+}
+
 void GrafoMatrizAdj::inserir_vertice() {
+    rotulos.push_back(std::to_string(qtd_vertices));
+
     qtd_vertices++;
     
     matriz_adj.resize(qtd_vertices);
-
     for (auto& row : matriz_adj) {
         row.resize(qtd_vertices, 0);
     }
 }
 
 void GrafoMatrizAdj::remover_vertice(int u) {
-    // Validação para evitar erros com índices inválidos
-    if (u <= 0 || u > qtd_vertices) {
+    if (u < 0 || u >= qtd_vertices) {
         std::cout << "Índice de vértice inválido, remoção cancelada" << std::endl;
         return;
     }
@@ -34,6 +41,7 @@ void GrafoMatrizAdj::remover_vertice(int u) {
     
     // 2. Remove a linha 'u'
     matriz_adj.erase(matriz_adj.begin() + u);
+    rotulos.erase(rotulos.begin() + u);
 
     // 3. Remove a coluna 'u' de todas as linhas restantes
     for (auto& linha : matriz_adj) {
@@ -81,4 +89,27 @@ std::list<int> GrafoMatrizAdj::get_vizinhos(int v) const {
         }
     }
     return vizinhos;
+}
+
+void GrafoMatrizAdj::print() const {
+    std::cout << "\n--- Imprimindo Matriz de Adjacência ---\n";
+    if (qtd_vertices == 0) {
+        std::cout << "O grafo esta vazio.\n";
+        return;
+    }
+
+    std::cout << "\t";
+    for (int i = 0; i < qtd_vertices; ++i) {
+        std::cout << rotulos.at(i) << "\t";
+    }
+    std::cout << std::endl;
+
+    for (int i = 0; i < qtd_vertices; ++i) {
+        std::cout << rotulos.at(i) << "\t";
+        for (int j = 0; j < qtd_vertices; ++j) {
+            std::cout << matriz_adj.at(i).at(j) << "\t";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "-----------------------------------------\n";
 }

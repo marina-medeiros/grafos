@@ -15,10 +15,10 @@ include_directories(
 
 # Arquivos fonte comuns
 set(SOURCES
-    source/arvore-largura.cpp
+    # source/arvore-largura.cpp
     source/busca-largura.cpp
     source/busca-profundidade.cpp
-    source/digrafo.cpp
+    # source/digrafo.cpp
     source/Grafo.cpp
     source/GrafoListaAdj.cpp
     source/GrafoMatrizAdj.cpp

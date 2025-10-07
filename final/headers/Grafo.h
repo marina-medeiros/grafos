@@ -11,11 +11,13 @@ class Grafo {
 protected:
     int qtd_vertices;
     int qtd_arestas;
+    std::vector<std::string> rotulos;
 
 public:
-    Grafo(int vertices) : qtd_vertices(vertices), qtd_arestas(0) {}
+    Grafo(int vertices);
     virtual ~Grafo() = default;
 
+    virtual void limpar() = 0;
     virtual void inserir_vertice() = 0;
     virtual void remover_vertice(int v) = 0;
     virtual void inserir_aresta(int u, int v, int peso = 1) = 0;
@@ -29,8 +31,10 @@ public:
     virtual bool is_conexo();
     virtual bool is_bipartido();
 
-    virtual void exportar_para_dot(const std::string& filename) const;
+    void carregar_de_arquivo(const std::string& filename);
+    void exportar_para_dot(const std::string& filename) const;
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
+    virtual void print() const = 0;
 };
 
 #endif

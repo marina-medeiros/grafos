@@ -27,7 +27,7 @@ std::map<int, int> busca_em_profundidade_grafo(const Grafo& grafo, int vertice_i
     int qtd_vertices = grafo.get_qtd_vertices();
     std::map<int, int> predecessores;
 
-    if (vertice_inicial <= 0 || vertice_inicial > qtd_vertices) {
+    if (vertice_inicial < 0 || vertice_inicial >= qtd_vertices) {
         std::cout << "Índice de vértice inválido, busca cancelada" << std::endl;
         return predecessores;
     }
