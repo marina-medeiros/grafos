@@ -24,7 +24,14 @@ set(SOURCES
     source/arvore_dfs.cpp
     source/arvore_busca.cpp
     source/busca-profundidade-digrafo.cpp
-    source/busca-largura-digrafo.cpp)
+    source/busca-largura-digrafo.cpp
+
+    source/busca-largura.cpp
+    source/busca-profundidade.cpp
+    source/Grafo.cpp
+    source/GrafoListaAdj.cpp
+    source/GrafoMatrizAdj.cpp
+    source/GrafoMatrizInc.cpp)
 
 # Executável principal
 add_executable(main

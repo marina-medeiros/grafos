@@ -1,215 +1,139 @@
 #include <iostream>
-#include <queue>
-#include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
-#include <memory>   
-#include <algorithm>
-#include <limits>
+#include <string>
+#include <filesystem>
 
-#include "headers/grafo.h"
-#include "headers/digrafo.h"
-#include "headers/arvore_bfs.h"
+#include "headers/Grafo.h"
+#include "headers/GrafoListaAdj.h"
+#include "headers/GrafoMatrizAdj.h"
+#include "headers/GrafoMatrizInc.h"
+// #include "headers/digrafo.h"
 
-void menu(); 
-std::unique_ptr<Grafo> loadFile(const std::string& nome_arquivo);
-void grafo(Grafo& grafo_simples, const std::string& nome_base);
-void digrafo(Digrafo& grafo_direcionado, const std::string& nome_base);
+void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl) {
+    std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
+
+    grafo.print();
+
+    // Testa os algoritmos
+    std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
+    std::cout << "Total de Arestas: " << grafo.get_qtd_arestas() << std::endl;
+    
+    grafo.is_conexo() ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
+    grafo.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
+
+    // Gera a imagem de visualização   
+    std::string arq_dot = "dot-files/" + nome_arquivo + "_" + tipo_impl + ".dot";
+    std::string arq_png = "png-files/" + nome_arquivo + "_" + tipo_impl + ".png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n";
+    grafo.exportar_para_dot(arq_dot);
+    grafo.gerar_imagem(arq_dot, arq_png);
+}
 
 int main(){
 
-    const std::map<std::string, std::string> arquivos = {
-        {"1", "GRAFO_0.txt"}, {"grafo_0", "GRAFO_0.txt"},
-        {"2", "GRAFO_1.txt"}, {"grafo_1", "GRAFO_1.txt"},
-        {"3", "GRAFO_2.txt"}, {"grafo_2", "GRAFO_2.txt"},
-        {"4", "GRAFO_3.txt"}, {"grafo_3", "GRAFO_3.txt"},
-        {"5", "DIGRAFO_0.txt"}, {"digrafo_0", "DIGRAFO_0.txt"},
-        {"6", "DIGRAFO_1.txt"}, {"digrafo_1", "DIGRAFO_1.txt"},
-        {"7", "DIGRAFO_2.txt"}, {"digrafo_2", "DIGRAFO_2.txt"},
-        {"8", "DIGRAFO_3.txt"}, {"digrafo_3", "DIGRAFO_3.txt"}
-    };
+    std::filesystem::create_directory("dot-files");
+    std::filesystem::create_directory("png-files");
 
-    while (true) {
-        menu();
-        std::string entrada;
-        std::cin >> entrada;
+    // 1. Criação do Grafo a partir da Lista de Adjacências
 
-        std::transform(entrada.begin(), entrada.end(), entrada.begin(), ::tolower);
+    std::cout << "\n1 -IMPLEMENTAÇÃO: LISTA DE ADJACÊNCIA\n";
+    GrafoListaAdj grafo0_lista(0);
+    grafo0_lista.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo0_lista, "GRAFO_0", "lista_adj");
 
-        if (entrada == "sair" || entrada == "s") {
-            break;
-        }
+    GrafoListaAdj grafo1_lista(0);
+    grafo1_lista.carregar_de_arquivo("../dados/GRAFO_1.txt");
+    analisar_e_gerar_imagem(grafo1_lista, "GRAFO_1", "lista_adj");
 
-        auto it = arquivos.find(entrada);
-        if (it == arquivos.end()) {
-            std::cout << "\nOpção inválida. Tente novamente.\n" << std::endl;
-            continue;
-        }
+    GrafoListaAdj grafo2_lista(0);
+    grafo2_lista.carregar_de_arquivo("../dados/GRAFO_2.txt");
+    analisar_e_gerar_imagem(grafo2_lista, "GRAFO_2", "lista_adj");
 
-        std::string nome_arquivo = it->second;
-        std::string caminho_completo = "../dados/" + nome_arquivo;
+    GrafoListaAdj grafo3_lista(0);
+    grafo3_lista.carregar_de_arquivo("../dados/GRAFO_3.txt");
+    analisar_e_gerar_imagem(grafo3_lista, "GRAFO_3", "lista_adj");
 
-        std::cout << "\nAnalisando o arquivo: " << caminho_completo << "...\n" << std::endl;
+    // 2. Criação do Grafo a partir da Matriz de Adjacências
 
-        auto ptr_grafo = loadFile(caminho_completo);
+    std::cout << "\n2 - IMPLEMENTAÇÃO: MATRIZ DE ADJACÊNCIA\n";
+    GrafoMatrizAdj grafo0_matriz(0);
+    grafo0_matriz.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo0_matriz, "GRAFO_0", "matriz_adj");
 
-        if (!ptr_grafo) {
-            std::cout << "Erro ao carregar o arquivo " << nome_arquivo << std::endl;
-            continue;
-        }
+    GrafoMatrizAdj grafo1_matriz(0);
+    grafo1_matriz.carregar_de_arquivo("../dados/GRAFO_1.txt");
+    analisar_e_gerar_imagem(grafo1_matriz, "GRAFO_1", "matriz_adj");
 
-        // dynamic_cast para identificar se grafo ou digrafo
-        Digrafo* d_ptr = dynamic_cast<Digrafo*>(ptr_grafo.get());
-        
-        std::string nome_base = nome_arquivo.substr(0, nome_arquivo.find("."));
+    GrafoMatrizAdj grafo2_matriz(0);
+    grafo2_matriz.carregar_de_arquivo("../dados/GRAFO_2.txt");
+    analisar_e_gerar_imagem(grafo2_matriz, "GRAFO_2", "matriz_adj");
 
-        if (d_ptr) {
-            //se digrafo
-            digrafo(*d_ptr, nome_base);
-        } else {
-            //se grafo
-            grafo(*ptr_grafo, nome_base);
-        }
-        
-        std::cout << "\nAnálise concluída. Pressione Enter para continuar...";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cin.get();
-    }
+    GrafoMatrizAdj grafo3_matriz(0);
+    grafo3_matriz.carregar_de_arquivo("../dados/GRAFO_3.txt");
+    analisar_e_gerar_imagem(grafo3_matriz, "GRAFO_3", "matriz_adj");
 
-    return 0;
+    // 3. Criação do Grafo a partir da Matriz de Incidência
 
-}
+    std::cout << "\n3 - IMPLEMENTAÇÃO: MATRIZ DE Incidência\n";
+    GrafoMatrizInc grafo0_inc(0);
+    grafo0_inc.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo0_inc, "GRAFO_0", "matriz_inc");
 
-void grafo(Grafo& grafo_simples, const std::string& nome_base){
+    GrafoMatrizInc grafo1_inc(0);
+    grafo1_inc.carregar_de_arquivo("../dados/GRAFO_1.txt");
+    analisar_e_gerar_imagem(grafo1_inc, "GRAFO_1", "matriz_inc");
 
-    std::cout << "----------- GRAFO NÃO DIRECIONADO ----------------------" << std::endl;
+    GrafoMatrizInc grafo2_inc(0);
+    grafo2_inc.carregar_de_arquivo("../dados/GRAFO_2.txt");
+    analisar_e_gerar_imagem(grafo2_inc, "GRAFO_2", "matriz_inc");
 
-    std::cout << "Matriz de adjacência:" << std::endl << std::endl;
-    grafo_simples.print_matriz_adj();
+    GrafoMatrizInc grafo3_inc(0);
+    grafo3_inc.carregar_de_arquivo("../dados/GRAFO_3.txt");
+    analisar_e_gerar_imagem(grafo3_inc, "GRAFO_3", "matriz_inc");
 
-    std::string nome_dot = nome_base + ".dot";
-    std::string nome_png = nome_base + ".png";
-    grafo_simples.exportar_para_dot(nome_dot);
-    grafo_simples.gerar_imagem(nome_dot, nome_png);
+    // 4.1 Converter de matriz de adjacência para lista de adjacência
 
-    //grafo_simples.remover_aresta(5,6);
+    std::cout << "\n4.1 - CONVERSÃO: MATRIZ DE ADJACÊNCIA PARA LISTA DE ADJACÊNCIA\n";
 
-    std::cout << "Matriz de adjacência após remover a aresta(5-6):"  << std::endl << std::endl;
-    grafo_simples.print_matriz_adj();
+    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
+    grafo0_matriz.print();
 
-   // grafo_simples.remover_vertice(3);
+    GrafoListaAdj grafo0_lista_convertido = grafo0_matriz.converter_para_lista_adj();
 
-    std::cout << "Matriz de adjacência após remover o vértice 3:" << std::endl << std::endl;
-    grafo_simples.print_matriz_adj();
+    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
+    grafo0_lista_convertido.print();
 
-    grafo_simples.gerar_matriz_inc();
+    // 4.2 Converter de lista de adjacência para matriz de adjacência
 
-    std::cout << "Matriz de incidência:" << std::endl << std::endl;
-    grafo_simples.print_matriz_inc();
+    std::cout << "\n4.2 CONVERSÃO: LISTA DE ADJACÊNCIA PARA MATRIZ DE ADJACÊNCIA\n";
 
-    grafo_simples.exportar_para_dot("grafo_simples.dot");
-    grafo_simples.gerar_imagem("grafo_simples.dot", "grafo_simples.png");
+    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
+    grafo0_lista.print();
 
-    grafo_simples.gerar_lista_adj();
+    GrafoMatrizAdj grafo0_matriz_convertido = grafo0_lista.converter_para_matriz_adj();
 
-    std::cout << "Lista de adjacência:" << std::endl;
-    grafo_simples.print_lista_adj();
+    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
+    grafo0_matriz_convertido.print();
 
-    // 11 - Função que determina se um grafo é conexo ou não.
+    // 5 e 6. Cálculo do grau de cada vértice e função que determina se dois vértices são adjacentes
+    std::cout << "\n5 e 6 - CÁLCULO DO GRAU DO VÉRTICE E DETERMINAÇÃO DE ADJACÊNCIA\n";
+    std::cout << "Utilizando o grafo_0 como referência:\n";
 
-    grafo_simples.is_conexo() ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
+    grafo0_lista.print();
 
-    // 12 - Determinar se um grafo é bipartido
+    std::cout << "Grau do vértice a(0): " << grafo0_lista.get_grau_vertice(0) << "\n";
+    std::cout << "Grau do vértice b(1): " << grafo0_lista.get_grau_vertice(1) << "\n";
+    std::cout << "Grau do vértice f(5): " << grafo0_lista.get_grau_vertice(5) << "\n";
 
-    grafo_simples.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
-
-
-
-}
-
-void digrafo(Digrafo& grafo_direcionado, const std::string& nome_base){
-
-    std::cout << "----------- GRAFO DIRECIONADO ----------------------" << std::endl;
-
-    std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
-
-    grafo_direcionado.print_matriz_adj();
-
-    grafo_direcionado.gerar_matriz_inc();
-
-    std::cout << "Matriz de incidência do grafo direcionado:" << std::endl << std::endl;
-
-    grafo_direcionado.print_matriz_inc();
-
-
-    std::string nome_dot = nome_base + ".dot";
-    std::string nome_png = nome_base + ".png";
-    grafo_direcionado.exportar_para_dot(nome_dot);
-    grafo_direcionado.gerar_imagem(nome_dot, nome_png);
-
-}
-
-void menu() {
-    std::cout << "\nQual grafo ou digrafo deseja analisar?\n" << std::endl;
-    std::cout << "1 | GRAFO_0\t5 | DIGRAFO_0" << std::endl;
-    std::cout << "2 | GRAFO_1\t6 | DIGRAFO_1" << std::endl;
-    std::cout << "3 | GRAFO_2\t7 | DIGRAFO_2" << std::endl;
-    std::cout << "4 | GRAFO_3\t8 | DIGRAFO_3" << std::endl;
-    std::cout << "\nDigite 'sair' ou 's' para terminar." << std::endl;
-    std::cout << "Insira a opção escolhida: ";
-}
-
-
-std::unique_ptr<Grafo> loadFile(const std::string& nome_arquivo) {
-    std::ifstream arquivo(nome_arquivo);
-    if (!arquivo.is_open()) {
-        return nullptr;
-    }
-
-    bool is_digrafo = (nome_arquivo.find("DIGRAFO") != std::string::npos);
-
-    int num_vertices;
-    arquivo >> num_vertices;
-
-    std::unique_ptr<Grafo> grafo;
-    if (is_digrafo) {
-        grafo = std::make_unique<Digrafo>(num_vertices);
+    if (grafo0_lista.existe_aresta(0, 1)) {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " são adjacentes.\n";
     } else {
-        grafo = std::make_unique<Grafo>(num_vertices);
-    }
-    
-    std::map<std::string, int> map_vertices;
-    int proximo_indice = 0;
-
-    std::string linha;
-    std::getline(arquivo, linha); 
-
-    while (std::getline(arquivo, linha)) {
-        std::stringstream ss(linha);
-        std::string u_str, v_str;
-
-        std::getline(ss, u_str, ',');
-        std::getline(ss, v_str);
-
-        if (u_str.empty() || v_str.empty()) continue;
-
-        if (map_vertices.find(u_str) == map_vertices.end()) {
-            int novo_indice = proximo_indice++;
-            map_vertices[u_str] = novo_indice;
-            grafo->set_rotulo_vertice(novo_indice, u_str);
-        }
-        if (map_vertices.find(v_str) == map_vertices.end()) {
-            int novo_indice = proximo_indice++;
-            map_vertices[v_str] = novo_indice;
-            grafo->set_rotulo_vertice(novo_indice, v_str); 
-        }
-
-        int u_idx = map_vertices[u_str];
-        int v_idx = map_vertices[v_str];
-
-        grafo->inserir_aresta(u_idx, v_idx, 1);
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " não são adjacentes.\n";
     }
 
-    return grafo;
+    if (grafo0_lista.existe_aresta(0, 5)) {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " são adjacentes.\n";
+    } else {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
+    }
 }

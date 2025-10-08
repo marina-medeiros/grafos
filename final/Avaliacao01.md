@@ -2,25 +2,27 @@
 
 ## A. Para GRAFOS (as opcionais possuem a sigla OPC ao final da função)
 
-1) [x] Criação do Grafo a partir da Lista de Adjacências
-2) [x]  Criação do Grafo a partir da Matriz de Adjacências
-3) [x]  Criação do Grafo a partir da Matriz de Incidência
-4) [ ]  Conversão de matriz de adjacência para lista de Adjacências e vice-versa.
-5) [ ]  Função que calcula o grau de cada vértice.
-6) [ ]  Função que determina se dois vértices são adjacentes.
-7) [x]  Função que determina o número total de vértices.
-8) [ ]  Função que determina o número total de arestas.
-9) [x]  Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
-10) [x]  Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
-11) [ ]  Função que determina se um grafo é conexo ou não.
-12) [ ]  Determinar se um grafo é bipartido **(OPC = 1,0 ponto)**
-13) [x]  Busca em Largura, a partir de um vértice específico.
-14) [x]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice
+1) [x] Criação do Grafo a partir da Lista de Adjacências (demonstrado em main.cpp)
+2) [x]  Criação do Grafo a partir da Matriz de Adjacências (demonstrado em main.cpp)
+3) [x]  Criação do Grafo a partir da Matriz de Incidência (demonstrado em main.cpp)
+4) [x]  Conversão de matriz de adjacência para lista de Adjacências e vice-versa. (demonstrado em main.cpp)
+5) [x]  Função que calcula o grau de cada vértice. (demonstrado em main.cpp)
+6) [x]  Função que determina se dois vértices são adjacentes. (demonstrado em main.cpp)
+7) [x]  Função que determina o número total de vértices. (O grafo já salva em um atributo essa informação)
+8) [x]  Função que determina o número total de arestas. (O grafo já salva em um atributo essa informação)
+9) [ ]  Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências. (já existe, falta demonstrar em main.cpp)
+10) [ ]  Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências. (já existe, falta demonstrar em main.cpp)
+11) [x]  Função que determina se um grafo é conexo ou não. (implementado em Grafo.cpp)
+12) [x]  Determinar se um grafo é bipartido **(OPC = 1,0 ponto)** (implementado em Grafo.cpp)
+13) [ ]  Busca em Largura, a partir de um vértice específico. (já existe, falta adaptar p novo padrão, e gerar um .png)
+14) [ ]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice (já existe, falta adaptar p novo padrão, e gerar um .png)
 em específico
 15) [ ]  Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a
-função lowpt.
+função lowpt. (pendente)
 
 ## B. Para DIGRAFOS (as opcionais possuem a sigla OPC ao final da função)
+
+(adaptação pendentes para digrafos, implementações já existem)
 
 16) [ ]  Representação do Digrafo a partir da Matriz de Adjacências.
 17) [ ]  Representação do Digrafo a partir da Matriz de Incidência.
