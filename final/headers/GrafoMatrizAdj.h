@@ -4,6 +4,8 @@
 #include "Grafo.h"
 #include <vector>
 
+class GrafoListaAdj;
+
 class GrafoMatrizAdj : public Grafo {
 private:
     std::vector<std::vector<int>> matriz_adj;
@@ -20,6 +22,7 @@ public:
     bool existe_aresta(int u, int v) const override;
     std::list<int> get_vizinhos(int v) const override;
     void print() const override;
+    GrafoListaAdj converter_para_lista_adj() const;
 };
 
 #endif

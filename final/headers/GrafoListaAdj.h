@@ -5,6 +5,8 @@
 #include <map>
 #include <algorithm>
 
+class GrafoMatrizAdj;
+
 class GrafoListaAdj : public Grafo {
 private:
     std::map<int, std::list<int>> lista_adj;
@@ -21,6 +23,7 @@ public:
     bool existe_aresta(int u, int v) const override;
     std::list<int> get_vizinhos(int v) const override;
     void print() const override;
+    GrafoMatrizAdj converter_para_matriz_adj() const;
 };
 
 #endif

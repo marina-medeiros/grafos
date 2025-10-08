@@ -2,6 +2,7 @@
 #include <queue>
 
 #include "../headers/GrafoListaAdj.h"
+#include "../headers/GrafoMatrizAdj.h"
 
 GrafoListaAdj::GrafoListaAdj(int vertices) : Grafo(vertices) {
     for (int i = 0; i < vertices; ++i) {
@@ -108,4 +109,19 @@ void GrafoListaAdj::print() const {
         std::cout << std::endl;
     }
     std::cout << "----------------------------------------\n";
+}
+
+GrafoMatrizAdj GrafoListaAdj::converter_para_matriz_adj() const {
+    GrafoMatrizAdj matriz_adj(qtd_vertices);
+    matriz_adj.set_rotulos(get_rotulos());
+
+    for (int i = 0; i < qtd_vertices; i++) {
+        for (int j : get_vizinhos(i)) {
+            if (i < j) {
+                matriz_adj.inserir_aresta(i, j);
+            }
+        }
+    }
+
+    return matriz_adj;
 }

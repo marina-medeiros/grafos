@@ -55,7 +55,7 @@ int main(){
 
     // 2. Criação do Grafo a partir da Matriz de Adjacências
 
-    std::cout << "\nIMPLEMENTAÇÃO: MATIRZ DE ADJACÊNCIA\n";
+    std::cout << "\nIMPLEMENTAÇÃO: MATRIZ DE ADJACÊNCIA\n";
     GrafoMatrizAdj grafo0_matriz(0);
     grafo0_matriz.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_matriz, "GRAFO_0", "matriz_adj");
@@ -74,7 +74,7 @@ int main(){
 
     // 3. Criação do Grafo a partir da Matriz de Incidência
 
-    std::cout << "\nIMPLEMENTAÇÃO: MATIRZ DE Incidência\n";
+    std::cout << "\nIMPLEMENTAÇÃO: MATRIZ DE Incidência\n";
     GrafoMatrizInc grafo0_inc(0);
     grafo0_inc.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_inc, "GRAFO_0", "matriz_inc");
@@ -90,4 +90,28 @@ int main(){
     GrafoMatrizInc grafo3_inc(0);
     grafo3_inc.carregar_de_arquivo("../dados/GRAFO_3.txt");
     analisar_e_gerar_imagem(grafo3_inc, "GRAFO_3", "matriz_inc");
+
+    // 4.1 Converter de matriz de adjacência para lista de adjacência
+
+    std::cout << "\nCONVERSÃO: MATRIZ DE ADJACÊNCIA PARA LISTA DE ADJACÊNCIA\n";
+
+    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
+    grafo0_matriz.print();
+
+    GrafoListaAdj grafo0_lista_convertido = grafo0_matriz.converter_para_lista_adj();
+
+    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
+    grafo0_lista_convertido.print();
+
+    // 4.2 Converter de lista de adjacência para matriz de adjacência
+
+    std::cout << "\nCONVERSÃO: LISTA DE ADJACÊNCIA PARA MATRIZ DE ADJACÊNCIA\n";
+
+    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
+    grafo0_lista.print();
+
+    GrafoMatrizAdj grafo0_matriz_convertido = grafo0_lista.converter_para_matriz_adj();
+
+    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
+    grafo0_matriz_convertido.print();
 }

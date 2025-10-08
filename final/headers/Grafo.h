@@ -27,6 +27,8 @@ public:
 
     int get_qtd_vertices() const { return qtd_vertices; }
     int get_qtd_arestas() const { return qtd_arestas; }
+    const std::vector<std::string>& get_rotulos() const { return rotulos; }
+    void set_rotulos(const std::vector<std::string>& novos_rotulos) { rotulos = novos_rotulos; }
 
     virtual bool is_conexo();
     virtual bool is_bipartido();
