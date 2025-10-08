@@ -15,8 +15,6 @@ include_directories(
 
 # Arquivos fonte comuns
 set(SOURCES
-    source/digrafo.cpp
-    source/grafo.cpp
     source/busca-profundidade.cpp
     source/arvore-largura.cpp
     source/busca-largura.cpp
@@ -31,7 +29,8 @@ set(SOURCES
     source/Grafo.cpp
     source/GrafoListaAdj.cpp
     source/GrafoMatrizAdj.cpp
-    source/GrafoMatrizInc.cpp)
+    source/GrafoMatrizInc.cpp
+    source/DigrafoMatrizAdj.cpp)
 
 # Executável principal
 add_executable(main
@@ -40,9 +39,9 @@ add_executable(main
     ${SOURCES}
 )
 
-add_executable(teste
-    teste.cpp
+# add_executable(teste
+#     teste.cpp
     
-    ${SOURCES}
-)
+#     ${SOURCES}
+# )
 

@@ -91,7 +91,7 @@ std::list<int> GrafoListaAdj::get_vizinhos(int v) const {
 void GrafoListaAdj::print() const {
     std::cout << "\n--- Imprimindo Lista de Adjacência ---\n";
     if (qtd_vertices == 0) {
-        std::cout << "O grafo esta vazio.\n";
+        std::cout << "O grafo está vazio.\n";
         return;
     }
 

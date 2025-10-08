@@ -121,7 +121,7 @@ std::list<int> GrafoMatrizInc::get_vizinhos(int v) const {
 void GrafoMatrizInc::print() const {
     std::cout << "\n--- Imprimindo Matriz de Incidência ---\n";
     if (qtd_vertices == 0) {
-        std::cout << "O grafo esta vazio.\n";
+        std::cout << "O grafo está vazio.\n";
         return;
     }
 

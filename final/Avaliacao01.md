@@ -15,8 +15,7 @@
 11) [x]  Função que determina se um grafo é conexo ou não. (implementado em Grafo.cpp)
 12) [x]  Determinar se um grafo é bipartido **(OPC = 1,0 ponto)** (implementado em Grafo.cpp)
 13) [ ]  Busca em Largura, a partir de um vértice específico. (já existe, falta adaptar p novo padrão, e gerar um .png)
-14) [ ]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice (já existe, falta adaptar p novo padrão, e gerar um .png)
-em específico
+14) [ ]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice em específico (já existe, falta adaptar p novo padrão, e gerar um .png)
 15) [ ]  Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a
 função lowpt. (pendente)
 
@@ -24,7 +23,7 @@ função lowpt. (pendente)
 
 (adaptação pendentes para digrafos, implementações já existem)
 
-16) [ ]  Representação do Digrafo a partir da Matriz de Adjacências.
+16) [x]  Representação do Digrafo a partir da Matriz de Adjacências. (demonstrado em main.cpp)
 17) [ ]  Representação do Digrafo a partir da Matriz de Incidência.
 18) [ ]  Determinação do Grafo subjacente **(OPC= 0,5 ponto)**
 19) [x]  Busca em largura. (implementado em busca-largura-digrafo.cpp)

@@ -7,7 +7,7 @@
 class GrafoListaAdj;
 
 class GrafoMatrizAdj : public Grafo {
-private:
+protected:
     std::vector<std::vector<int>> matriz_adj;
 
 public:

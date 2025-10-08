@@ -3,8 +3,8 @@
 #include <vector>
 #include <map>
 
-#include "headers/grafo.h"
-#include "headers/digrafo.h"
+#include "headers/Grafo.h"
+#include "headers/Digrafo.h"
 #include "headers/arvore_bfs.h"
 #include "headers/busca-largura.h"
 #include "headers/busca-largura-digrafo.h"

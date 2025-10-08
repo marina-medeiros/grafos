@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <cstdlib>
 #include <cstdio>
@@ -116,14 +117,21 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     arquivo.close();
 }
 
-void Grafo::exportar_para_dot(const std::string& filename) const {
+void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) const {
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Erro ao abrir o arquivo " << filename << std::endl;
         return;
     }
 
-    file << "graph G {\n";
+    if (eh_digrafo) {
+        file << "digraph G {\n";
+        file << "  rankdir=TB;\n"; 
+        file << "  overlap=false;\n";
+    } else {
+        file << "graph G {\n";
+    }
+
 
     // Adiciona todos os vértices
     for (int i = 0; i < qtd_vertices; i++) {
@@ -135,7 +143,9 @@ void Grafo::exportar_para_dot(const std::string& filename) const {
     // Adiciona as arestas
     for (int i = 0; i < qtd_vertices; i++) {
         for (int j : get_vizinhos(i)) {
-            if (j > i) {
+            if (eh_digrafo) {
+                file << "  " << i << " -> " << j << ";\n"; 
+            } else if (j > i) {
                 file << "  " << i << " -- " << j << ";\n"; 
             }
         }

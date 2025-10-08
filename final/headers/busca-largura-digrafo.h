@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "grafo.h"
+#include "Grafo.h"
 
 bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& predecessor);
 void busca_largura_digrafo(Grafo grafo, int verticeInicial);

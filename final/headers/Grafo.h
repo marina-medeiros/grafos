@@ -35,7 +35,7 @@ public:
     virtual bool is_bipartido();
 
     void carregar_de_arquivo(const std::string& filename);
-    void exportar_para_dot(const std::string& filename) const;
+    void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
     virtual void print() const = 0;
 };

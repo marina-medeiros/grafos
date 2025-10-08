@@ -3,12 +3,14 @@
 #include <filesystem>
 
 #include "headers/Grafo.h"
+
 #include "headers/GrafoListaAdj.h"
 #include "headers/GrafoMatrizAdj.h"
 #include "headers/GrafoMatrizInc.h"
-// #include "headers/digrafo.h"
 
-void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl) {
+#include "headers/DigrafoMatrizAdj.h"
+
+void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
 
     grafo.print();
@@ -25,7 +27,7 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     std::string arq_png = "png-files/" + nome_arquivo + "_" + tipo_impl + ".png";
     
     std::cout << "Gerando imagem em '" << arq_png << "'...\n";
-    grafo.exportar_para_dot(arq_dot);
+    grafo.exportar_para_dot(arq_dot, eh_digrafo);
     grafo.gerar_imagem(arq_dot, arq_png);
 }
 
@@ -36,7 +38,7 @@ int main(){
 
     // 1. Criação do Grafo a partir da Lista de Adjacências
 
-    std::cout << "\n1 -IMPLEMENTAÇÃO: LISTA DE ADJACÊNCIA\n";
+    std::cout << "\n1 -IMPLEMENTAÇÃO GRAFO: LISTA DE ADJACÊNCIA\n";
     GrafoListaAdj grafo0_lista(0);
     grafo0_lista.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_lista, "GRAFO_0", "lista_adj");
@@ -55,7 +57,7 @@ int main(){
 
     // 2. Criação do Grafo a partir da Matriz de Adjacências
 
-    std::cout << "\n2 - IMPLEMENTAÇÃO: MATRIZ DE ADJACÊNCIA\n";
+    std::cout << "\n2 - IMPLEMENTAÇÃO GRAFO: MATRIZ DE ADJACÊNCIA\n";
     GrafoMatrizAdj grafo0_matriz(0);
     grafo0_matriz.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_matriz, "GRAFO_0", "matriz_adj");
@@ -74,7 +76,7 @@ int main(){
 
     // 3. Criação do Grafo a partir da Matriz de Incidência
 
-    std::cout << "\n3 - IMPLEMENTAÇÃO: MATRIZ DE Incidência\n";
+    std::cout << "\n3 - IMPLEMENTAÇÃO GRAFO: MATRIZ DE Incidência\n";
     GrafoMatrizInc grafo0_inc(0);
     grafo0_inc.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_inc, "GRAFO_0", "matriz_inc");
@@ -136,4 +138,23 @@ int main(){
     } else {
         std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
     }
+
+    // 16 - Representação do Digrafo a partir da Matriz de Adjacências.
+
+    std::cout << "\n16 - IMPLEMENTAÇÃO DIGRAFO: MATRIZ DE ADJACÊNCIA\n";
+    DigrafoMatrizAdj digrafo0_matriz(0);
+    digrafo0_matriz.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    analisar_e_gerar_imagem(digrafo0_matriz, "DIGRAFO_0", "matriz_adj", true);
+
+    DigrafoMatrizAdj digrafo1_matriz(0);
+    digrafo1_matriz.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
+    analisar_e_gerar_imagem(digrafo1_matriz, "DIGRAFO_1", "matriz_adj", true);
+
+    DigrafoMatrizAdj digrafo2_matriz(0);
+    digrafo2_matriz.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
+    analisar_e_gerar_imagem(digrafo2_matriz, "DIGRAFO_2", "matriz_adj", true);
+
+    DigrafoMatrizAdj digrafo3_matriz(0);
+    digrafo3_matriz.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
+    analisar_e_gerar_imagem(digrafo3_matriz, "DIGRAFO_3", "matriz_adj", true);
 }

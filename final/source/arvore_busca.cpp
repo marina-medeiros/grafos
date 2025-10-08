@@ -23,10 +23,6 @@ int ArvoreBusca::get_predecessor(int vertice) const {
     return -1; 
 }
 
-
-
-
-
 void ArvoreBusca::adicionar_aresta_retorno(int u, int v) {
     arestas_retorno.push_back({u, v});
 }
@@ -38,7 +34,6 @@ void ArvoreBusca::adicionar_aresta_avanco(int u, int v) {
 void ArvoreBusca::adicionar_aresta_cruzamento(int u, int v) {
     arestas_cruzamento.push_back({u, v});
 }
-
 
 void ArvoreBusca::exportar_arestas_nao_arvore(std::ofstream& file) const {
     

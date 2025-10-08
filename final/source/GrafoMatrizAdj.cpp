@@ -95,7 +95,7 @@ std::list<int> GrafoMatrizAdj::get_vizinhos(int v) const {
 void GrafoMatrizAdj::print() const {
     std::cout << "\n--- Imprimindo Matriz de Adjacência ---\n";
     if (qtd_vertices == 0) {
-        std::cout << "O grafo esta vazio.\n";
+        std::cout << "O grafo está vazio.\n";
         return;
     }
 
