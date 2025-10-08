@@ -36,7 +36,7 @@ int main(){
 
     // 1. Criação do Grafo a partir da Lista de Adjacências
 
-    std::cout << "\nIMPLEMENTAÇÃO: LISTA DE ADJACÊNCIA\n";
+    std::cout << "\n1 -IMPLEMENTAÇÃO: LISTA DE ADJACÊNCIA\n";
     GrafoListaAdj grafo0_lista(0);
     grafo0_lista.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_lista, "GRAFO_0", "lista_adj");
@@ -55,7 +55,7 @@ int main(){
 
     // 2. Criação do Grafo a partir da Matriz de Adjacências
 
-    std::cout << "\nIMPLEMENTAÇÃO: MATRIZ DE ADJACÊNCIA\n";
+    std::cout << "\n2 - IMPLEMENTAÇÃO: MATRIZ DE ADJACÊNCIA\n";
     GrafoMatrizAdj grafo0_matriz(0);
     grafo0_matriz.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_matriz, "GRAFO_0", "matriz_adj");
@@ -74,7 +74,7 @@ int main(){
 
     // 3. Criação do Grafo a partir da Matriz de Incidência
 
-    std::cout << "\nIMPLEMENTAÇÃO: MATRIZ DE Incidência\n";
+    std::cout << "\n3 - IMPLEMENTAÇÃO: MATRIZ DE Incidência\n";
     GrafoMatrizInc grafo0_inc(0);
     grafo0_inc.carregar_de_arquivo("../dados/GRAFO_0.txt");
     analisar_e_gerar_imagem(grafo0_inc, "GRAFO_0", "matriz_inc");
@@ -93,7 +93,7 @@ int main(){
 
     // 4.1 Converter de matriz de adjacência para lista de adjacência
 
-    std::cout << "\nCONVERSÃO: MATRIZ DE ADJACÊNCIA PARA LISTA DE ADJACÊNCIA\n";
+    std::cout << "\n4.1 - CONVERSÃO: MATRIZ DE ADJACÊNCIA PARA LISTA DE ADJACÊNCIA\n";
 
     std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
     grafo0_matriz.print();
@@ -105,7 +105,7 @@ int main(){
 
     // 4.2 Converter de lista de adjacência para matriz de adjacência
 
-    std::cout << "\nCONVERSÃO: LISTA DE ADJACÊNCIA PARA MATRIZ DE ADJACÊNCIA\n";
+    std::cout << "\n4.2 CONVERSÃO: LISTA DE ADJACÊNCIA PARA MATRIZ DE ADJACÊNCIA\n";
 
     std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
     grafo0_lista.print();
@@ -114,4 +114,26 @@ int main(){
 
     std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
     grafo0_matriz_convertido.print();
+
+    // 5 e 6. Cálculo do grau de cada vértice e função que determina se dois vértices são adjacentes
+    std::cout << "\n5 e 6 - CÁLCULO DO GRAU DO VÉRTICE E DETERMINAÇÃO DE ADJACÊNCIA\n";
+    std::cout << "Utilizando o grafo_0 como referência:\n";
+
+    grafo0_lista.print();
+
+    std::cout << "Grau do vértice a(0): " << grafo0_lista.get_grau_vertice(0) << "\n";
+    std::cout << "Grau do vértice b(1): " << grafo0_lista.get_grau_vertice(1) << "\n";
+    std::cout << "Grau do vértice f(5): " << grafo0_lista.get_grau_vertice(5) << "\n";
+
+    if (grafo0_lista.existe_aresta(0, 1)) {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " são adjacentes.\n";
+    } else {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " não são adjacentes.\n";
+    }
+
+    if (grafo0_lista.existe_aresta(0, 5)) {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " são adjacentes.\n";
+    } else {
+        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
+    }
 }

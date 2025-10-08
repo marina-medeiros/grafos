@@ -25,6 +25,7 @@ public:
     virtual bool existe_aresta(int u, int v) const = 0;
     virtual std::list<int> get_vizinhos(int v) const = 0;
 
+    int get_grau_vertice(int v) const { return get_vizinhos(v).size(); } 
     int get_qtd_vertices() const { return qtd_vertices; }
     int get_qtd_arestas() const { return qtd_arestas; }
     const std::vector<std::string>& get_rotulos() const { return rotulos; }
