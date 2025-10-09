@@ -28,6 +28,7 @@ set(SOURCES
     source/GrafoMatrizAdj.cpp
     source/GrafoMatrizInc.cpp
     source/DigrafoListaAdj.cpp
+    source/DigrafoMatrizInc.cpp
     source/DigrafoMatrizAdj.cpp)
 
 # Executável principal

@@ -24,7 +24,7 @@ função lowpt. (pendente)
 (adaptação pendentes para digrafos, implementações já existem)
 
 16) [x]  Representação do Digrafo a partir da Matriz de Adjacências. (demonstrado em main.cpp)
-17) [ ]  Representação do Digrafo a partir da Matriz de Incidência.
-18) [ ]  Determinação do Grafo subjacente **(OPC= 0,5 ponto)**
+17) [x]  Representação do Digrafo a partir da Matriz de Incidência. (demonstrado em main.cpp)
+18) [x]  Determinação do Grafo subjacente **(OPC= 0,5 ponto)**
 19) [x]  Busca em largura. (demonstrado em main.cpp)
 20) [x]  Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento. (demonstrado em main.cpp)

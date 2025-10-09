@@ -111,6 +111,14 @@ int main(){
     std::cout << "----------- GRAFO DIRECIONADO ----------------------" << std::endl << std::endl;
 
     grafo_dir.print();
+    grafo_dir.exportar_para_dot("grafo_dir.dot", true);
+    gerar_imagem("grafo_dir.dot", "grafo_dir.png");
+
+    GrafoListaAdj grafo_subjacente = grafo_dir.obter_grafo_subjacente(grafo_dir);
+    std::cout << "----------- GRAFO SUBJACENTE ----------------------" << std::endl << std::endl;
+    grafo_subjacente.print();
+    grafo_subjacente.exportar_para_dot("grafo_subjacente.dot", false);
+    gerar_imagem("grafo_subjacente.dot", "grafo_subjacente.png");
 
     // std::cout << "Matriz de adjacência do grafo direcionado:" << std::endl << std::endl;
 

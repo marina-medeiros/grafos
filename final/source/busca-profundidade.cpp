@@ -85,12 +85,23 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
 
     busca_profundidade_lista_adj_recursiva_util(vertice, visitados, predecessores, lista_adj, arestas_retorno);
 
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Mapa de Predecessores:" << std::endl;
-    for (const auto& par : predecessores) {
-        std::cout << "Vértice " << (par.first + 1) << " foi descoberto a partir de " << (par.second != -1 ? std::to_string(par.second + 1) : "Ninguém (raiz)") << "\n";
+    // std::cout << "Mapa de Predecessores:" << std::endl;
+    // for (const auto& par : predecessores) {
+    //     std::cout << "Vértice " << (par.first + 1) << " foi descoberto a partir de " << (par.second != -1 ? std::to_string(par.second + 1) : "Ninguém (raiz)") << "\n";
+    // }
+
+    std::cout << std::endl;
+    std::cout << "---------------------\n";
+    std::cout << "Vértice | Predecessor \n";
+    std::cout << "---------------------\n";
+    for(const auto& par : predecessores) {
+        std::cout << "| " << (par.first + 1) << "\t| "
+                << (par.second != -1 ? std::to_string(par.second + 1) : "Raiz") << "\t  | "
+                <<  std::endl;
     }
+    std::cout << "---------------------\n";
 
     std::cout << "\nArestas de Retorno Encontradas:" << std::endl;
     for (const auto& aresta : arestas_retorno) {

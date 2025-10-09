@@ -21,6 +21,7 @@ public:
     void print() const override;
     int get_grau_saida(int v) const;
     int get_grau_entrada(int v) const;
+    GrafoListaAdj obter_grafo_subjacente(const DigrafoListaAdj& digrafo);
 };
 
 #endif 

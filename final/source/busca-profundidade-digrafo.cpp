@@ -13,32 +13,19 @@
 ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int verticeInicial){
     int qtd_vertices = grafo.get_qtd_vertices();
     std::vector<bool> visitado(qtd_vertices, false);
-    std::vector<int> predecessor(qtd_vertices, -1);
 
     ArvoreBusca arvore(qtd_vertices);
 
-    std::map<int, int> predecessores;
-    predecessores[verticeInicial - 1] = -1; 
-    
-    // std::vector<std::pair<int, int>> arestas_retorno;
-    // std::vector<std::pair<int, int>> arestas_avanco;
-    // std::vector<std::pair<int, int>> arestas_cruzamento;
-
     std::vector<Cor> cores(qtd_vertices, Cor::BRANCO);
-    // std::vector<int> tempo_entrada(qtd_vertices, 0);
-    // std::vector<int> tempo_saida(qtd_vertices, 0);
     int tempo1 = 0;
     int tempo2 = 0;
 
     std::map<int, std::list<int>> lista_adj = grafo.get_lista_adj();
 
     std::cout << "\n--- Iniciando Busca em Profundidade de um Digrafo (com analise de arestas) a partir de " << verticeInicial + 1 << " ---\n";
-    std::cout << "Ordem de visitação: ";
     
-    // if (cores[verticeInicial] == Cor::BRANCO) {
-        busca_profundidade_digrafo_rec(verticeInicial, lista_adj, cores, arvore, tempo1, tempo2);
-    // }
-    
+    busca_profundidade_digrafo_rec(verticeInicial, lista_adj, cores, arvore, tempo1, tempo2);
+   
     for(int i = 0; i < qtd_vertices; i++){
         if(cores[i] == Cor::BRANCO){
             busca_profundidade_digrafo_rec(i, lista_adj, cores, arvore, tempo1, tempo2);
@@ -76,37 +63,26 @@ void busca_profundidade_digrafo_rec(int ultimoVertice,
     tempo1++;
     arvore.set_tempo_entrada(ultimoVertice, tempo1);
 
-    std::cout << "Visitando vertice " << ultimoVertice + 1 << " [PE=" << arvore.get_tempo_entrada()[ultimoVertice] << "]\n";
-
-                                    
-    //lista_adj[ultimoVertice].sort();
-
-    // if (ultimoVertice == 0) { // Vamos checar apenas para o vértice 1
-    //     std::cout << "\n[PROVA REAL] A ordem de vizinhos para o vertice 1 e: ";
-    //     for (int v : lista_adj[ultimoVertice]) {
-    //         std::cout << v + 1 << " ";
-    //     }
-    //     std::cout << "\n\n";
-    // }
+    //std::cout << "Visitando vertice " << ultimoVertice + 1 << " [PE=" << arvore.get_tempo_entrada()[ultimoVertice] << "]\n";
     
     for(int vizinho : lista_adj[ultimoVertice]) {
-        std::cout << "  Aresta (" << ultimoVertice + 1 << " -> " << vizinho + 1 << "): ";
+        //std::cout << "  Aresta (" << ultimoVertice + 1 << " -> " << vizinho + 1 << "): ";
 
         if (cores[vizinho] == Cor::BRANCO) {
-            std::cout << "ARESTA DE ARVORE\n";
+            //std::cout << "ARESTA DE ARVORE\n";
             arvore.adicionar_predecessor(vizinho, ultimoVertice);
             busca_profundidade_digrafo_rec(vizinho, lista_adj, cores, arvore, tempo1, tempo2);
         }
         else if (cores[vizinho] == Cor::CINZA) {
-            std::cout << "ARESTA DE RETORNO (Ciclo detectado!)\n";
+           // std::cout << "ARESTA DE RETORNO (Ciclo detectado!)\n";
             arvore.adicionar_aresta_retorno(ultimoVertice, vizinho);
         }
         else { // Cor::PRETO
             if (arvore.get_tempo_entrada()[ultimoVertice] < arvore.get_tempo_entrada()[vizinho]) {
-                std::cout << "ARESTA DE AVANCO\n";
+              //  std::cout << "ARESTA DE AVANCO\n";
                 arvore.adicionar_aresta_avanco(ultimoVertice, vizinho);
             } else {
-                std::cout << "ARESTA DE CRUZAMENTO\n";
+               // std::cout << "ARESTA DE CRUZAMENTO\n";
                 arvore.adicionar_aresta_cruzamento(ultimoVertice, vizinho);
             }
         }
@@ -114,7 +90,7 @@ void busca_profundidade_digrafo_rec(int ultimoVertice,
     cores[ultimoVertice] = Cor::PRETO; // Marca como 'finalizado'
     tempo2++;
     arvore.set_tempo_saida(ultimoVertice, tempo2);
-    std::cout << "Finalizando vertice " << ultimoVertice + 1 << " [PS=" << arvore.get_tempo_saida()[ultimoVertice] << "]\n";
+   // std::cout << "Finalizando vertice " << ultimoVertice + 1 << " [PS=" << arvore.get_tempo_saida()[ultimoVertice] << "]\n";
 }
 
 

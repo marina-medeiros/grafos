@@ -150,3 +150,19 @@ int DigrafoListaAdj::get_grau_entrada(int v) const {
     }
     return grau_entrada;
 }
+
+GrafoListaAdj DigrafoListaAdj::obter_grafo_subjacente(const DigrafoListaAdj& digrafo) {
+    int qtd_vertices = digrafo.get_qtd_vertices();
+
+    GrafoListaAdj grafo_subjacente(qtd_vertices);
+
+    std::cout << "\n--- Gerando o Grafo Subjacente ---\n";
+
+    for (int u = 0; u < qtd_vertices; ++u) {
+        for (int v : digrafo.get_vizinhos(u)) {
+            grafo_subjacente.inserir_aresta(u, v);
+        }
+    }
+    std::cout << "Grafo subjacente gerado com sucesso.\n";
+    return grafo_subjacente;
+}

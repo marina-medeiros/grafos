@@ -14,6 +14,7 @@
 
 #include "headers/DigrafoListaAdj.h"
 #include "headers/DigrafoMatrizAdj.h"
+#include "headers/DigrafoMatrizInc.h"
 #include "headers/busca-largura-digrafo.h"
 #include "headers/busca-profundidade-digrafo.h"
 
@@ -30,8 +31,8 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     grafo.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
 
     // Gera a imagem de visualização   
-    std::string arq_dot = "../dot-files/" + nome_arquivo + "_" + tipo_impl + ".dot";
-    std::string arq_png = "../png-files/" + nome_arquivo + "_" + tipo_impl + ".png";
+    std::string arq_dot =  nome_arquivo + "_" + tipo_impl + ".dot";
+    std::string arq_png = nome_arquivo + "_" + tipo_impl + ".png";
     
     std::cout << "Gerando imagem em '" << arq_png << "'...\n";
     grafo.exportar_para_dot(arq_dot, eh_digrafo);
@@ -228,20 +229,97 @@ int main(){
     digrafo3_matriz.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
     analisar_e_gerar_imagem(digrafo3_matriz, "DIGRAFO_3", "matriz_adj", true);
 
+    // 16.2 - Representação do Digrafo a partir da Lista de Adjacências.
+
     DigrafoListaAdj digrafo0_lista(0);
     digrafo0_lista.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    analisar_e_gerar_imagem(digrafo0_lista, "DIGRAFO_0", "lista_adj", true);
+
+    DigrafoListaAdj digrafo1_lista(0);
+    digrafo1_lista.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
+    analisar_e_gerar_imagem(digrafo1_lista, "DIGRAFO_1", "lista_adj", true);
+
+    DigrafoListaAdj digrafo2_lista(0);
+    digrafo2_lista.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
+    analisar_e_gerar_imagem(digrafo2_lista, "DIGRAFO_2", "lista_adj", true);
+
+    DigrafoListaAdj digrafo3_lista(0);
+    digrafo3_lista.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
+    analisar_e_gerar_imagem(digrafo3_lista, "DIGRAFO_3", "lista_adj", true);
+
+    // 17 - Representação do Digrafo a partir da Matriz de Incidência.
+    std::cout << "\n17 - IMPLEMENTAÇÃO DIGRAFO: MATRIZ DE INCIDÊNCIA\n";
+    DigrafoMatrizInc digrafo0_inc(0);
+    digrafo0_inc.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    analisar_e_gerar_imagem(digrafo0_inc, "DIGRAFO_0", "matriz_inc", true);
+
+    DigrafoMatrizInc digrafo1_inc(0);
+    digrafo1_inc.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
+    analisar_e_gerar_imagem(digrafo1_inc, "DIGRAFO_1", "matriz_inc", true);
+
+    DigrafoMatrizInc digrafo2_inc(0);
+    digrafo2_inc.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
+    analisar_e_gerar_imagem(digrafo2_inc, "DIGRAFO_2", "matriz_inc", true);
+
+    DigrafoMatrizInc digrafo3_inc(0);
+    digrafo3_inc.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
+    analisar_e_gerar_imagem(digrafo3_inc, "DIGRAFO_3", "matriz_inc", true);
+
+    // 18 - Determinação do Grafo subjacente
+
+    std::cout << "\n18 - DETERMINAÇÃO DO GRAFO SUBJACENTE\n";
+    GrafoListaAdj grafo_subjacente_d0 = digrafo0_lista.obter_grafo_subjacente(digrafo0_lista);
+    grafo_subjacente_d0.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.dot", false);
+    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.png");
+    
+    GrafoListaAdj grafo_subjacente_d1 = digrafo1_lista.obter_grafo_subjacente(digrafo1_lista);
+    grafo_subjacente_d1.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.dot", false);
+    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.png");
+
+    GrafoListaAdj grafo_subjacente_d2 = digrafo2_lista.obter_grafo_subjacente(digrafo2_lista);
+    grafo_subjacente_d2.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.dot", false);
+    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.png");   
+
+    GrafoListaAdj grafo_subjacente_d3 = digrafo3_lista.obter_grafo_subjacente(digrafo3_lista);
+    grafo_subjacente_d3.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.dot", false);
+    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.png");   
+    
 
     // 19 - Busca em Largura (BFS) - Implementação para Digrafo
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";
     
-    auto arvore_bfs_digrafo = busca_largura_digrafo(digrafo0_lista, 0);
-    exportar_arvore_bfs_para_dot("arvore_bfs_digrafo0.dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
-    gerar_imagem("arvore_bfs_digrafo0.dot", "arvore_bfs_digrafo0.png");
+    auto arvore_bfs_digrafo0 = busca_largura_digrafo(digrafo0_lista, 0);
+    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO0.dot", arvore_bfs_digrafo0.get_qtd_vertices(), arvore_bfs_digrafo0);
+    gerar_imagem("ARVORE_BFS_DIGRAFO0.dot", "ARVORE_BFS_DIGRAFO0.png");
 
+    auto arvore_bfs_digrafo1 = busca_largura_digrafo(digrafo1_lista, 0);
+    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO1.dot", arvore_bfs_digrafo1.get_qtd_vertices(), arvore_bfs_digrafo1);
+    gerar_imagem("ARVORE_BFS_DIGRAFO1.dot", "ARVORE_BFS_DIGRAFO1.png");
+
+    auto arvore_bfs_digrafo2 = busca_largura_digrafo(digrafo2_lista, 0);
+    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO2.dot", arvore_bfs_digrafo2.get_qtd_vertices(), arvore_bfs_digrafo2);
+    gerar_imagem("ARVORE_BFS_DIGRAFO2.dot", "ARVORE_BFS_DIGRAFO2.png");
+
+    auto arvore_bfs_digrafo3 = busca_largura_digrafo(digrafo3_lista, 0);
+    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO3.dot", arvore_bfs_digrafo3.get_qtd_vertices(), arvore_bfs_digrafo3);
+    gerar_imagem("ARVORE_BFS_DIGRAFO3.dot", "ARVORE_BFS_DIGRAFO3.png");
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
-    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo0_lista, 0);
-    exportar_arvore_dfs_para_dot("arvore_dfs_digrafo0.dot", arvore_dfs_digrafo);
-    gerar_imagem("arvore_dfs_digrafo0.dot", "arvore_dfs_digrafo0.png");
+    auto arvore_dfs_digrafo0 = busca_profundidade_digrafo_completa(digrafo0_lista, 0);
+    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO0.dot", arvore_dfs_digrafo0);
+    gerar_imagem("ARVORE_DFS_DIGRAFO0.dot", "ARVORE_DFS_DIGRAFO0.png");
+
+    auto arvore_dfs_digrafo1 = busca_profundidade_digrafo_completa(digrafo1_lista, 0);
+    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO1.dot", arvore_dfs_digrafo1);
+    gerar_imagem("ARVORE_DFS_DIGRAFO1.dot", "ARVORE_DFS_DIGRAFO1.png");
+
+    auto arvore_dfs_digrafo2 = busca_profundidade_digrafo_completa(digrafo2_lista, 0);
+    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO2.dot", arvore_dfs_digrafo2);
+    gerar_imagem("ARVORE_DFS_DIGRAFO2.dot", "ARVORE_DFS_DIGRAFO2.png");
+
+    auto arvore_dfs_digrafo3 = busca_profundidade_digrafo_completa(digrafo3_lista, 0);
+    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO3.dot", arvore_dfs_digrafo3);
+    gerar_imagem("ARVORE_DFS_DIGRAFO3.dot", "ARVORE_DFS_DIGRAFO3.png");
+    
 }
