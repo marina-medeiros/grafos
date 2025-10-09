@@ -12,7 +12,7 @@ public:
     std::map<int, std::list<int>> get_lista_adj() const { return lista_adj; }
 
     void limpar() override;
-    void inserir_vertice() override;
+    void inserir_vertice(const std::string& rotulo = "") override;
     void remover_vertice(int u) override;
     void inserir_aresta(int u, int v, int peso = 1) override;
     void remover_aresta(int u, int v) override;

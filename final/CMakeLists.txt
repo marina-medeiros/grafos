@@ -15,17 +15,14 @@ include_directories(
 
 # Arquivos fonte comuns
 set(SOURCES
-    source/busca-profundidade.cpp
     source/arvore-largura.cpp
-    source/busca-largura.cpp
     source/arvore_bfs.cpp
     source/arvore_dfs.cpp
     source/arvore_busca.cpp
-    source/busca-profundidade-digrafo.cpp
-    source/busca-largura-digrafo.cpp
-
-    source/busca-largura.cpp
     source/busca-profundidade.cpp
+    source/busca-profundidade-digrafo.cpp
+    source/busca-largura.cpp
+    source/busca-largura-digrafo.cpp
     source/Grafo.cpp
     source/GrafoListaAdj.cpp
     source/GrafoMatrizAdj.cpp

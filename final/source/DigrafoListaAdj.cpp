@@ -17,9 +17,15 @@ void DigrafoListaAdj::limpar() {
     this->qtd_arestas = 0;
 }
 
-void DigrafoListaAdj::inserir_vertice() {
+void DigrafoListaAdj::inserir_vertice(const std::string& rotulo) {
     lista_adj[qtd_vertices] = std::list<int>();
-    rotulos.push_back(std::to_string(qtd_vertices));
+
+    if (rotulo.empty()) {
+        rotulos.push_back(std::to_string(qtd_vertices));
+    } else {
+        rotulos.push_back(rotulo);
+    }
+    
     qtd_vertices++;
 }
 
