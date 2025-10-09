@@ -37,7 +37,7 @@ int main(){
     grafo_dir.gerar_lista_adj();
     grafo_dir.print_lista_adj();
 
-    busca_largura_digrafo(grafo_dir, 2);
+    //busca_largura_digrafo(grafo_dir, 2);
 
     // std::map<int, int> arvore = busca_profundidade_digrafo_completa(grafo_dir, 2);
 

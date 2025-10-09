@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "Grafo.h"
+#include "arvore-largura.h"
+#include "GrafoListaAdj.h"
 
 /**
  * @brief Tenta colorir um componente conexo de um grafo com duas cores (Busca em Largura).
@@ -16,4 +18,6 @@
  * @return true se o componente conexo for bipartido, false caso contrário.
  */
 bool busca_largura_colorida_grafo(const Grafo& grafo, int vertice_inicial, std::vector<int>& cores);
+
+ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInicial);
 #endif

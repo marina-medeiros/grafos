@@ -1,4 +1,4 @@
-#ifndef ARVORE_DE_BUSCA_H
+#ifndef ARVORE_BUSCA_H
 #define ARVORE_BUSCA_H
 
 #include <vector>
@@ -6,35 +6,77 @@
 
 class ArvoreBusca {
 protected:
-    //std::vector<int> nivel;
-    int qtd_vertices = 0;
+    int qtd_vertices;
     std::vector<int> predecessores;
+    std::vector<int> niveis; // Usado principalmente pela BFS
+    std::vector<int> tempo_entrada; // Usado pela DFS
+    std::vector<int> tempo_saida; // Usado pela DFS
 
+    // Classificação das Arestas
+    std::vector<std::pair<int, int>> arestas_arvore;
     std::vector<std::pair<int, int>> arestas_retorno;
     std::vector<std::pair<int, int>> arestas_avanco;
     std::vector<std::pair<int, int>> arestas_cruzamento;
 
-    void exportar_arestas_nao_arvore(std::ofstream& file) const;
-
 public:
-    ArvoreBusca(int vertices);
 
-    virtual ~ArvoreBusca();
+    ArvoreBusca(int vertices) : qtd_vertices(vertices) {
+        predecessores.assign(vertices, -1);
+    }
 
-    void set_predecessor(int vertice, int predecessor);
-    int get_predecessor(int vertice) const;
+    virtual ~ArvoreBusca() = default;
 
-    void adicionar_aresta_retorno(int u, int v);
-    void adicionar_aresta_avanco(int u, int v);
-    void adicionar_aresta_cruzamento(int u, int v);
-    
-    int get_qtd_vertices() { return qtd_vertices; }
+    int get_qtd_vertices() const;
+    const std::vector<int>& get_predecessores() const { return predecessores; }
+    const std::vector<int>& get_niveis() const { return niveis; }
+    const std::vector<int>& get_tempo_entrada() const { return tempo_entrada; }
+    const std::vector<int>& get_tempo_saida() const { return tempo_saida; }
+    const std::vector<std::pair<int, int>>& get_arestas_arvore() const { return arestas_arvore; }
+    const std::vector<std::pair<int, int>>& get_arestas_retorno() const { return arestas_retorno; }
+    const std::vector<std::pair<int, int>>& get_arestas_avanco() const { return arestas_avanco; }
+    const std::vector<std::pair<int, int>>& get_arestas_cruzamento() const { return arestas_cruzamento; }
 
-    
+    void adicionar_aresta_arvore(int u, int v) {
+        arestas_arvore.push_back({u, v});
+    }
 
-    //virtual void exportar_para_dot(const std::string& filename) const = 0;
-    //virtual void exportar_para_dot(ArvoreBusca arvore, std::string& filename) const = 0;
-    void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
+    void adicionar_aresta_retorno(int u, int v) {
+        arestas_retorno.push_back({u, v});
+    }
+
+    void adicionar_aresta_avanco(int u, int v) {
+        arestas_avanco.push_back({u, v});
+    }
+
+    void adicionar_aresta_cruzamento(int u, int v) {
+        arestas_cruzamento.push_back({u, v});
+    }
+
+    void adicionar_predecessor(int v, int pred) {
+        predecessores[v] = pred;
+    }
+
+    void set_nivel(int v, int nivel) {
+        if (niveis.size() != qtd_vertices) {
+            niveis.resize(qtd_vertices, -1);
+        }
+        niveis[v] = nivel;
+    }
+
+    void set_tempo_entrada(int v, int tempo) {
+        if (tempo_entrada.size() != qtd_vertices) {
+            tempo_entrada.resize(qtd_vertices, 0);
+        }
+        tempo_entrada[v] = tempo;
+    }
+
+    void set_tempo_saida(int v, int tempo) {
+        if (tempo_saida.size() != qtd_vertices) {
+            tempo_saida.resize(qtd_vertices, 0);
+        }
+        tempo_saida[v] = tempo;
+    }
+
 };
 
 #endif

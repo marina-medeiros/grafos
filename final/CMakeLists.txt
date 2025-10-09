@@ -30,6 +30,7 @@ set(SOURCES
     source/GrafoListaAdj.cpp
     source/GrafoMatrizAdj.cpp
     source/GrafoMatrizInc.cpp
+    source/DigrafoListaAdj.cpp
     source/DigrafoMatrizAdj.cpp)
 
 # Executável principal
@@ -39,9 +40,9 @@ add_executable(main
     ${SOURCES}
 )
 
-# add_executable(teste
-#     teste.cpp
+add_executable(teste
+    teste.cpp
     
-#     ${SOURCES}
-# )
+    ${SOURCES}
+)
 

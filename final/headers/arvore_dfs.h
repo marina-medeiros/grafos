@@ -1,19 +1,19 @@
-#ifndef ARVORE_DFS_H
-#define ARVORE_DFS_H
+// #ifndef ARVORE_DFS_H
+// #define ARVORE_DFS_H
 
-#include "arvore_busca.h"
+// #include "arvore_busca.h"
 
-class ArvoreDFS : public ArvoreBusca {
+// class ArvoreDFS : public ArvoreBusca {
 
-    std::vector<int> tempos_entrada; 
-    std::vector<int> tempos_saida;   
+//     std::vector<int> tempos_entrada; 
+//     std::vector<int> tempos_saida;   
 
-public:
-    ArvoreDFS(int vertices);
+// public:
+//     ArvoreDFS(int vertices);
 
-    void set_tempos(int vertice, int entrada, int saida);
+//     void set_tempos(int vertice, int entrada, int saida);
     
-    void exportar_para_dot(ArvoreDFS arvore, std::string& filename) const;
-};
+//     void exportar_para_dot(ArvoreDFS arvore, std::string& filename) const;
+// };
 
-#endif
+// #endif

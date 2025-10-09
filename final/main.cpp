@@ -8,7 +8,14 @@
 #include "headers/GrafoMatrizAdj.h"
 #include "headers/GrafoMatrizInc.h"
 
+#include "headers/busca-largura.h"
+#include "headers/busca-profundidade.h"
+#include "headers/arvore-largura.h"
+
+#include "headers/DigrafoListaAdj.h"
 #include "headers/DigrafoMatrizAdj.h"
+#include "headers/busca-largura-digrafo.h"
+#include "headers/busca-profundidade-digrafo.h"
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -23,12 +30,12 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     grafo.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
 
     // Gera a imagem de visualização   
-    std::string arq_dot = "dot-files/" + nome_arquivo + "_" + tipo_impl + ".dot";
-    std::string arq_png = "png-files/" + nome_arquivo + "_" + tipo_impl + ".png";
+    std::string arq_dot = "../dot-files/" + nome_arquivo + "_" + tipo_impl + ".dot";
+    std::string arq_png = "../png-files/" + nome_arquivo + "_" + tipo_impl + ".png";
     
     std::cout << "Gerando imagem em '" << arq_png << "'...\n";
     grafo.exportar_para_dot(arq_dot, eh_digrafo);
-    grafo.gerar_imagem(arq_dot, arq_png);
+    gerar_imagem(arq_dot, arq_png);
 }
 
 int main(){
@@ -139,6 +146,23 @@ int main(){
         std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
     }
 
+    // 13 - Busca em Largura (BFS) - Implementação 
+
+    std::cout << "\n13 - IMPLEMENTAÇÃO GRAFO: BUSCA EM LARGURA (BFS)\n";
+    ArvoreLargura arvore_bfs = busca_largura_arestas_retorno(grafo0_lista, 0);
+    arvore_bfs.exportar_arvore_bfs(arvore_bfs, "arvore_bfs_grafo0.dot");
+    gerar_imagem("arvore_bfs_grafo0.dot", "arvore_bfs_grafo0.png");
+
+    // 14 - Busca em Profundidade (DFS) - Implementação 
+
+    std::cout << "\n14 - IMPLEMENTAÇÃO GRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
+    auto resultado_dfs = busca_profundidade_lista_adj_recursiva(grafo0_lista, 0);
+    std::map<int, int> predecessores_dfs = resultado_dfs.first;
+    std::vector<std::pair<int, int>> arestas_retorno_dfs = resultado_dfs.second;
+    exportar_arvore_profundidade_para_dot("dfs_grafo0_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs);
+    gerar_imagem("dfs_grafo0_com_retorno.dot", "dfs_grafo0_com_retorno.png");
+    
+
     // 16 - Representação do Digrafo a partir da Matriz de Adjacências.
 
     std::cout << "\n16 - IMPLEMENTAÇÃO DIGRAFO: MATRIZ DE ADJACÊNCIA\n";
@@ -157,4 +181,22 @@ int main(){
     DigrafoMatrizAdj digrafo3_matriz(0);
     digrafo3_matriz.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
     analisar_e_gerar_imagem(digrafo3_matriz, "DIGRAFO_3", "matriz_adj", true);
+
+    DigrafoListaAdj digrafo0_lista(0);
+    digrafo0_lista.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    //analisar_e_gerar_imagem(digrafo0_lista, "DIGRAFO_0", "lista_adj", true);
+
+    // 19 - Busca em Largura (BFS) - Implementação para Digrafo
+    std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";
+    
+    auto arvore_bfs_digrafo = busca_largura_digrafo(digrafo0_lista, 0);
+    exportar_arvore_bfs_para_dot("arvore_bfs_digrafo0.dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
+    gerar_imagem("arvore_bfs_digrafo0.dot", "arvore_bfs_digrafo0.png");
+
+
+    // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
+    std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
+    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo0_lista, 0);
+    exportar_arvore_dfs_para_dot("arvore_dfs_digrafo0.dot", arvore_dfs_digrafo);
+    gerar_imagem("arvore_dfs_digrafo0.dot", "arvore_dfs_digrafo0.png");
 }

@@ -14,8 +14,8 @@
 10) [ ]  Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências. (já existe, falta demonstrar em main.cpp)
 11) [x]  Função que determina se um grafo é conexo ou não. (implementado em Grafo.cpp)
 12) [x]  Determinar se um grafo é bipartido **(OPC = 1,0 ponto)** (implementado em Grafo.cpp)
-13) [ ]  Busca em Largura, a partir de um vértice específico. (já existe, falta adaptar p novo padrão, e gerar um .png)
-14) [ ]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice em específico (já existe, falta adaptar p novo padrão, e gerar um .png)
+13) [x]  Busca em Largura, a partir de um vértice específico. (demonstrado em main.cpp)
+14) [x]  Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice em específico (demonstrado em main.cpp)
 15) [ ]  Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a
 função lowpt. (pendente)
 
@@ -26,6 +26,5 @@ função lowpt. (pendente)
 16) [x]  Representação do Digrafo a partir da Matriz de Adjacências. (demonstrado em main.cpp)
 17) [ ]  Representação do Digrafo a partir da Matriz de Incidência.
 18) [ ]  Determinação do Grafo subjacente **(OPC= 0,5 ponto)**
-19) [x]  Busca em largura. (implementado em busca-largura-digrafo.cpp)
-20) [x]  Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento.
-(implementado em busca-profundidade-digrafo.cpp)
+19) [x]  Busca em largura. (demonstrado em main.cpp)
+20) [x]  Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento. (demonstrado em main.cpp)

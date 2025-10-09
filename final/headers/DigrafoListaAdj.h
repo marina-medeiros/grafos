@@ -1,19 +1,13 @@
-#ifndef GRAFO_LISTA_ADJ_H
-#define GRAFO_LISTA_ADJ_H
+#ifndef DIGRAFO_LISTA_ADJ_H
+#define DIGRAFO_LISTA_ADJ_H
 
-#include "Grafo.h"
-#include <map>
-#include <algorithm>
+#include "GrafoListaAdj.h" 
 
-class GrafoMatrizAdj;
-
-class GrafoListaAdj : public Grafo {
-private:
+class DigrafoListaAdj : public Grafo{
     std::map<int, std::list<int>> lista_adj;
-
 public:
-    GrafoListaAdj(int vertices);
-    virtual ~GrafoListaAdj() override = default;
+    DigrafoListaAdj(int vertices);
+    virtual ~DigrafoListaAdj() override = default;
 
     std::map<int, std::list<int>> get_lista_adj() const { return lista_adj; }
 
@@ -25,7 +19,8 @@ public:
     bool existe_aresta(int u, int v) const override;
     std::list<int> get_vizinhos(int v) const override;
     void print() const override;
-    GrafoMatrizAdj converter_para_matriz_adj() const;
+    int get_grau_saida(int v) const;
+    int get_grau_entrada(int v) const;
 };
 
-#endif
+#endif 

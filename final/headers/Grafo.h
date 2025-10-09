@@ -17,6 +17,9 @@ public:
     Grafo(int vertices);
     virtual ~Grafo() = default;
 
+    void incrementar_qtd_arestas();
+    void decrementar_qtd_arestas();
+
     virtual void limpar() = 0;
     virtual void inserir_vertice() = 0;
     virtual void remover_vertice(int v) = 0;
@@ -36,8 +39,9 @@ public:
 
     void carregar_de_arquivo(const std::string& filename);
     void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;
-    void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
     virtual void print() const = 0;
 };
+
+    void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
 
 #endif

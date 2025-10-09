@@ -16,6 +16,16 @@ Grafo::Grafo(int vertices) : qtd_vertices(vertices), qtd_arestas(0) {
     }
 }
 
+void Grafo::incrementar_qtd_arestas() {
+    this->qtd_arestas++;
+}
+
+void Grafo::decrementar_qtd_arestas() {
+    if (this->qtd_arestas > 0) {
+        this->qtd_arestas--;
+    }
+}
+
 bool Grafo::is_conexo() {
     if (qtd_vertices <= 1) {
         return true;
@@ -155,7 +165,7 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     file.close();
 }
 
-void Grafo::gerar_imagem(const std::string& dotfile, const std::string& imgfile){
+void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
     std::string cmd = "dot -Tpng " + dotfile + " -o " + imgfile;
     FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) {
