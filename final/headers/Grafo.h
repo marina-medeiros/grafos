@@ -21,7 +21,7 @@ public:
     void decrementar_qtd_arestas();
 
     virtual void limpar() = 0;
-    virtual void inserir_vertice() = 0;
+    virtual void inserir_vertice(const std::string& rotulo = "") = 0;
     virtual void remover_vertice(int v) = 0;
     virtual void inserir_aresta(int u, int v, int peso = 1) = 0;
     virtual void remover_aresta(int u, int v) = 0;

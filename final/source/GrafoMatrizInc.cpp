@@ -16,8 +16,13 @@ void GrafoMatrizInc::limpar() {
     this->qtd_arestas = 0;
 }
 
-void GrafoMatrizInc::inserir_vertice() {
-    rotulos.push_back(std::to_string(qtd_vertices));
+void GrafoMatrizInc::inserir_vertice(const std::string& rotulo) {
+    if (rotulo.empty()) {
+        rotulos.push_back(std::to_string(qtd_vertices));
+    } else {
+        rotulos.push_back(rotulo);
+    }
+
     matriz_inc.push_back(std::vector<int>(qtd_arestas, 0));
     qtd_vertices++;
 }

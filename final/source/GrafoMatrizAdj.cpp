@@ -16,8 +16,12 @@ void GrafoMatrizAdj::limpar() {
     this->qtd_arestas = 0;
 }
 
-void GrafoMatrizAdj::inserir_vertice() {
-    rotulos.push_back(std::to_string(qtd_vertices));
+void GrafoMatrizAdj::inserir_vertice(const std::string& rotulo) {
+    if (rotulo.empty()) {
+        rotulos.push_back(std::to_string(qtd_vertices));
+    } else {
+        rotulos.push_back(rotulo);
+    }
 
     qtd_vertices++;
     

@@ -125,6 +125,7 @@ int main(){
     grafo0_matriz_convertido.print();
 
     // 5 e 6. Cálculo do grau de cada vértice e função que determina se dois vértices são adjacentes
+
     std::cout << "\n5 e 6 - CÁLCULO DO GRAU DO VÉRTICE E DETERMINAÇÃO DE ADJACÊNCIA\n";
     std::cout << "Utilizando o grafo_0 como referência:\n";
 
@@ -146,6 +147,52 @@ int main(){
         std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
     }
 
+     // 9 - Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
+
+    std::cout << "\n9.1 - INCLUSÃO DE UM NOVO VÉRTICE USANDO LISTA DE ADJACÊNCIAS\n";
+    std::cout << "Utilizando o grafo_2 como referência:\n";
+
+    grafo2_lista.print();
+
+    std::cout << "\nApós inclusão do novo vértice:\n";
+
+    grafo2_lista.inserir_vertice("12");
+    grafo2_lista.inserir_vertice("13");
+    grafo2_lista.print();
+
+    std::cout << "\n9.2 - INCLUSÃO DE UM NOVO VÉRTICE USANDO MATRIZ DE ADJACÊNCIAS\n";
+    std::cout << "Utilizando o grafo_2 como referência:\n";
+
+    grafo2_matriz.print();
+
+    std::cout << "\nApós inclusão do novo vértice:\n";
+
+    grafo2_matriz.inserir_vertice("12");
+    grafo2_matriz.inserir_vertice("13");
+    grafo2_matriz.print();
+
+    // 10 - Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
+
+    std::cout << "\n10.1 - EXCLUSÃO DE UM VÉRTICE EXISTENTE USANDO LISTA DE ADJACÊNCIAS\n";
+    std::cout << "Utilizando o grafo_2 anterior como referência:\n";
+
+    grafo2_lista.print();
+
+    std::cout << "\nApós remoção do vértice com rótulo 1\n";
+
+    grafo2_lista.remover_vertice(0);
+    grafo2_lista.print();
+
+    std::cout << "\n10.2 - EXCLUSÃO DE UM VÉRTICE EXISTENTE USANDO MATRIZ DE ADJACÊNCIAS\n";
+    std::cout << "Utilizando o grafo_2 como referência:\n";
+
+    grafo2_matriz.print();
+
+    std::cout << "\nApós remoção do vértice com rótulo 2\n";
+
+    grafo2_matriz.remover_vertice(1);
+    grafo2_matriz.print();
+
     // 13 - Busca em Largura (BFS) - Implementação 
 
     std::cout << "\n13 - IMPLEMENTAÇÃO GRAFO: BUSCA EM LARGURA (BFS)\n";
@@ -161,7 +208,6 @@ int main(){
     std::vector<std::pair<int, int>> arestas_retorno_dfs = resultado_dfs.second;
     exportar_arvore_profundidade_para_dot("dfs_grafo0_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs);
     gerar_imagem("dfs_grafo0_com_retorno.dot", "dfs_grafo0_com_retorno.png");
-    
 
     // 16 - Representação do Digrafo a partir da Matriz de Adjacências.
 
@@ -184,7 +230,6 @@ int main(){
 
     DigrafoListaAdj digrafo0_lista(0);
     digrafo0_lista.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    //analisar_e_gerar_imagem(digrafo0_lista, "DIGRAFO_0", "lista_adj", true);
 
     // 19 - Busca em Largura (BFS) - Implementação para Digrafo
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";

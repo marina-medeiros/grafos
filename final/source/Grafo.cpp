@@ -77,7 +77,6 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     
     // 2. Limpa o estado atual e reinicializa o grafo com o novo tamanho
     this->limpar();
-    this->rotulos.resize(num_vertices_arquivo);
     for (int i = 0; i < num_vertices_arquivo; ++i) {
         this->inserir_vertice(); 
     }
