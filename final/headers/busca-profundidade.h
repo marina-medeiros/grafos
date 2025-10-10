@@ -2,6 +2,9 @@
 #define BUSCA_PROFUNDIDADE_H
 
 #include <map>
+#include <set>
+#include <stack>
+#include <utility> 
 #include "Grafo.h"
 #include "GrafoListaAdj.h"
 
@@ -15,5 +18,9 @@ void busca_profundidade_lista_adj_recursiva_util(int u,
 void exportar_arvore_profundidade_para_dot(const std::string& filename,
                                             std::map<int, int> arvore, 
                                             const std::vector<std::pair<int, int>>& arestas_retorno);
+void busca_articulacoes_dfs_recursiva(
+    const Grafo& grafo,int u, std::vector<int>& disc, std::vector<int>& low, 
+    std::vector<int>& parent, std::stack<std::pair<int, int>>& pilha,
+    std::set<int>& ap, std::vector<std::set<int>>& blocos, int& tempo);
 
 #endif

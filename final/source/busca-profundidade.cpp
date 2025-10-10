@@ -134,6 +134,50 @@ void busca_profundidade_lista_adj_recursiva_util(int u,
     }
 }
 
+void busca_articulacoes_dfs_recursiva(
+    const Grafo& grafo,int u, std::vector<int>& disc, std::vector<int>& low, 
+    std::vector<int>& parent, std::stack<std::pair<int, int>>& pilha,
+    std::set<int>& ap, std::vector<std::set<int>>& blocos, int& tempo) {
+
+    disc[u] = low[u] = tempo++;
+    int filhos = 0;
+
+    for (int v : grafo.get_vizinhos(u)) {
+        if (v == parent[u]) continue;
+
+        if (disc[v] != -1) { 
+            if (disc[v] < disc[u]) { 
+                low[u] = std::min(low[u], disc[v]);
+                pilha.push({u, v});
+            }
+        } else { 
+            filhos++;
+            parent[v] = u;
+            pilha.push({u, v});
+            
+            busca_articulacoes_dfs_recursiva(grafo,v, disc, low, parent, pilha, ap, blocos, tempo);
+
+            low[u] = std::min(low[u], low[v]);
+
+            if ((parent[u] == -1 && filhos > 1) || (parent[u] != -1 && low[v] >= disc[u])) {
+                ap.insert(u); 
+
+                std::set<int> aux;
+                while (true) {
+                    std::pair<int, int> edge = pilha.top();
+                    pilha.pop();
+                    aux.insert(edge.first);
+                    aux.insert(edge.second);
+                    if ((edge.first == u && edge.second == v) || (edge.first == v && edge.second == u)) {
+                        break;
+                    }
+                }
+                blocos.push_back(aux);
+            }
+        }
+    }
+}
+
 void exportar_arvore_profundidade_para_dot(const std::string& filename,
                                             std::map<int, int> arvore, 
                                             const std::vector<std::pair<int, int>>& arestas_retorno) {
