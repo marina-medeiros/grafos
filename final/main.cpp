@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <filesystem>
 
 #include "headers/Grafo.h"
 
@@ -18,6 +17,9 @@
 #include "headers/busca-largura-digrafo.h"
 #include "headers/busca-profundidade-digrafo.h"
 
+void grafo(std::string txt);
+void digrafo(std::string txt);
+
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
 
@@ -26,10 +28,7 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     // Testa os algoritmos
     std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
     std::cout << "Total de Arestas: " << grafo.get_qtd_arestas() << std::endl;
-    
-    grafo.is_conexo() ? std::cout << "O grafo é conexo" << std::endl :  std::cout << "O grafo é não conexo" << std::endl;
-    grafo.is_bipartido() ? std::cout << "O grafo é bipartido" << std::endl :  std::cout << "O grafo é não bipartido" << std::endl;
-
+        
     // Gera a imagem de visualização   
     std::string arq_dot =  nome_arquivo + "_" + tipo_impl + ".dot";
     std::string arq_png = nome_arquivo + "_" + tipo_impl + ".png";
@@ -39,292 +38,310 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     gerar_imagem(arq_dot, arq_png);
 }
 
+void menu() {
+    std::cout << "\nQual grafo ou digrafo deseja analisar?\n" << std::endl;
+    std::cout << "1 | GRAFO_0\t5 | DIGRAFO_0" << std::endl;
+    std::cout << "2 | GRAFO_1\t6 | DIGRAFO_1" << std::endl;
+    std::cout << "3 | GRAFO_2\t7 | DIGRAFO_2" << std::endl;
+    std::cout << "4 | GRAFO_3\t8 | DIGRAFO_3" << std::endl;
+    std::cout << "\nDigite 'sair' ou 's' para terminar." << std::endl;
+    std::cout << "Insira a opção escolhida: ";
+}
+
 int main(){
 
-    std::filesystem::create_directory("dot-files");
-    std::filesystem::create_directory("png-files");
+    const std::map<std::string, std::string> arquivos = {
+        {"1", "GRAFO_0.txt"}, {"grafo_0", "GRAFO_0.txt"},
+        {"2", "GRAFO_1.txt"}, {"grafo_1", "GRAFO_1.txt"},
+        {"3", "GRAFO_2.txt"}, {"grafo_2", "GRAFO_2.txt"},
+        {"4", "GRAFO_3.txt"}, {"grafo_3", "GRAFO_3.txt"},
+        {"5", "DIGRAFO_0.txt"}, {"digrafo_0", "DIGRAFO_0.txt"},
+        {"6", "DIGRAFO_1.txt"}, {"digrafo_1", "DIGRAFO_1.txt"},
+        {"7", "DIGRAFO_2.txt"}, {"digrafo_2", "DIGRAFO_2.txt"},
+        {"8", "DIGRAFO_3.txt"}, {"digrafo_3", "DIGRAFO_3.txt"}
+    };
+
+    while (true) {
+        menu();
+        std::string entrada;
+        std::cin >> entrada;
+
+        std::transform(entrada.begin(), entrada.end(), entrada.begin(), ::tolower);
+
+        if (entrada == "sair" || entrada == "s") {
+            break;
+        }
+
+        auto it = arquivos.find(entrada);
+        if (it == arquivos.end()) {
+            std::cout << "\nOpção inválida. Tente novamente.\n" << std::endl;
+            continue;
+        }
+
+        if (entrada == "1" || entrada == "2" || entrada == "3" || entrada == "4") {
+            //se digrafo
+            grafo(it->second);
+        } else if (entrada == "5" || entrada == "6" || entrada == "7" || entrada == "8"){
+            //se grafo
+            digrafo(it->second);
+        }
+        
+        std::cout << "\nAnálise concluída. Pressione Enter para continuar...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+    }
+
+    return 0;
+
+}
+
+void grafo(std::string txt){
+
+    std::string caminho_arquivo = "../dados/" + txt;
+    std::string nome_grafo = txt.substr(0, txt.find(".txt"));
 
     // 1. Criação do Grafo a partir da Lista de Adjacências
 
-    std::cout << "\n1 -IMPLEMENTAÇÃO GRAFO: LISTA DE ADJACÊNCIA\n";
-    GrafoListaAdj grafo0_lista(0);
-    grafo0_lista.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo0_lista, "GRAFO_0", "lista_adj");
-
-    GrafoListaAdj grafo1_lista(0);
-    grafo1_lista.carregar_de_arquivo("../dados/GRAFO_1.txt");
-    analisar_e_gerar_imagem(grafo1_lista, "GRAFO_1", "lista_adj");
-
-    GrafoListaAdj grafo2_lista(0);
-    grafo2_lista.carregar_de_arquivo("../dados/GRAFO_2.txt");
-    analisar_e_gerar_imagem(grafo2_lista, "GRAFO_2", "lista_adj");
-
-    GrafoListaAdj grafo3_lista(0);
-    grafo3_lista.carregar_de_arquivo("../dados/GRAFO_3.txt");
-    analisar_e_gerar_imagem(grafo3_lista, "GRAFO_3", "lista_adj");
+    std::cout << "\n1 -IMPLEMENTAÇÃO " + nome_grafo + ": LISTA DE ADJACÊNCIA\n";
+    GrafoListaAdj grafo_original_lista(0);
+    grafo_original_lista.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(grafo_original_lista, nome_grafo, "lista_adj");
 
     // 2. Criação do Grafo a partir da Matriz de Adjacências
 
-    std::cout << "\n2 - IMPLEMENTAÇÃO GRAFO: MATRIZ DE ADJACÊNCIA\n";
-    GrafoMatrizAdj grafo0_matriz(0);
-    grafo0_matriz.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo0_matriz, "GRAFO_0", "matriz_adj");
-
-    GrafoMatrizAdj grafo1_matriz(0);
-    grafo1_matriz.carregar_de_arquivo("../dados/GRAFO_1.txt");
-    analisar_e_gerar_imagem(grafo1_matriz, "GRAFO_1", "matriz_adj");
-
-    GrafoMatrizAdj grafo2_matriz(0);
-    grafo2_matriz.carregar_de_arquivo("../dados/GRAFO_2.txt");
-    analisar_e_gerar_imagem(grafo2_matriz, "GRAFO_2", "matriz_adj");
-
-    GrafoMatrizAdj grafo3_matriz(0);
-    grafo3_matriz.carregar_de_arquivo("../dados/GRAFO_3.txt");
-    analisar_e_gerar_imagem(grafo3_matriz, "GRAFO_3", "matriz_adj");
+    std::cout << "\n2 - IMPLEMENTAÇÃO " + nome_grafo + ": MATRIZ DE ADJACÊNCIA\n";
+    GrafoMatrizAdj grafo_original_matriz(0);
+    grafo_original_matriz.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(grafo_original_matriz, nome_grafo, "matriz_adj");
 
     // 3. Criação do Grafo a partir da Matriz de Incidência
 
-    std::cout << "\n3 - IMPLEMENTAÇÃO GRAFO: MATRIZ DE Incidência\n";
-    GrafoMatrizInc grafo0_inc(0);
-    grafo0_inc.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo0_inc, "GRAFO_0", "matriz_inc");
-
-    GrafoMatrizInc grafo1_inc(0);
-    grafo1_inc.carregar_de_arquivo("../dados/GRAFO_1.txt");
-    analisar_e_gerar_imagem(grafo1_inc, "GRAFO_1", "matriz_inc");
-
-    GrafoMatrizInc grafo2_inc(0);
-    grafo2_inc.carregar_de_arquivo("../dados/GRAFO_2.txt");
-    analisar_e_gerar_imagem(grafo2_inc, "GRAFO_2", "matriz_inc");
-
-    GrafoMatrizInc grafo3_inc(0);
-    grafo3_inc.carregar_de_arquivo("../dados/GRAFO_3.txt");
-    analisar_e_gerar_imagem(grafo3_inc, "GRAFO_3", "matriz_inc");
+    std::cout << "\n3 - IMPLEMENTAÇÃO " + nome_grafo + ": MATRIZ DE Incidência\n";
+    GrafoMatrizInc grafo_original_inc(0);
+    grafo_original_inc.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(grafo_original_inc, nome_grafo, "matriz_inc");
 
     // 4.1 Converter de matriz de adjacência para lista de adjacência
 
     std::cout << "\n4.1 - CONVERSÃO: MATRIZ DE ADJACÊNCIA PARA LISTA DE ADJACÊNCIA\n";
 
-    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
-    grafo0_matriz.print();
+    std::cout << "ANTES DA CONVERSÃO - " + nome_grafo + ":\n";
+    grafo_original_matriz.print();
 
-    GrafoListaAdj grafo0_lista_convertido = grafo0_matriz.converter_para_lista_adj();
+    GrafoListaAdj grafo_lista_convertido = grafo_original_matriz.converter_para_lista_adj();
 
-    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
-    grafo0_lista_convertido.print();
+    std::cout << "DEPOIS DA CONVERSÃO - " + nome_grafo + ":\n";
+    grafo_lista_convertido.print();
 
     // 4.2 Converter de lista de adjacência para matriz de adjacência
 
     std::cout << "\n4.2 CONVERSÃO: LISTA DE ADJACÊNCIA PARA MATRIZ DE ADJACÊNCIA\n";
 
-    std::cout << "ANTES DA CONVERSÃO - Grafo 0:\n";
-    grafo0_lista.print();
+    std::cout << "ANTES DA CONVERSÃO - " + nome_grafo + ":\n";
+    grafo_original_lista.print();
 
-    GrafoMatrizAdj grafo0_matriz_convertido = grafo0_lista.converter_para_matriz_adj();
+    GrafoMatrizAdj grafo_matriz_convertido = grafo_original_lista.converter_para_matriz_adj();
 
-    std::cout << "DEPOIS DA CONVERSÃO - Grafo 0:\n";
-    grafo0_matriz_convertido.print();
+    std::cout << "DEPOIS DA CONVERSÃO - " + nome_grafo + ":\n";
+    grafo_matriz_convertido.print();
 
     // 5 e 6. Cálculo do grau de cada vértice e função que determina se dois vértices são adjacentes
 
     std::cout << "\n5 e 6 - CÁLCULO DO GRAU DO VÉRTICE E DETERMINAÇÃO DE ADJACÊNCIA\n";
-    std::cout << "Utilizando o grafo_0 como referência:\n";
+    std::cout << "Utilizando o " + nome_grafo + " como referência:\n";
 
-    grafo0_lista.print();
+    grafo_original_lista.print();
 
-    std::cout << "Grau do vértice a(0): " << grafo0_lista.get_grau_vertice(0) << "\n";
-    std::cout << "Grau do vértice b(1): " << grafo0_lista.get_grau_vertice(1) << "\n";
-    std::cout << "Grau do vértice f(5): " << grafo0_lista.get_grau_vertice(5) << "\n";
-
-    if (grafo0_lista.existe_aresta(0, 1)) {
-        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " são adjacentes.\n";
+    int qtd_vertices = grafo_original_lista.get_qtd_vertices();
+    if (qtd_vertices == 0) {
+        std::cout << "O grafo está vazio. Não há vértices para testar.\n";
     } else {
-        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[1] << " não são adjacentes.\n";
+        std::cout << "\nGrau de cada vértice:\n";
+        for (int i = 0; i < qtd_vertices; ++i) {
+            std::cout << "  - Vértice '" << grafo_original_lista.get_rotulos()[i] 
+                    << "' (índice " << i << "): Grau " 
+                    << grafo_original_lista.get_grau_vertice(i) << "\n";
+        }
+
+        std::cout << "\n--- Determinando se dois vértices são ou não adjacentes ---\n";
+
+        for (int i = 0; i < qtd_vertices; ++i) {
+            for (int j = i + 1; j < qtd_vertices; ++j) {
+                
+                std::string rotulo_i = grafo_original_lista.get_rotulos()[i];
+                std::string rotulo_j = grafo_original_lista.get_rotulos()[j];
+
+                std::cout << "  - Par ('" << rotulo_i << "', '" << rotulo_j << "'): ";
+
+                if (grafo_original_lista.existe_aresta(i, j)) {
+                    std::cout << "São adjacentes.\n";
+                } else {
+                    std::cout << "Não são adjacentes.\n";
+                }
+            }
+        }
     }
 
-    if (grafo0_lista.existe_aresta(0, 5)) {
-        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " são adjacentes.\n";
-    } else {
-        std::cout << "Os vértices " << grafo0_lista.get_rotulos()[0] << " e " << grafo0_lista.get_rotulos()[5] << " não são adjacentes.\n";
-    }
+    // 7 - Número total de vértices. -- já é mostrado ao analisar_e_gerar_imagem
 
-     // 9 - Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
+    // 8 - Número total de arestas. -- já é mostrado ao analisar_e_gerar_imagem
+
+    // 9 - Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
 
     std::cout << "\n9.1 - INCLUSÃO DE UM NOVO VÉRTICE USANDO LISTA DE ADJACÊNCIAS\n";
-    std::cout << "Utilizando o grafo_2 como referência:\n";
+    std::cout << "Utilizando o " + nome_grafo + " como referência:\n";
 
-    grafo2_lista.print();
+    grafo_original_lista.print();
+
+    GrafoListaAdj grafo_com_inclusao_lista = grafo_original_lista;
+
+    int qtd_inicial_lista = grafo_com_inclusao_lista.get_qtd_vertices();
+    std::string rotulo_1 = std::to_string(qtd_inicial_lista + 1);
+    std::string rotulo_2 = std::to_string(qtd_inicial_lista + 2);
+
+    grafo_com_inclusao_lista.inserir_vertice(rotulo_1);
+    grafo_com_inclusao_lista.inserir_vertice(rotulo_2);
 
     std::cout << "\nApós inclusão do novo vértice:\n";
-
-    grafo2_lista.inserir_vertice("12");
-    grafo2_lista.inserir_vertice("13");
-    grafo2_lista.print();
+    grafo_com_inclusao_lista.print();
 
     std::cout << "\n9.2 - INCLUSÃO DE UM NOVO VÉRTICE USANDO MATRIZ DE ADJACÊNCIAS\n";
-    std::cout << "Utilizando o grafo_2 como referência:\n";
+    std::cout << "Utilizando o " + nome_grafo + " como referência:\n";
 
-    grafo2_matriz.print();
+    grafo_original_matriz.print();
+
+    GrafoMatrizAdj grafo_com_inclusao_matriz = grafo_original_matriz;
+
+    int qtd_inicial_matriz = grafo_com_inclusao_matriz.get_qtd_vertices();
+    rotulo_1 = std::to_string(qtd_inicial_matriz + 1);
+    rotulo_2 = std::to_string(qtd_inicial_matriz + 2);
+
+
+    grafo_com_inclusao_matriz.inserir_vertice(rotulo_1);
+    grafo_com_inclusao_matriz.inserir_vertice(rotulo_2);
 
     std::cout << "\nApós inclusão do novo vértice:\n";
+    grafo_com_inclusao_matriz.print();
 
-    grafo2_matriz.inserir_vertice("12");
-    grafo2_matriz.inserir_vertice("13");
-    grafo2_matriz.print();
 
     // 10 - Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
 
     std::cout << "\n10.1 - EXCLUSÃO DE UM VÉRTICE EXISTENTE USANDO LISTA DE ADJACÊNCIAS\n";
-    std::cout << "Utilizando o grafo_2 anterior como referência:\n";
+    std::cout << "Utilizando o grafo anterior como referência:\n";
 
-    grafo2_lista.print();
+    grafo_com_inclusao_lista.print();
 
-    std::cout << "\nApós remoção do vértice com rótulo 1\n";
+    GrafoListaAdj grafo_com_remocao_lista = grafo_com_inclusao_lista;
 
-    grafo2_lista.remover_vertice(0);
-    grafo2_lista.print();
+    int qtd_antes_remocao_lista = grafo_com_remocao_lista.get_qtd_vertices();
+    if (qtd_antes_remocao_lista > 0) {
+        int indice_para_remover = qtd_antes_remocao_lista - 1;
+        std::string rotulo_removido = grafo_com_remocao_lista.get_rotulos()[indice_para_remover];
+
+        std::cout << "\nRemovendo o último vértice (rótulo '" << rotulo_removido << "', índice " << indice_para_remover << ")...\n";
+
+        grafo_com_remocao_lista.remover_vertice(indice_para_remover);
+
+        std::cout << "\nGrafo após a exclusão:\n";
+        grafo_com_remocao_lista.print();
+    } else {
+        std::cout << "\nNão há vértices para remover.\n";
+    }
 
     std::cout << "\n10.2 - EXCLUSÃO DE UM VÉRTICE EXISTENTE USANDO MATRIZ DE ADJACÊNCIAS\n";
-    std::cout << "Utilizando o grafo_2 como referência:\n";
+    std::cout << "Utilizando o grafo anterior como referência:\n";
 
-    grafo2_matriz.print();
+    grafo_com_inclusao_matriz.print();
 
-    std::cout << "\nApós remoção do vértice com rótulo 2\n";
+    GrafoMatrizAdj grafo_com_remocao_matriz = grafo_com_inclusao_matriz;
 
-    grafo2_matriz.remover_vertice(1);
-    grafo2_matriz.print();
+    int qtd_antes_remocao_matriz = grafo_com_remocao_matriz.get_qtd_vertices();
+    if (qtd_antes_remocao_matriz > 0) {
+        int indice_para_remover = qtd_antes_remocao_matriz - 1;
+        std::string rotulo_removido = grafo_com_remocao_matriz.get_rotulos()[indice_para_remover];
+
+        std::cout << "\nRemovendo o último vértice (rótulo '" << rotulo_removido << "', índice " << indice_para_remover << ")...\n";
+        
+        grafo_com_remocao_matriz.remover_vertice(indice_para_remover);
+
+        std::cout << "\nGrafo após a exclusão:\n";
+        grafo_com_remocao_matriz.print();
+    } else {
+        std::cout << "\nNão há vértices para remover.\n";
+    }
+
+    // 11 - Verificar se o grafo é ou não conexo
+
+    std::cout << "\n11 - O " + nome_grafo + " é conexo?\n";
+    grafo_original_lista.is_conexo() ? std::cout << "O " + nome_grafo + " é conexo" << std::endl :  std::cout << "O " + nome_grafo + " é não conexo" << std::endl;
+
+    // 12 - Verificar se o grafo é ou não bipartido
+
+    std::cout << "\n12 - O " + nome_grafo + " é bipartido?\n";
+    grafo_original_lista.is_bipartido() ? std::cout << "O " + nome_grafo + " é bipartido" << std::endl :  std::cout << "O " + nome_grafo + " é não bipartido" << std::endl;
 
     // 13 - Busca em Largura (BFS) - Implementação 
 
-    std::cout << "\n13 - IMPLEMENTAÇÃO GRAFO: BUSCA EM LARGURA (BFS)\n";
-    ArvoreLargura arvore_bfs = busca_largura_arestas_retorno(grafo0_lista, 0);
-    arvore_bfs.exportar_arvore_bfs(arvore_bfs, "arvore_bfs_grafo0.dot");
-    gerar_imagem("arvore_bfs_grafo0.dot", "arvore_bfs_grafo0.png");
+    std::cout << "\n13 - IMPLEMENTAÇÃO " + nome_grafo + ": BUSCA EM LARGURA (BFS)\n";
+    ArvoreLargura arvore_bfs = busca_largura_arestas_retorno(grafo_original_lista, 0);
+    arvore_bfs.exportar_arvore_bfs(arvore_bfs, "arvore_bfs_"+nome_grafo+".dot");
+    gerar_imagem("arvore_bfs_"+nome_grafo+".dot", "arvore_bfs_"+nome_grafo+".png");
 
     // 14 - Busca em Profundidade (DFS) - Implementação 
 
-    std::cout << "\n14 - IMPLEMENTAÇÃO GRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
-    auto resultado_dfs = busca_profundidade_lista_adj_recursiva(grafo0_lista, 0);
+    std::cout << "\n14 - IMPLEMENTAÇÃO " + nome_grafo + ": BUSCA EM PROFUNDIDADE (DFS)\n";
+    auto resultado_dfs = busca_profundidade_lista_adj_recursiva(grafo_original_lista, 0);
     std::map<int, int> predecessores_dfs = resultado_dfs.first;
     std::vector<std::pair<int, int>> arestas_retorno_dfs = resultado_dfs.second;
-    exportar_arvore_profundidade_para_dot("dfs_grafo0_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs);
-    gerar_imagem("dfs_grafo0_com_retorno.dot", "dfs_grafo0_com_retorno.png");
+    exportar_arvore_profundidade_para_dot("arvore_dfs_"+nome_grafo+"_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs, grafo_original_lista.get_rotulos());
+    gerar_imagem("arvore_dfs_"+nome_grafo+"_com_retorno.dot","arvore_dfs_"+nome_grafo+"_com_retorno.png");
 
     // 15 - Determinação de articulações e blocos (biconectividade), utilizando lowpt.
 
-    std::cout << "\n15 - IMPLEMENTAÇÃO GRAFO: DETERMINAÇÂO DE ARTICULAÇÔES E BLOCOS COM LOWPT\n";
-    grafo0_lista.determinar_articulacoes_blocos_lowpt();
+    std::cout << "\n15 - IMPLEMENTAÇÃO " + nome_grafo + ": DETERMINAÇÂO DE ARTICULAÇÔES E BLOCOS COM LOWPT\n";
+    grafo_original_lista.determinar_articulacoes_blocos_lowpt();
+}
+
+void digrafo(std::string txt){
+    std::string caminho_arquivo = "../dados/" + txt;
+    std::string nome_grafo = txt.substr(0, txt.find(".txt"));
 
     // 16 - Representação do Digrafo a partir da Matriz de Adjacências.
 
     std::cout << "\n16 - IMPLEMENTAÇÃO DIGRAFO: MATRIZ DE ADJACÊNCIA\n";
-    DigrafoMatrizAdj digrafo0_matriz(0);
-    digrafo0_matriz.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo0_matriz, "DIGRAFO_0", "matriz_adj", true);
-
-    DigrafoMatrizAdj digrafo1_matriz(0);
-    digrafo1_matriz.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
-    analisar_e_gerar_imagem(digrafo1_matriz, "DIGRAFO_1", "matriz_adj", true);
-
-    DigrafoMatrizAdj digrafo2_matriz(0);
-    digrafo2_matriz.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
-    analisar_e_gerar_imagem(digrafo2_matriz, "DIGRAFO_2", "matriz_adj", true);
-
-    DigrafoMatrizAdj digrafo3_matriz(0);
-    digrafo3_matriz.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
-    analisar_e_gerar_imagem(digrafo3_matriz, "DIGRAFO_3", "matriz_adj", true);
+    DigrafoMatrizAdj digrafo_matriz(0);
+    digrafo_matriz.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(digrafo_matriz, nome_grafo, "matriz_adj", true);
 
     // 16.2 - Representação do Digrafo a partir da Lista de Adjacências.
 
-    DigrafoListaAdj digrafo0_lista(0);
-    digrafo0_lista.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo0_lista, "DIGRAFO_0", "lista_adj", true);
-
-    DigrafoListaAdj digrafo1_lista(0);
-    digrafo1_lista.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
-    analisar_e_gerar_imagem(digrafo1_lista, "DIGRAFO_1", "lista_adj", true);
-
-    DigrafoListaAdj digrafo2_lista(0);
-    digrafo2_lista.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
-    analisar_e_gerar_imagem(digrafo2_lista, "DIGRAFO_2", "lista_adj", true);
-
-    DigrafoListaAdj digrafo3_lista(0);
-    digrafo3_lista.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
-    analisar_e_gerar_imagem(digrafo3_lista, "DIGRAFO_3", "lista_adj", true);
+    DigrafoListaAdj digrafo_lista(0);
+    digrafo_lista.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(digrafo_lista, nome_grafo, "lista_adj", true);
 
     // 17 - Representação do Digrafo a partir da Matriz de Incidência.
     std::cout << "\n17 - IMPLEMENTAÇÃO DIGRAFO: MATRIZ DE INCIDÊNCIA\n";
-    DigrafoMatrizInc digrafo0_inc(0);
-    digrafo0_inc.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo0_inc, "DIGRAFO_0", "matriz_inc", true);
-
-    DigrafoMatrizInc digrafo1_inc(0);
-    digrafo1_inc.carregar_de_arquivo("../dados/DIGRAFO_1.txt");
-    analisar_e_gerar_imagem(digrafo1_inc, "DIGRAFO_1", "matriz_inc", true);
-
-    DigrafoMatrizInc digrafo2_inc(0);
-    digrafo2_inc.carregar_de_arquivo("../dados/DIGRAFO_2.txt");
-    analisar_e_gerar_imagem(digrafo2_inc, "DIGRAFO_2", "matriz_inc", true);
-
-    DigrafoMatrizInc digrafo3_inc(0);
-    digrafo3_inc.carregar_de_arquivo("../dados/DIGRAFO_3.txt");
-    analisar_e_gerar_imagem(digrafo3_inc, "DIGRAFO_3", "matriz_inc", true);
+    DigrafoMatrizInc digrafo_inc(0);
+    digrafo_inc.carregar_de_arquivo(caminho_arquivo);
+    analisar_e_gerar_imagem(digrafo_inc, nome_grafo, "matriz_inc", true);
 
     // 18 - Determinação do Grafo subjacente
 
     std::cout << "\n18 - DETERMINAÇÃO DO GRAFO SUBJACENTE\n";
-    GrafoListaAdj grafo_subjacente_d0 = digrafo0_lista.obter_grafo_subjacente(digrafo0_lista);
-    grafo_subjacente_d0.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.dot", false);
-    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_0_lista_adj.png");
+    GrafoListaAdj grafo_subjacente = digrafo_lista.obter_grafo_subjacente(digrafo_lista);
+    analisar_e_gerar_imagem(grafo_subjacente, nome_grafo, "lista_adj_subjacente", false);
     
-    GrafoListaAdj grafo_subjacente_d1 = digrafo1_lista.obter_grafo_subjacente(digrafo1_lista);
-    grafo_subjacente_d1.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.dot", false);
-    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_1_lista_adj.png");
-
-    GrafoListaAdj grafo_subjacente_d2 = digrafo2_lista.obter_grafo_subjacente(digrafo2_lista);
-    grafo_subjacente_d2.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.dot", false);
-    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_2_lista_adj.png");   
-
-    GrafoListaAdj grafo_subjacente_d3 = digrafo3_lista.obter_grafo_subjacente(digrafo3_lista);
-    grafo_subjacente_d3.exportar_para_dot("GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.dot", false);
-    gerar_imagem("GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.dot", "GRAFO_SUBJACENTE_DIGRAFO_3_lista_adj.png");   
-    
-
     // 19 - Busca em Largura (BFS) - Implementação para Digrafo
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";
     
-    auto arvore_bfs_digrafo0 = busca_largura_digrafo(digrafo0_lista, 0);
-    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO0.dot", arvore_bfs_digrafo0.get_qtd_vertices(), arvore_bfs_digrafo0);
-    gerar_imagem("ARVORE_BFS_DIGRAFO0.dot", "ARVORE_BFS_DIGRAFO0.png");
-
-    auto arvore_bfs_digrafo1 = busca_largura_digrafo(digrafo1_lista, 0);
-    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO1.dot", arvore_bfs_digrafo1.get_qtd_vertices(), arvore_bfs_digrafo1);
-    gerar_imagem("ARVORE_BFS_DIGRAFO1.dot", "ARVORE_BFS_DIGRAFO1.png");
-
-    auto arvore_bfs_digrafo2 = busca_largura_digrafo(digrafo2_lista, 0);
-    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO2.dot", arvore_bfs_digrafo2.get_qtd_vertices(), arvore_bfs_digrafo2);
-    gerar_imagem("ARVORE_BFS_DIGRAFO2.dot", "ARVORE_BFS_DIGRAFO2.png");
-
-    auto arvore_bfs_digrafo3 = busca_largura_digrafo(digrafo3_lista, 0);
-    exportar_arvore_bfs_para_dot("ARVORE_BFS_DIGRAFO3.dot", arvore_bfs_digrafo3.get_qtd_vertices(), arvore_bfs_digrafo3);
-    gerar_imagem("ARVORE_BFS_DIGRAFO3.dot", "ARVORE_BFS_DIGRAFO3.png");
+    auto arvore_bfs_digrafo = busca_largura_digrafo(digrafo_lista, 0);
+    exportar_arvore_bfs_para_dot("arvore_bfs_"+nome_grafo+".dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
+    gerar_imagem("arvore_bfs_"+nome_grafo+".dot", "arvore_bfs_"+nome_grafo+".png");
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
-    auto arvore_dfs_digrafo0 = busca_profundidade_digrafo_completa(digrafo0_lista, 0);
-    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO0.dot", arvore_dfs_digrafo0);
-    gerar_imagem("ARVORE_DFS_DIGRAFO0.dot", "ARVORE_DFS_DIGRAFO0.png");
-
-    auto arvore_dfs_digrafo1 = busca_profundidade_digrafo_completa(digrafo1_lista, 0);
-    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO1.dot", arvore_dfs_digrafo1);
-    gerar_imagem("ARVORE_DFS_DIGRAFO1.dot", "ARVORE_DFS_DIGRAFO1.png");
-
-    auto arvore_dfs_digrafo2 = busca_profundidade_digrafo_completa(digrafo2_lista, 0);
-    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO2.dot", arvore_dfs_digrafo2);
-    gerar_imagem("ARVORE_DFS_DIGRAFO2.dot", "ARVORE_DFS_DIGRAFO2.png");
-
-    auto arvore_dfs_digrafo3 = busca_profundidade_digrafo_completa(digrafo3_lista, 0);
-    exportar_arvore_dfs_para_dot("ARVORE_DFS_DIGRAFO3.dot", arvore_dfs_digrafo3);
-    gerar_imagem("ARVORE_DFS_DIGRAFO3.dot", "ARVORE_DFS_DIGRAFO3.png");
+    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_lista, 0);
+    exportar_arvore_dfs_para_dot("arvore_dfs_"+nome_grafo+".dot", arvore_dfs_digrafo);
+    gerar_imagem("arvore_dfs_"+nome_grafo+".dot", "arvore_dfs_"+nome_grafo+".png");
     
 }

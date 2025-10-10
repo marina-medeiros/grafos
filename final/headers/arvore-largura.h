@@ -13,6 +13,7 @@
 class ArvoreLargura {
     std::vector<std::vector<int>> matriz_adj;
     std::vector<int> nivel;
+    std::vector<std::string> rotulos;
     int qtd_vertices = 0;
 
     public:
@@ -20,10 +21,15 @@ class ArvoreLargura {
         matriz_adj = std::vector<std::vector<int>> (0, std::vector<int>(0, 0));
     }
 
-    ArvoreLargura(int vertices){
+    ArvoreLargura(int vertices) {
         this->qtd_vertices = vertices;  
         matriz_adj = std::vector<std::vector<int>> (qtd_vertices, std::vector<int>(qtd_vertices, 0));
         nivel = std::vector<int>(vertices, 0);
+        
+        rotulos.resize(vertices);
+        for (int i = 0; i < vertices; i++) {
+            rotulos[i] = std::to_string(i);
+        }
     }
 
     void inserir_vertice();
@@ -40,6 +46,9 @@ class ArvoreLargura {
     int get_nivel(int vertice){
         return this->nivel[vertice];
     }
+
+    const std::vector<std::string>& get_rotulos() const { return rotulos; }
+    void set_rotulos(const std::vector<std::string>& novos_rotulos) { rotulos = novos_rotulos; }
 };
 
 #endif

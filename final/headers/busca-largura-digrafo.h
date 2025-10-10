@@ -6,7 +6,7 @@
 #include "Grafo.h"
 #include "GrafoListaAdj.h"
 #include "DigrafoListaAdj.h"
-#include "arvore_busca.h"
+#include "arvore-busca.h"
 
 bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& predecessor);
 ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial);

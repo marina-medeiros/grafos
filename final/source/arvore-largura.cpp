@@ -52,11 +52,10 @@ void ArvoreLargura::exportar_arvore_bfs(ArvoreLargura arvore, const std::string&
     file << "  rankdir=TB;\n"; // desenhar árvore de cima para baixo
 
     int qtd = arvore.get_qtd_vertices();
-
     // Declara os nós
     for (int i = 0; i < qtd; i++) {
-        file << "  " << i+1 
-             << " [label=\"" << i+1 
+        file << "  " << i
+             << " [label=\"" << rotulos.at(i)
              << "\", shape=circle];\n";
     }
 
@@ -65,7 +64,7 @@ void ArvoreLargura::exportar_arvore_bfs(ArvoreLargura arvore, const std::string&
     for (int i = 0; i < qtd; i++) {
         for (int j = i+1; j < qtd; j++) {
             if (matriz[i][j] != 0) {
-                file << "  " << i+1 << " -- " << j+1; // não-direcionado
+                file << "  " << i << " -- " << j; // não-direcionado
                 // Diferencia tipos de arestas pela cor
                 if (matriz[i][j] == 1) 
                     file << " [color=black, penwidth=2];\n";   // árvore (pai-filho)
@@ -90,7 +89,7 @@ void ArvoreLargura::exportar_arvore_bfs(ArvoreLargura arvore, const std::string&
     for (int d = 0; d <= maxNivel; d++) {
         file << "  { rank = same; ";
         for (int i = 0; i < qtd; i++) {
-            if (arvore.get_nivel(i) == d) file << i+1 << "; ";
+            if (arvore.get_nivel(i) == d) file << i << "; ";
         }
         file << "}\n";
     }

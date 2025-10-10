@@ -4,8 +4,6 @@
 #include <map>
 #include <fstream>
 #include "../headers/busca-largura-digrafo.h"
-// #include "../headers/DigrafoListaAdj.h"
-// #include "../headers/arvore_busca.h"
 
 
 bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& predecessor) {
@@ -25,8 +23,9 @@ ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial){
     std::vector<int> nivel(grafo.get_qtd_vertices(), 0);
     
     ArvoreBusca arvore(grafo.get_qtd_vertices());
+    auto rotulos_grafo = grafo.get_rotulos();
+    arvore.set_rotulos(rotulos_grafo);
 
-    
     visitado[verticeInicial] = true;
     
     std::queue<int> fila;
@@ -35,12 +34,12 @@ ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial){
 
     std::map<int, std::list<int>> lista_adj = grafo.get_lista_adj();
     
-    std::cout << "\n--- Iniciando Busca em Largura de um Digrafo a partir de " << verticeInicial + 1 << " ---\n";
+    std::cout << "\n--- Iniciando Busca em Largura de um Digrafo a partir de " << rotulos_grafo[verticeInicial].c_str() << " ---\n";
     std::cout << "Ordem de visitação: ";
 
     while(!fila.empty()) { 
         int verticeAtual = fila.front();
-        std::cout << verticeAtual + 1 << " ";
+        std::cout << rotulos_grafo[verticeAtual] << " ";
         fila.pop(); 
         
         for(int vizinho : lista_adj[verticeAtual]) { 
@@ -81,15 +80,12 @@ ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial){
     std::cout << "---------------------\n";
     for(int i = 0; i < grafo.get_qtd_vertices(); ++i) {
         if(visitado[i]) {
-            std::cout << "| " << i+1 << "\t| "
-                      << (arvore.get_predecessores()[i] == -1 ? "Raiz" : std::to_string(arvore.get_predecessores()[i] + 1)) << "\t  | "
+            std::cout << "| " << rotulos_grafo[i] << "\t| "
+                      << (arvore.get_predecessores()[i] == -1 ? "Raiz" : rotulos_grafo[arvore.get_predecessores()[i] + 1]) << "\t  | "
                       <<  std::endl;
         }
     }
     std::cout << "---------------------\n";
-
-    // exportar_arvore_bfs_para_dot("arvore_bfs_dirt.dot", grafo.get_qtd_vertices(), arvore);
-    // gerar_imagem_bsfd("arvore_bfs_dirt.dot", "arvore_bfs_dirt.png");
     return arvore;
 }
 
@@ -104,8 +100,14 @@ void exportar_arvore_bfs_para_dot(const std::string& filename,
     }
 
     file << "digraph Arvore_BFS {\n";
-    file << "  rankdir=TB;\n"; // Organiza a árvore de cima para baixo
-    file << "  node [shape=circle];\n\n";
+    file << "  rankdir=TB;\n";
+
+    for (int i = 0; i < qtd_vertices; i++) {
+    file << "  " << i
+            << " [label=\"" << arvore.get_rotulos().at(i)
+            << "\", shape=circle];\n";
+    }
+
 
     // 1. RECONSTRUIR A ÁRVORE PARA TER ACESSO AOS FILHOS DE CADA NÓ
     // A chave é o nó pai, o valor é um vetor com seus filhos.
@@ -120,20 +122,20 @@ void exportar_arvore_bfs_para_dot(const std::string& filename,
     // Desenha as arestas da árvore
     for (int i = 0; i < qtd_vertices; ++i) {
         if (arvore.get_predecessores()[i] != -1) {
-            file << "  " << arvore.get_predecessores()[i] + 1 << " -> " << i + 1 << " [penwidth=2];\n";
+            file << "  " << arvore.get_predecessores()[i] << " -> " << i << " [penwidth=2];\n";
         }
     }
     file << "\n";
 
     // Desenha as outras arestas (retorno, avanço, cruzamento)
     for (const auto& aresta : arvore.get_arestas_retorno()) {
-        file << "  " << aresta.first + 1 << " -> " << aresta.second + 1 << " [style=dashed, color=darkorchid, constraint=false];\n";
+        file << "  " << aresta.first << " -> " << aresta.second << " [style=dashed, color=darkorchid, constraint=false];\n";
     }
     for (const auto& aresta : arvore.get_arestas_avanco()) {
-        file << "  " << aresta.first + 1 << " -> " << aresta.second + 1 << " [style=dashed, color=darkgreen, constraint=false];\n";
+        file << "  " << aresta.first << " -> " << aresta.second << " [style=dashed, color=darkgreen, constraint=false];\n";
     }
     for (const auto& aresta : arvore.get_arestas_cruzamento()) {
-        file << "  " << aresta.first + 1 << " -> " << aresta.second + 1 << " [style=dashed, color=darkgoldenrod, constraint=false];\n";
+        file << "  " << aresta.first << " -> " << aresta.second << " [style=dashed, color=darkgoldenrod, constraint=false];\n";
     }
     file << "\n";
 
@@ -144,7 +146,7 @@ void exportar_arvore_bfs_para_dot(const std::string& filename,
         if (filhos.size() > 1) {
             file << "  { rank=same; ";
             for (size_t i = 0; i < filhos.size() - 1; ++i) {
-                file << filhos[i] + 1 << " -> " << filhos[i+1] + 1 << " [style=invis]; ";
+                file << filhos[i] << " -> " << filhos[i+1] << " [style=invis]; ";
             }
             file << "}\n";
         }

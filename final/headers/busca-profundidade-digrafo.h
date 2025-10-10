@@ -6,7 +6,7 @@
 #include "Grafo.h"
 #include "GrafoListaAdj.h"
 #include "DigrafoListaAdj.h"
-#include "arvore_busca.h"
+#include "arvore-busca.h"
 
 enum class Cor { BRANCO, CINZA, PRETO };
 
