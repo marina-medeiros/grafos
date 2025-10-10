@@ -36,6 +36,7 @@ public:
 
     virtual bool is_conexo();
     virtual bool is_bipartido();
+    virtual void determinar_articulacoes_blocos_lowpt();
 
     void carregar_de_arquivo(const std::string& filename);
     void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;

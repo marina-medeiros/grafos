@@ -60,6 +60,57 @@ bool Grafo::is_bipartido() {
     return true;
 }
 
+void Grafo::determinar_articulacoes_blocos_lowpt() {
+    std::vector<int> disc(qtd_vertices, -1);
+    std::vector<int> low(qtd_vertices, -1);
+    std::vector<int> parent(qtd_vertices, -1);
+    std::set<int> articulacoes;
+    std::vector<std::set<int>> blocos;
+    std::stack<std::pair<int, int>> pilha;
+    
+    int tempo = 0;
+
+    for (int i = 0; i < qtd_vertices; ++i) {
+        if (disc[i] == -1) {
+            busca_articulacoes_dfs_recursiva(*this, i, disc, low, parent, pilha, articulacoes, blocos, tempo);
+
+            if (!pilha.empty()) {
+                std::set<int> aux;
+                while (!pilha.empty()) {
+                    std::pair<int, int> edge = pilha.top();
+                    pilha.pop();
+                    aux.insert(edge.first);
+                    aux.insert(edge.second);
+                }
+                blocos.push_back(aux);
+            }
+        }
+    }
+
+    if (articulacoes.empty()) {
+        std::cout << "O grafo não possui pontos de articulção." << std::endl;
+    } else {
+        std::cout << "\nPontos de Articulação encontrados:\n";
+        for (int v_idx : articulacoes) {
+            std::cout << "  - Vértice " << this->get_rotulos()[v_idx] << " (índice " << v_idx << ")\n";
+        }
+    }
+    
+    if (blocos.empty()) {
+        std::cout << "\nO grafo não possui blocos." << std::endl;
+    } else {
+        std::cout << "\nForam encontrados " << blocos.size() << " blocos:\n";
+        int i = 1;
+        for (const auto& bloco : blocos) {
+            std::cout << "  - Bloco " << i++ << ": { ";
+            for (int v_idx : bloco) {
+                std::cout << this->get_rotulos()[v_idx] << " ";
+            }
+            std::cout << "}\n";
+        }
+    }
+}
+
 void Grafo::carregar_de_arquivo(const std::string& filename) {
     std::ifstream arquivo(filename);
     if (!arquivo.is_open()) {
