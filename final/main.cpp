@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <filesystem>
 
 #include "headers/Grafo.h"
 
@@ -50,9 +49,6 @@ void menu() {
 }
 
 int main(){
-
-    std::filesystem::create_directory("dot-files");
-    std::filesystem::create_directory("png-files");
 
     const std::map<std::string, std::string> arquivos = {
         {"1", "GRAFO_0.txt"}, {"grafo_0", "GRAFO_0.txt"},
@@ -297,7 +293,7 @@ void grafo(std::string txt){
     auto resultado_dfs = busca_profundidade_lista_adj_recursiva(grafo_original_lista, 0);
     std::map<int, int> predecessores_dfs = resultado_dfs.first;
     std::vector<std::pair<int, int>> arestas_retorno_dfs = resultado_dfs.second;
-    exportar_arvore_profundidade_para_dot("dfs_"+nome_grafo+"_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs);
+    exportar_arvore_profundidade_para_dot("dfs_"+nome_grafo+"_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs, grafo_original_lista.get_rotulos());
     gerar_imagem("dfs_"+nome_grafo+"_com_retorno.dot","dfs_"+nome_grafo+"_com_retorno.png");
 
     // 15 - Determinação de articulações e blocos (biconectividade), utilizando lowpt.
@@ -334,7 +330,7 @@ void digrafo(std::string txt){
     std::cout << "\n18 - DETERMINAÇÃO DO GRAFO SUBJACENTE\n";
     GrafoListaAdj grafo_subjacente = digrafo_lista.obter_grafo_subjacente(digrafo_lista);
     grafo_subjacente.exportar_para_dot("GRAFO_SUBJACENTE_"+nome_grafo+"_lista_adj.dot", false);
-    gerar_imagem("GRAFO_SUBJACENTE_"+nome_grafo+"_lista_adj.dot", "GRAFO_SUBJACENTE_"+nome_grafo+"_lista_adj.png");
+    analisar_e_gerar_imagem(grafo_subjacente, nome_grafo, "lista_adj_subjacente", true);
     
     // 19 - Busca em Largura (BFS) - Implementação para Digrafo
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";

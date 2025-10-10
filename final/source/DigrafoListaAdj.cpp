@@ -155,6 +155,7 @@ GrafoListaAdj DigrafoListaAdj::obter_grafo_subjacente(const DigrafoListaAdj& dig
     int qtd_vertices = digrafo.get_qtd_vertices();
 
     GrafoListaAdj grafo_subjacente(qtd_vertices);
+    grafo_subjacente.set_rotulos(digrafo.get_rotulos());
 
     std::cout << "\n--- Gerando o Grafo Subjacente ---\n";
 

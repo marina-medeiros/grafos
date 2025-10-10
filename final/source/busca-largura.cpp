@@ -42,6 +42,9 @@ bool busca_largura_colorida_grafo(const Grafo& grafo, int vertice_inicial, std::
 
 ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInicial){
     ArvoreLargura arvore(grafo.get_qtd_vertices());
+    auto rotulos_grafo = grafo.get_rotulos();
+    arvore.set_rotulos(rotulos_grafo);
+
     std::vector<bool> visitado(grafo.get_qtd_vertices(), false);
     std::vector<int> predecessor(grafo.get_qtd_vertices(), -1);
     std::queue<int> fila;
@@ -57,7 +60,7 @@ ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInic
         vizinhos.sort();
     }
 
-    printf("\n--- Iniciando Busca em Largura a partir de %d ---\n", verticeInicial+1);
+    printf("\n--- Iniciando Busca em Largura a partir de %s ---\n", rotulos_grafo[verticeInicial].c_str());
     printf("Relacionamentos:\n");
 
     while(!fila.empty()){
@@ -67,7 +70,8 @@ ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInic
             if(!visitado[vizinho]){
                 visitado[vizinho] = true;
                 arvore.set_nivel(vizinho, arvore.get_nivel(verticeAtual)+1);
-                std::cout<< "   Pai: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
+                std::cout << "   Pai: " << rotulos_grafo[verticeAtual] << ", " << rotulos_grafo[vizinho] << "\n";
+
                 arvore.inserir_aresta_ndir(verticeAtual+1, vizinho+1, 1);
                 predecessor[vizinho] = verticeAtual;
 
@@ -76,16 +80,16 @@ ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInic
                 if(arvore.get_matriz_adj()[verticeAtual][vizinho] == 0){
                     if(arvore.get_nivel(verticeAtual)+1 == arvore.get_nivel(vizinho) &&
                        verticeAtual != predecessor[vizinho]){
-                        std::cout<< "   Tio: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
+                        std::cout<< "   Tio: " << rotulos_grafo[verticeAtual] << ", " << rotulos_grafo[vizinho] << std::endl;
                         peso = 4; 
                     }
                     if(predecessor[verticeAtual] == predecessor[vizinho]){
-                        std::cout<< "   Irmãos: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
+                        std::cout<< "   Irmãos: " << rotulos_grafo[verticeAtual] << ", " << rotulos_grafo[vizinho] << std::endl;
                         peso = 2; 
                     }
                     if(arvore.get_nivel(vizinho) == arvore.get_nivel(verticeAtual) &&
                        predecessor[verticeAtual] != predecessor[vizinho]){
-                        std::cout<< "   Primos: " << verticeAtual+1 << ", " << vizinho+1 << std::endl;
+                        std::cout<< "   Primos: " << rotulos_grafo[verticeAtual] << ", " << rotulos_grafo[vizinho] << std::endl;
                         peso = 3; 
                     }
                     arvore.inserir_aresta_ndir(verticeAtual+1, vizinho+1, peso);
@@ -96,7 +100,7 @@ ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInic
     std::cout << std::endl << "Níveis dos vértices:" << std::endl;
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
 
-        std::cout << "Vértice " << ii << ": " << arvore.get_nivel(ii) << std::endl;
+        std::cout << "Vértice " << rotulos_grafo[ii] << ": " << arvore.get_nivel(ii) << std::endl;
     }
     std::cout << std::endl;
 

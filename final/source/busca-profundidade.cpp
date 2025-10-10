@@ -75,6 +75,7 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
     }
 
     std::map<int, std::list<int>> lista_adj = grafo.get_lista_adj();
+    auto rotulos = grafo.get_rotulos();
     
     std::vector<bool> visitados(qtd_vertices, false);
     std::map<int, int> predecessores;
@@ -83,7 +84,7 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
     }
     std::vector<std::pair<int, int>> arestas_retorno;
 
-    busca_profundidade_lista_adj_recursiva_util(vertice, visitados, predecessores, lista_adj, arestas_retorno);
+    busca_profundidade_lista_adj_recursiva_util(vertice, visitados, predecessores, lista_adj, arestas_retorno, rotulos);
 
     std::cout << std::endl;
 
@@ -97,15 +98,15 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
     std::cout << "Vértice | Predecessor \n";
     std::cout << "---------------------\n";
     for(const auto& par : predecessores) {
-        std::cout << "| " << (par.first + 1) << "\t| "
-                << (par.second != -1 ? std::to_string(par.second + 1) : "Raiz") << "\t  | "
+        std::cout << "| " << rotulos[par.first] << "\t| "
+                << (par.second != -1 ? rotulos[par.second] : "Raiz") << "\t  | "
                 <<  std::endl;
     }
     std::cout << "---------------------\n";
 
     std::cout << "\nArestas de Retorno Encontradas:" << std::endl;
     for (const auto& aresta : arestas_retorno) {
-        std::cout << "(" << aresta.first + 1 << ", " << aresta.second + 1 << ")" << std::endl;
+        std::cout << "(" << rotulos[aresta.first] << ", " << rotulos[aresta.second] << ")" << std::endl;
     }
 
     return {predecessores, arestas_retorno};
@@ -115,17 +116,18 @@ void busca_profundidade_lista_adj_recursiva_util(int u,
                                                 std::vector<bool>& visitados,
                                                 std::map<int, int>& predecessores,
                                                 std::map<int, std::list<int>>& lista_adj,
-                                                std::vector<std::pair<int, int>>& arestas_retorno) {
+                                                std::vector<std::pair<int, int>>& arestas_retorno,
+                                                const std::vector<std::string>& rotulos) {
     visitados[u] = true;
     
-    std::cout << (u + 1) << " ";
+    std::cout << rotulos[u] << " ";
 
     
 
     for (int v : lista_adj[u]) {
         if (!visitados[v]) {
             predecessores[v] = u;
-            busca_profundidade_lista_adj_recursiva_util(v, visitados, predecessores, lista_adj, arestas_retorno);
+            busca_profundidade_lista_adj_recursiva_util(v, visitados, predecessores, lista_adj, arestas_retorno, rotulos);
         } else if (predecessores[u] != v) {
             if (u < v) {
                 arestas_retorno.push_back({u, v});
@@ -180,25 +182,27 @@ void busca_articulacoes_dfs_recursiva(
 
 void exportar_arvore_profundidade_para_dot(const std::string& filename,
                                             std::map<int, int> arvore, 
-                                            const std::vector<std::pair<int, int>>& arestas_retorno) {
+                                            const std::vector<std::pair<int, int>>& arestas_retorno,
+                                            const std::vector<std::string>& rotulos) {
     std::ofstream file(filename);
     file << "graph Arvore_DFS {\n";
     file << "  rankdir=TB; \n";
 
     int vertice = 0;
     for (auto it = arvore.begin(); it != arvore.end(); it++, vertice++) {
-        file << "  " << vertice + 1 << ";\n";
+        file << "    " << vertice << " [label=\"" << rotulos.at(vertice) << "\"];\n";
     }
+
+    file << "\n";
 
     for (const auto& par : arvore) {
         if (par.second == -1) continue;
-        file << "  " << par.second + 1 << " -- " << par.first + 1 << ";\n";
+        file << "  " << par.second << " -- " << par.first << ";\n";
     }
 
     file << "\n  // Arestas de Retorno\n";
     for (const auto& aresta : arestas_retorno) {
-        // MODIFICADO: '--' e estilo tracejado/colorido
-        file << "  " << aresta.first + 1 << " -- " << aresta.second + 1
+        file << "  " << aresta.first << " -- " << aresta.second
              << " [style=dashed, color=darkorchid, constraint=false];\n";
     }
 
