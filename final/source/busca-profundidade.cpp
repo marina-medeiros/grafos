@@ -146,8 +146,8 @@ void busca_articulacoes_dfs_recursiva(
         if (v == parent[u]) continue;
 
         if (disc[v] != -1) { 
-            low[u] = std::min(low[u], disc[v]);
             if (disc[v] < disc[u]) { 
+                low[u] = std::min(low[u], disc[v]);
                 pilha.push({u, v});
             }
         } else { 
@@ -168,7 +168,7 @@ void busca_articulacoes_dfs_recursiva(
                     pilha.pop();
                     aux.insert(edge.first);
                     aux.insert(edge.second);
-                    if (edge.first == u && edge.second == v) {
+                    if ((edge.first == u && edge.second == v) || (edge.first == v && edge.second == u)) {
                         break;
                     }
                 }

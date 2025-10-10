@@ -213,7 +213,7 @@ int main(){
     // 15 - Determinação de articulações e blocos (biconectividade), utilizando lowpt.
 
     std::cout << "\n15 - IMPLEMENTAÇÃO GRAFO: DETERMINAÇÂO DE ARTICULAÇÔES E BLOCOS COM LOWPT\n";
-    grafo2_lista.determinar_articulacoes_blocos_lowpt();
+    grafo0_lista.determinar_articulacoes_blocos_lowpt();
 
     // 16 - Representação do Digrafo a partir da Matriz de Adjacências.
 
