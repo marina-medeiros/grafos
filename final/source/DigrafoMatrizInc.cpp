@@ -5,10 +5,26 @@
 
 #include "../headers/DigrafoMatrizInc.h"
 
+/**
+ * Construtor da classe DigrafoMatrizInc, inicializando o grafo com um número específico de vértices.
+ * Parâmetros:
+ *  vertices - Número inicial de vértices no digrafo.
+ * Retorno: 
+ *  Nenhum.
+ */
 DigrafoMatrizInc::DigrafoMatrizInc(int vertices) : Grafo(vertices) {
     matriz_inc.resize(vertices);
 }
 
+/**
+ * Limpa o digrafo, removendo todos os vértices e arestas.
+ * Reseta a quantidade de vértices e arestas para zero.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::limpar() {
     this->matriz_inc.clear();
     this->arestas_info.clear();
@@ -17,6 +33,15 @@ void DigrafoMatrizInc::limpar() {
     this->qtd_arestas = 0;
 }
 
+/**
+ * Insere um novo vértice no digrafo com um rótulo opcional.
+ * Se nenhum rótulo for fornecido, o índice do vértice será usado como rótulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Rótulo opcional para o novo vértice.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::inserir_vertice(const std::string& rotulo) {
     if (rotulo.empty()) {
         rotulos.push_back(std::to_string(qtd_vertices));
@@ -28,6 +53,15 @@ void DigrafoMatrizInc::inserir_vertice(const std::string& rotulo) {
     qtd_vertices++;
 }
 
+/**
+ * Remove um vértice do digrafo, eliminando todas as arestas associadas a ele.
+ * Reindexa os vértices restantes para manter a consistência dos índices.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice a ser removido.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::remover_vertice(int u) {
     if (u < 0 || u >= qtd_vertices) {
         std::cout << "Índice de vértice inválido, remoção cancelada" << std::endl;
@@ -65,6 +99,16 @@ void DigrafoMatrizInc::remover_vertice(int u) {
     qtd_vertices--;
 }
 
+/**
+ * Insere uma aresta direcionada do vértice u para o vértice v com o peso especificado.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ *  peso - Peso da aresta a ser inserida (não usado na matriz de incidência).
+ * Retorno: 
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::inserir_aresta(int u, int v, int peso) {
     if (u < 0 || u >= qtd_vertices || v < 0 || v >= qtd_vertices) return;
 
@@ -82,6 +126,16 @@ void DigrafoMatrizInc::inserir_aresta(int u, int v, int peso) {
     qtd_arestas++;
 }
 
+/**
+ * Remove uma aresta direcionada do vértice u para o vértice v.
+ * Se a aresta não existir, a função não faz nada.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::remover_aresta(int u, int v) {
     int aresta_idx = -1;
     for (int j = 0; j < qtd_arestas; ++j) {
@@ -101,6 +155,15 @@ void DigrafoMatrizInc::remover_aresta(int u, int v) {
     }
 }
 
+/**
+ * Verifica se existe uma aresta direcionada do vértice u para o vértice v.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ * Retorno:
+ *  true se a aresta existir, false caso contrário.
+ */
 bool DigrafoMatrizInc::existe_aresta(int u, int v) const {
     for (int j = 0; j < qtd_arestas; ++j) {
         if (matriz_inc[u][j] == 1 && matriz_inc[v][j] == 1) {
@@ -110,6 +173,14 @@ bool DigrafoMatrizInc::existe_aresta(int u, int v) const {
     return false;
 }
 
+/**
+ * Retorna uma lista dos vizinhos do vértice v (vértices adjacentes).
+ * 
+ * Parâmetros:
+ *  v - Índice do vértice cujo vizinhos serão retornados.
+ * Retorno:
+ *  Uma lista de inteiros representando os índices dos vértices vizinhos.
+ */
 std::list<int> DigrafoMatrizInc::get_vizinhos(int v) const {
     std::list<int> vizinhos;
     if (v < 0 || v >= qtd_vertices) return vizinhos;
@@ -124,6 +195,14 @@ std::list<int> DigrafoMatrizInc::get_vizinhos(int v) const {
     return vizinhos;
 }
 
+/**
+ * Imprime a matriz de incidência do digrafo no console.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::print() const {
     std::cout << "\n--- Imprimindo Matriz de Incidência ---\n";
     if (qtd_vertices == 0) {
@@ -151,6 +230,15 @@ void DigrafoMatrizInc::print() const {
     std::cout << "-------------------------------------------\n";
 }
 
+/**
+ * Exporta o digrafo para um arquivo no formato DOT, adequado para visualização com Graphviz.
+ * 
+ * Parâmetros:
+ *  filename - Nome do arquivo de saída.
+ *  eh_digrafo - Indica se o grafo é direcionado (true) ou não (false).
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoMatrizInc::exportar_para_dot(const std::string& filename, bool eh_digrafo) const {
     std::ofstream file(filename);
     if (!file.is_open()) {
@@ -166,8 +254,6 @@ void DigrafoMatrizInc::exportar_para_dot(const std::string& filename, bool eh_di
         file << "graph G {\n";
     }
 
-
-    // Adiciona todos os vértices
     for (int i = 0; i < qtd_vertices; i++) {
         file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
     }
@@ -175,15 +261,11 @@ void DigrafoMatrizInc::exportar_para_dot(const std::string& filename, bool eh_di
     file << "\n";
 
     for (int aresta_idx = 0; aresta_idx < get_qtd_arestas(); ++aresta_idx) {
-        
         int origem = -1;
         int destino = -1;
 
-        // Para a aresta atual, itera sobre cada VÉRTICE (linha da matriz)
-        // para encontrar a origem e o destino dela.
         for (int vertice_idx = 0; vertice_idx < get_qtd_vertices(); ++vertice_idx) {
             
-            // Supondo a convenção: +1 para origem, -1 para destino
             if (matriz_inc[vertice_idx][aresta_idx] == 1) {
                 origem = vertice_idx;
             } else if (matriz_inc[vertice_idx][aresta_idx] == -1) {
@@ -191,7 +273,6 @@ void DigrafoMatrizInc::exportar_para_dot(const std::string& filename, bool eh_di
             }
         }
 
-        // Se ambos foram encontrados, desenha a aresta direcionada
         if (origem != -1 && destino != -1) {
             file << "  " << origem << " -> " << destino << ";\n";
         }

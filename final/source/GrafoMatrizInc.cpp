@@ -4,10 +4,26 @@
 
 #include "../headers/GrafoMatrizInc.h"
 
+/**
+ * Construtor da classe GrafoMatrizInc, inicializando o grafo com um número específico de vértices.
+ * Parâmetros:
+ *  vertices - Número inicial de vértices no grafo.
+ * Retorno: 
+ *  Nenhum.
+ */
 GrafoMatrizInc::GrafoMatrizInc(int vertices) : Grafo(vertices) {
     matriz_inc.resize(vertices);
 }
 
+/**
+ * Limpa o grafo, removendo todos os vértices e arestas.
+ * Reseta a quantidade de vértices e arestas para zero.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::limpar() {
     this->matriz_inc.clear();
     this->arestas_info.clear();
@@ -16,6 +32,15 @@ void GrafoMatrizInc::limpar() {
     this->qtd_arestas = 0;
 }
 
+/**
+ * Insere um novo vértice no grafo com um rótulo opcional.
+ * Se nenhum rótulo for fornecido, o índice do vértice será usado como rótulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Rótulo opcional para o novo vértice.
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::inserir_vertice(const std::string& rotulo) {
     if (rotulo.empty()) {
         rotulos.push_back(std::to_string(qtd_vertices));
@@ -27,13 +52,21 @@ void GrafoMatrizInc::inserir_vertice(const std::string& rotulo) {
     qtd_vertices++;
 }
 
+/**
+ * Remove um vértice do grafo, eliminando todas as arestas associadas a ele.
+ * Reindexa os vértices restantes para manter a consistência dos índices.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice a ser removido.
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::remover_vertice(int u) {
     if (u < 0 || u >= qtd_vertices) {
         std::cout << "Índice de vértice inválido, remoção cancelada" << std::endl;
         return;
     };
 
-    // 1. Identifica e remove todas as arestas conectadas a 'u'
     std::vector<int> arestas_a_remover;
     for (int j = 0; j < qtd_arestas; ++j) {
         if (matriz_inc[u][j] == 1) {
@@ -50,20 +83,27 @@ void GrafoMatrizInc::remover_vertice(int u) {
     }
     qtd_arestas -= arestas_a_remover.size();
 
-    // 2. Remove a linha do vértice 'u'
     matriz_inc.erase(matriz_inc.begin() + u);
     rotulos.erase(rotulos.begin() + u);
 
-    // 3. Reindexa as arestas restantes
     for (auto& aresta : arestas_info) {
         if (aresta.first > u) aresta.first--;
         if (aresta.second > u) aresta.second--;
     }
     
-    // 4. Atualiza contagem de vértices
     qtd_vertices--;
 }
 
+/**
+ * Insere uma aresta não direcionada entre os vértices u e v com o peso especificado.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ *  peso - Peso opcional da aresta (padrão é 1).
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::inserir_aresta(int u, int v, int peso) {
     if (u < 0 || u >= qtd_vertices || v < 0 || v >= qtd_vertices) return;
 
@@ -81,6 +121,16 @@ void GrafoMatrizInc::inserir_aresta(int u, int v, int peso) {
     qtd_arestas++;
 }
 
+/**
+ * Remove a aresta não direcionada entre os vértices u e v.
+ * Se a aresta não existir, a função não faz nada.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::remover_aresta(int u, int v) {
     int aresta_idx = -1;
     for (int j = 0; j < qtd_arestas; ++j) {
@@ -100,6 +150,15 @@ void GrafoMatrizInc::remover_aresta(int u, int v) {
     }
 }
 
+/**
+ * Verifica se existe uma aresta não direcionada entre os vértices u e v.   
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.   
+ * Retorno:
+ *  true se a aresta existir, false caso contrário.
+ */
 bool GrafoMatrizInc::existe_aresta(int u, int v) const {
     for (int j = 0; j < qtd_arestas; ++j) {
         if (matriz_inc[u][j] == 1 && matriz_inc[v][j] == 1) {
@@ -109,6 +168,14 @@ bool GrafoMatrizInc::existe_aresta(int u, int v) const {
     return false;
 }
 
+/**
+ * Retorna uma lista dos vizinhos do vértice v (vértices adjacentes).
+ * 
+ * Parâmetros:
+ *  v - Índice do vértice cujo vizinhos serão retornados.
+ * Retorno:
+ *  Uma lista de inteiros representando os índices dos vértices vizinhos.
+ */
 std::list<int> GrafoMatrizInc::get_vizinhos(int v) const {
     std::list<int> vizinhos;
     if (v < 0 || v >= qtd_vertices) return vizinhos;
@@ -123,6 +190,15 @@ std::list<int> GrafoMatrizInc::get_vizinhos(int v) const {
     return vizinhos;
 }
 
+/**
+ * Imprime a matriz de incidência do grafo no console.
+ * Mostra os rótulos dos vértices e as conexões das arestas.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void GrafoMatrizInc::print() const {
     std::cout << "\n--- Imprimindo Matriz de Incidência ---\n";
     if (qtd_vertices == 0) {

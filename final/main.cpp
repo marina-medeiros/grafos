@@ -335,13 +335,13 @@ void digrafo(std::string txt){
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";
     
     auto arvore_bfs_digrafo = busca_largura_digrafo(digrafo_lista, 0);
-    exportar_arvore_bfs_para_dot("arvore_bfs_"+nome_grafo+".dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
-    gerar_imagem("arvore_bfs_"+nome_grafo+".dot", "arvore_bfs_"+nome_grafo+".png");
+    exportar_arvore_bfs_para_dot("ARVORE_BFS_"+nome_grafo+".dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
+    gerar_imagem("ARVORE_BFS_"+nome_grafo+".dot", "ARVORE_BFS_"+nome_grafo+".png");
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
     auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_lista, 0);
-    exportar_arvore_dfs_para_dot("arvore_dfs_"+nome_grafo+".dot", arvore_dfs_digrafo);
-    gerar_imagem("arvore_dfs_"+nome_grafo+".dot", "arvore_dfs_"+nome_grafo+".png");
+    exportar_arvore_dfs_para_dot("ARVORE_DFS_"+nome_grafo+".dot", arvore_dfs_digrafo);
+    gerar_imagem("ARVORE_DFS_"+nome_grafo+".dot", "ARVORE_DFS_"+nome_grafo+".png");
     
 }

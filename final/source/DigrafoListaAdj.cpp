@@ -2,14 +2,28 @@
 #include <iostream>
 
 
-
+/**
+ * Construtor da classe DigrafoListaAdj, inicializando o grafo com um número específico de vértices.
+ * Parâmetros:
+ *  vertices - Número inicial de vértices no digrafo.
+ * Retorno: 
+ *  Nenhum.
+ */
 DigrafoListaAdj::DigrafoListaAdj(int vertices) : Grafo(vertices)  {
     for (int i = 0; i < vertices; ++i) {
         lista_adj[i] = std::list<int>();
     }
 }
 
-
+/**
+ * Limpa o digrafo, removendo todos os vértices e arestas.
+ * Reseta a quantidade de vértices e arestas para zero.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoListaAdj::limpar() {
     this->lista_adj.clear();
     this->rotulos.clear();
@@ -17,6 +31,15 @@ void DigrafoListaAdj::limpar() {
     this->qtd_arestas = 0;
 }
 
+/**
+ * Insere um novo vértice no digrafo com um rótulo opcional.
+ * Se nenhum rótulo for fornecido, o índice do vértice será usado como rótulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Rótulo opcional para o novo vértice.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoListaAdj::inserir_vertice(const std::string& rotulo) {
     lista_adj[qtd_vertices] = std::list<int>();
 
@@ -29,23 +52,29 @@ void DigrafoListaAdj::inserir_vertice(const std::string& rotulo) {
     qtd_vertices++;
 }
 
+/**
+ * Remove um vértice do digrafo, eliminando todas as arestas associadas a ele.
+ * Reindexa os vértices restantes para manter a consistência dos índices.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice a ser removido.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoListaAdj::remover_vertice(int u) {
     if (u < 0 || u >= qtd_vertices) {
         std::cout << "Índice de vértice inválido, remoção cancelada" << std::endl;
         return;
     };
 
-    // 1. Remove todas as arestas conectadas a 'u'
     std::list<int> vizinhos_a_remover = lista_adj[u];
     for (int v : vizinhos_a_remover) {
         remover_aresta(u, v);
     }
 
-    // 2. Remove o vértice 'u' do mapa
     lista_adj.erase(u);
     rotulos.erase(rotulos.begin() + u);
 
-    // 3. Reindexa os vértices e arestas com índice > u
     std::map<int, std::list<int>> nova_lista_adj;
     for (auto const& [vertice, vizinhos] : lista_adj) {
         int novo_vertice_idx = (vertice > u) ? vertice - 1 : vertice;
@@ -58,10 +87,20 @@ void DigrafoListaAdj::remover_vertice(int u) {
     }
     lista_adj = nova_lista_adj;
     
-    // 4. Atualiza a contagem de vértices
     qtd_vertices--;
 }
 
+/**
+ * Insere uma aresta direcionada do vértice u para o vértice v com um peso opcional.
+ * Se a aresta já existir, a função não faz nada.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ *  peso - Peso opcional da aresta (padrão é 1).
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoListaAdj::inserir_aresta(int u, int v, int peso) {
     if (u < 0 || u >= qtd_vertices || v < 0 || v >= qtd_vertices) return;
     if (!existe_aresta(u, v)) {
@@ -71,7 +110,14 @@ void DigrafoListaAdj::inserir_aresta(int u, int v, int peso) {
 }
 
 /**
- * @brief Sobrescrita da remoção de aresta para comportamento DIRECIONADO.
+ * Remove uma aresta direcionada do vértice u para o vértice v.
+ * Se a aresta não existir, a função não faz nada.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ * Retorno:
+ *  Nenhum.
  */
 void DigrafoListaAdj::remover_aresta(int u, int v) {
     if (u < 0 || u >= get_qtd_vertices() || v < 0 || v >= get_qtd_vertices()) {
@@ -80,16 +126,21 @@ void DigrafoListaAdj::remover_aresta(int u, int v) {
     }
 
     if (existe_aresta(u, v)) {
-        // A MUDANÇA PRINCIPAL ESTÁ AQUI:
-        // Remove 'v' apenas da lista de vizinhos de 'u'.
         lista_adj[u].remove(v);
 
-        // Decrementa a quantidade de arestas
         decrementar_qtd_arestas();
     }
 }
 
-
+/**
+ * Verifica se existe uma aresta direcionada do vértice u para o vértice v.
+ * 
+ * Parâmetros:
+ *  u - Índice do vértice de origem.
+ *  v - Índice do vértice de destino.
+ * Retorno:
+ *  true se a aresta existir, false caso contrário.
+ */
 bool DigrafoListaAdj::existe_aresta(int u, int v) const {
     auto it = lista_adj.find(u);
     if (it == lista_adj.end()) return false;
@@ -97,6 +148,14 @@ bool DigrafoListaAdj::existe_aresta(int u, int v) const {
     return (std::find(vizinhos.begin(), vizinhos.end(), v) != vizinhos.end());
 }
 
+/**
+ * Retorna a lista de vizinhos (vértices adjacentes) do vértice v.
+ * 
+ * Parâmetros:
+ *  v - Índice do vértice cujo vizinhos serão retornados.
+ * Retorno:
+ *  Uma lista de inteiros representando os índices dos vértices vizinhos.
+ */
 std::list<int> DigrafoListaAdj::get_vizinhos(int v) const {
     auto it = lista_adj.find(v);
     if (it != lista_adj.end()) {
@@ -105,6 +164,15 @@ std::list<int> DigrafoListaAdj::get_vizinhos(int v) const {
     return std::list<int>();
 }
 
+/**
+ * Imprime a lista de adjacência do digrafo no console.
+ * Mostra cada vértice seguido por seus vizinhos.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  Nenhum.
+ */
 void DigrafoListaAdj::print() const {
     std::cout << "\n--- Imprimindo Lista de Adjacência ---\n";
     if (qtd_vertices == 0) {
@@ -128,19 +196,31 @@ void DigrafoListaAdj::print() const {
     std::cout << "----------------------------------------\n";
 }
 
-
+/**
+ * Retorna o grau de saída do vértice v (número de arestas saindo de v).
+ * 
+ * Parâmetros:
+ *  v - Índice do vértice cujo grau de saída será retornado.
+ * Retorno:
+ *  O grau de saída do vértice v.
+ */
 int DigrafoListaAdj::get_grau_saida(int v) const {
-    // Para uma lista de adjacências, isso é simplesmente o tamanho da lista de vizinhos.
     if (v < 0 || v >= get_qtd_vertices()) return 0;
     return get_vizinhos(v).size();
 }
 
-
+/**
+ * Retorna o grau de entrada do vértice v (número de arestas entrando em v).
+ * 
+ * Parâmetros:
+ *  v - Índice do vértice cujo grau de entrada será retornado.
+ * Retorno:
+ *  O grau de entrada do vértice v.
+ */
 int DigrafoListaAdj::get_grau_entrada(int v) const {
     if (v < 0 || v >= get_qtd_vertices()) return 0;
 
     int grau_entrada = 0;
-    // Precisamos percorrer todo o grafo para ver quem aponta para 'v'
     for (int i = 0; i < get_qtd_vertices(); ++i) {
         for (int vizinho : get_vizinhos(i)) {
             if (vizinho == v) {
@@ -151,6 +231,17 @@ int DigrafoListaAdj::get_grau_entrada(int v) const {
     return grau_entrada;
 }
 
+/**
+ * Gera o grafo subjacente não direcionado a partir do digrafo atual.
+ * O grafo subjacente contém todas as arestas do digrafo, mas sem direção
+ * (ou seja, cada aresta direcionada u -> v se torna uma aresta não direcionada {u, v}).
+ * Utiliza a classe GrafoListaAdj para representar o grafo subjacente.
+ * 
+ * Parâmetros:
+ *   digrafo - Referência ao digrafo do qual o grafo subjacente será gerado.
+ * Retorno:
+ *   Um objeto GrafoListaAdj representando o grafo subjacente.
+ */
 GrafoListaAdj DigrafoListaAdj::obter_grafo_subjacente(const DigrafoListaAdj& digrafo) {
     int qtd_vertices = digrafo.get_qtd_vertices();
 

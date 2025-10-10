@@ -3,6 +3,12 @@
 
 #include "GrafoListaAdj.h" 
 
+/**
+ * Classe que representa um digrafo (grafo direcionado) usando uma lista de adjacência.
+ * Herda da classe base Grafo e implementa métodos específicos para digrafos.
+ * Cada vértice mantém uma lista de seus vizinhos (vértices para os quais há arestas direcionadas).
+ * 
+ */
 class DigrafoListaAdj : public Grafo{
     std::map<int, std::list<int>> lista_adj;
 public:

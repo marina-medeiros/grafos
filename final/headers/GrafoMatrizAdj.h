@@ -6,6 +6,11 @@
 
 class GrafoListaAdj;
 
+/**
+ * Classe que representa um grafo não direcionado usando uma matriz de adjacência.
+ * Herda da classe base Grafo e implementa métodos específicos para grafos.
+ * Cada célula na matriz indica a presença e o peso de uma aresta entre dois vértices.
+ */
 class GrafoMatrizAdj : public Grafo {
 protected:
     std::vector<std::vector<int>> matriz_adj;

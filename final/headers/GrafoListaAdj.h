@@ -7,6 +7,11 @@
 
 class GrafoMatrizAdj;
 
+/**
+ * Classe que representa um grafo não direcionado usando uma lista de adjacência.
+ * Herda da classe base Grafo e implementa métodos específicos para grafos.
+ * Cada vértice mantém uma lista de seus vizinhos (vértices conectados por arestas).
+ */
 class GrafoListaAdj : public Grafo {
 private:
     std::map<int, std::list<int>> lista_adj;

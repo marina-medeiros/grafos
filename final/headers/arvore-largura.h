@@ -10,6 +10,10 @@
 #include <cstdio>
 #include <list>
 
+/** 
+ *  Classe que representa uma árvore gerada por um algoritmo de Busca em Largura (BFS).
+ *  A árvore mantém uma matriz de adjacência, níveis dos vértices e rótulos.
+*/
 class ArvoreLargura {
     std::vector<std::vector<int>> matriz_adj;
     std::vector<int> nivel;

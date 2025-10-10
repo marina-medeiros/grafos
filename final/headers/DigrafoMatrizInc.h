@@ -5,6 +5,12 @@
 #include <utility>
 #include <vector>
 
+/**
+ * Classe que representa um digrafo (grafo direcionado) usando uma matriz de incidência.
+ * Herda da classe base Grafo e implementa métodos específicos para digrafos.
+ * Cada linha na matriz representa um vértice e cada coluna representa uma aresta.
+ * O valor na célula indica se o vértice é a origem (1), destino (-1) ou não está conectado (0) à aresta.
+ */
 class DigrafoMatrizInc : public Grafo {
 private:
     std::vector<std::vector<int>> matriz_inc;

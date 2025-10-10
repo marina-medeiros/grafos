@@ -7,6 +7,11 @@
 #include <memory>
 #include <iostream>
 
+/**
+ * Classe base abstrata que representa um grafo não direcionado.
+ * Define a interface comum para diferentes implementações de grafos,
+ * como listas de adjacência, matrizes de adjacência e matrizes de incidência.
+ */
 class Grafo {
 protected:
     int qtd_vertices;

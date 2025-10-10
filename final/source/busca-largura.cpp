@@ -6,6 +6,17 @@
 #include "../headers/arvore-largura.h"
 #include "../headers/GrafoListaAdj.h"
 
+/** 
+ * Realiza a busca em largura (BFS) em um grafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca e classifica as arestas do grafo. 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao grafo representado por GrafoListaAdj.
+ *   verticeInicial - Índice do vértice inicial para a BFS.
+ * Retorno:
+ *   Um objeto ArvoreLargura representando a árvore gerada pela BFS.
+ */
 bool busca_largura_colorida_grafo(const Grafo& grafo, int vertice_inicial, std::vector<int>& cores) {
     int qtd_vertices = grafo.get_qtd_vertices();
     if (vertice_inicial < 0 || vertice_inicial >= qtd_vertices) {
@@ -40,6 +51,17 @@ bool busca_largura_colorida_grafo(const Grafo& grafo, int vertice_inicial, std::
     return true;
 }
 
+/**
+ * Realiza a busca em largura (BFS) em um grafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca e classifica as arestas do grafo. 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao grafo representado por GrafoListaAdj.
+ *   verticeInicial - Índice do vértice inicial para a BFS.
+ * Retorno:
+ *   Um objeto ArvoreLargura representando a árvore gerada pela BFS.
+ */
 ArvoreLargura busca_largura_arestas_retorno(GrafoListaAdj grafo, int verticeInicial){
     ArvoreLargura arvore(grafo.get_qtd_vertices());
     auto rotulos_grafo = grafo.get_rotulos();

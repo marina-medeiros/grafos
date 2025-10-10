@@ -4,6 +4,12 @@
 #include <vector>
 #include <string>
 
+/**
+ * Classe que representa uma árvore gerada por algoritmos de busca em grafos,
+ * como Busca em Largura (BFS) e Busca em Profundidade (DFS).
+ * A árvore mantém informações sobre predecessores, níveis, tempos de entrada e saída,
+ * além de classificar as arestas em diferentes categorias.
+ */
 class ArvoreBusca {
 protected:
     int qtd_vertices;

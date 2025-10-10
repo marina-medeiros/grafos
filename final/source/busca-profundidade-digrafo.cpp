@@ -8,7 +8,19 @@
 #include "../headers/DigrafoListaAdj.h"
 
 
-
+/** 
+ * Realiza a busca em profundidade (DFS) em um digrafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca e classifica as arestas do digrafo. 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao digrafo representado por DigrafoListaAdj.
+ *   verticeInicial - Índice do vértice inicial para a DFS.
+ * Retorno:
+ *   Um par contendo:
+ *     - Um mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
+ *     - Um vetor de pares representando as arestas de retorno (ciclos) encontradas durante a DFS.
+ */
 ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int verticeInicial){
     int qtd_vertices = grafo.get_qtd_vertices();
     std::vector<bool> visitado(qtd_vertices, false);
@@ -49,6 +61,20 @@ ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int vert
     return arvore;
 }
 
+/** 
+ * Função recursiva auxiliar para a busca em profundidade (DFS).
+ * Marca os vértices conforme são visitados e classifica as arestas.
+ * 
+ * Parâmetros:
+ *   ultimoVertice - Índice do vértice atualmente sendo visitado.
+ *   lista_adj - Mapa representando a lista de adjacência do digrafo.
+ *   cores - Vetor que mantém o estado de cada vértice (BRANCO, CINZA, PRETO).
+ *   arvore - Objeto ArvoreBusca onde a estrutura da árvore DFS é armazenada.
+ *   tempo1 - Referência para o contador de tempo de entrada.
+ *   tempo2 - Referência para o contador de tempo de saída.
+ * Retorno:
+ *   Nenhum. A função modifica diretamente os parâmetros passados por referência.
+ */
 void busca_profundidade_digrafo_rec(int ultimoVertice, 
                                     std::map<int, std::list<int>>& lista_adj,
                                     std::vector<Cor>& cores,
@@ -87,6 +113,18 @@ void busca_profundidade_digrafo_rec(int ultimoVertice,
     arvore.set_tempo_saida(ultimoVertice, tempo2);
 }
 
+
+/**
+ * Exporta a árvore gerada pela busca em profundidade (DFS) para um arquivo DOT.
+ * A árvore é representada com diferentes estilos de arestas para indicar relações
+ * como pai-filho, irmãos, primos e tios.
+ * 
+ * Parâmetros:
+ *   filename - Nome do arquivo de saída onde o grafo será salvo.
+ *   arvore - Objeto ArvoreBusca contendo a estrutura da árvore DFS.
+ * Retorno:
+ *   Nenhum.
+ */
 void exportar_arvore_dfs_para_dot(const std::string& filename,
                                            ArvoreBusca arvore) {
     std::ofstream file(filename);

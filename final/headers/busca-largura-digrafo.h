@@ -8,6 +8,7 @@
 #include "DigrafoListaAdj.h"
 #include "arvore-busca.h"
 
+
 bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& predecessor);
 ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial);
 void exportar_arvore_bfs_para_dot(const std::string& filename,

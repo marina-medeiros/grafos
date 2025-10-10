@@ -9,6 +9,14 @@
 #include "../headers/busca-profundidade.h"
 #include "../headers/busca-largura.h"
 
+/**
+ * Construtor da classe Grafo, inicializando o grafo com um número específico de vértices.
+ * 
+ * Parâmetros:
+ *   vertices - Número inicial de vértices no grafo.
+ * Retorno: 
+ *   Nenhum.
+ */
 Grafo::Grafo(int vertices) : qtd_vertices(vertices), qtd_arestas(0) {
     rotulos.resize(vertices);
     for (int i = 0; i < vertices; i++) {
@@ -16,16 +24,39 @@ Grafo::Grafo(int vertices) : qtd_vertices(vertices), qtd_arestas(0) {
     }
 }
 
+/**
+ * Incrementa a contagem de arestas do grafo.
+ * 
+ * Parâmetros:
+ *   Nenhum.
+ * Retorno:
+ *   Nenhum.
+ */
 void Grafo::incrementar_qtd_arestas() {
     this->qtd_arestas++;
 }
 
+/**
+ * Decrementa a contagem de arestas do grafo, garantindo que não fique negativa.
+ * 
+ * Parâmetros:
+ *   Nenhum.
+ * Retorno:
+ *   Nenhum.
+ */
 void Grafo::decrementar_qtd_arestas() {
     if (this->qtd_arestas > 0) {
         this->qtd_arestas--;
     }
 }
 
+/**
+ * Verifica se o grafo é conexo utilizando uma busca em profundidade (DFS).
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  true se o grafo for conexo, false caso contrário.
+ */
 bool Grafo::is_conexo() {
     if (qtd_vertices <= 1) {
         return true;
@@ -36,6 +67,14 @@ bool Grafo::is_conexo() {
     return vertices_alcancados.size() == qtd_vertices;
 }
 
+/**
+ * Verifica se o grafo é bipartido utilizando uma busca em largura (BFS) colorida.
+ * 
+ * Parâmetros:
+ *  Nenhum.
+ * Retorno:
+ *  true se o grafo for bipartido, false caso contrário.
+ */
 bool Grafo::is_bipartido() {
     if (qtd_vertices <= 1) {
         return true;
@@ -43,20 +82,14 @@ bool Grafo::is_bipartido() {
 
     std::vector<int> cores(qtd_vertices, 0);
 
-    // Itera por todos os vértices para garantir que grafos desconexos sejam tratados
     for (int i = 0; i < qtd_vertices; ++i) {
-        // Se o vértice 'i' ainda não foi visitado/colorido,
-        // então inicia a verificação de bipartição para o componente ao qual 'i' pertence
         if (cores[i] == 0) {
-            // Se a função auxiliar retornar 'false' para qualquer componente,
-            // então o grafo inteiro não é bipartido
             if (!busca_largura_colorida_grafo(*this, i, cores)) {
                 return false;
             }
         }
     }
 
-    // Se todos os componentes foram verificados com sucesso, o grafo é bipartido
     return true;
 }
 
@@ -111,6 +144,17 @@ void Grafo::determinar_articulacoes_blocos_lowpt() {
     }
 }
 
+/**
+ * Carrega um grafo a partir de um arquivo de texto.
+ * O arquivo deve ter o seguinte formato:
+ *   - A primeira linha contém o número de vértices.
+ *   - As linhas subsequentes contêm pares de rótulos de vértices separados por vírgula, representando arestas.
+ * 
+ * Parâmetros:
+ *   filename - Nome do arquivo a ser carregado.
+ * Retorno:
+ *   Nenhum.    
+ */
 void Grafo::carregar_de_arquivo(const std::string& filename) {
     std::ifstream arquivo(filename);
     if (!arquivo.is_open()) {
@@ -118,7 +162,6 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         return;
     }
 
-    // 1. Lê o número de vértices da primeira linha
     int num_vertices_arquivo;
     arquivo >> num_vertices_arquivo;
     if (arquivo.fail()) {
@@ -126,20 +169,17 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         return;
     }
     
-    // 2. Limpa o estado atual e reinicializa o grafo com o novo tamanho
     this->limpar();
     for (int i = 0; i < num_vertices_arquivo; ++i) {
         this->inserir_vertice(); 
     }
 
-    // 3. Mapa para traduzir rótulos do arquivo (string) para índices (int)
     std::map<std::string, int> mapa_rotulos;
     int proximo_indice = 0;
 
     std::string linha;
     std::getline(arquivo, linha); 
 
-    // 4. Lê cada linha de aresta
     while (std::getline(arquivo, linha)) {
         if (linha.empty()) continue;
 
@@ -151,7 +191,6 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
 
         int indice1, indice2;
 
-        // Mapeia o primeiro rótulo para um índice
         if (mapa_rotulos.find(rotulo1_str) == mapa_rotulos.end()) {
             if (proximo_indice >= this->qtd_vertices) continue;
             indice1 = proximo_indice++;
@@ -161,7 +200,6 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
             indice1 = mapa_rotulos[rotulo1_str];
         }
 
-        // Mapeia o segundo rótulo para um índice
         if (mapa_rotulos.find(rotulo2_str) == mapa_rotulos.end()) {
             if (proximo_indice >= this->qtd_vertices) continue;
             indice2 = proximo_indice++;
@@ -177,6 +215,15 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     arquivo.close();
 }
 
+/**
+ * Exporta o grafo para um arquivo no formato DOT, adequado para visualização com Graphviz.
+ * 
+ * Parâmetros:
+ *  filename - Nome do arquivo de saída.
+ *  eh_digrafo - Indica se o grafo é direcionado (true) ou não (false).
+ * Retorno:
+ *  Nenhum.
+ */
 void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) const {
     std::ofstream file(filename);
     if (!file.is_open()) {
@@ -192,15 +239,11 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
         file << "graph G {\n";
     }
 
-
-    // Adiciona todos os vértices
     for (int i = 0; i < qtd_vertices; i++) {
         file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
     }
-
     file << "\n";
 
-    // Adiciona as arestas
     for (int i = 0; i < qtd_vertices; i++) {
         for (int j : get_vizinhos(i)) {
             if (eh_digrafo) {
@@ -215,6 +258,15 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     file.close();
 }
 
+/**
+ * Gera uma imagem PNG a partir de um arquivo DOT usando o Graphviz.
+ * 
+ * Parâmetros:
+ *   dotfile - Nome do arquivo DOT de entrada.
+ *   imgfile - Nome do arquivo de saída para a imagem PNG.
+ * Retorno:
+ *   Nenhum.
+ */
 void gerar_imagem(const std::string& dotfile, const std::string& imgfile){
     std::string cmd = "dot -Tpng " + dotfile + " -o " + imgfile;
     FILE* pipe = popen(cmd.c_str(), "r");

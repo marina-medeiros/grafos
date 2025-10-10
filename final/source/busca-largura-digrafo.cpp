@@ -5,7 +5,17 @@
 #include <fstream>
 #include "../headers/busca-largura-digrafo.h"
 
-
+/** 
+ * Verifica se o vértice v_ancestral é um ancestral do vértice u_descendente
+ * na árvore definida pelo vetor predecessor.
+ * 
+ * Parâmetros:
+ *   u_descendente - Índice do vértice descendente.
+ *   v_ancestral - Índice do vértice ancestral.
+ *   predecessor - Vetor onde predecessor[i] é o predecessor do vértice i.
+ * Retorno:
+ *   true se v_ancestral é um ancestral de u_descendente, false caso contrário.
+ */
 bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& predecessor) {
     int p = u_descendente;
     while (p != -1) {
@@ -17,6 +27,17 @@ bool eh_ancestral(int u_descendente, int v_ancestral, const std::vector<int>& pr
     return false;
 }
 
+/**
+ * Realiza a busca em largura (BFS) em um digrafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca e classifica as arestas do digrafo. 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao digrafo representado por DigrafoListaAdj.
+ *   verticeInicial - Índice do vértice inicial para a BFS.
+ * Retorno:
+ *   Um objeto ArvoreBusca representando a árvore gerada pela BFS.
+ */
 ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial){
     std::vector<bool> visitado(grafo.get_qtd_vertices(), false);
     std::vector<int> predecessor(grafo.get_qtd_vertices(), -1);
@@ -89,6 +110,18 @@ ArvoreBusca busca_largura_digrafo(DigrafoListaAdj& grafo, int verticeInicial){
     return arvore;
 }
 
+/**
+ * Exporta a árvore gerada pela busca em largura (BFS) para um arquivo DOT.
+ * A árvore é representada com diferentes estilos de arestas para indicar relações
+ * como pai-filho, irmãos, primos e tios.
+ * 
+ * Parâmetros:
+ *   filename - Nome do arquivo de saída onde o grafo será salvo.
+ *   qtd_vertices - Quantidade de vértices na árvore.
+ *   arvore - Objeto ArvoreBusca contendo a estrutura da árvore BFS.
+ * Retorno:
+ *   Nenhum.
+ */
 void exportar_arvore_bfs_para_dot(const std::string& filename,
                                   int qtd_vertices,
                                   ArvoreBusca& arvore) {

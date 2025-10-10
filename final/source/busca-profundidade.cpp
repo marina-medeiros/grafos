@@ -26,6 +26,17 @@
     }
 */
 
+/**
+ * Realiza a busca em profundidade (DFS) em um grafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca. 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao grafo representado por GrafoListaAdj.
+ *   vertice_inicial - Índice do vértice inicial para a DFS.
+ * Retorno:
+ *   Um mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
+ */
 std::map<int, int> busca_em_profundidade_grafo(const Grafo& grafo, int vertice_inicial) {
     int qtd_vertices = grafo.get_qtd_vertices();
     std::map<int, int> predecessores;
@@ -65,7 +76,20 @@ std::map<int, int> busca_em_profundidade_grafo(const Grafo& grafo, int vertice_i
     return predecessores;
 }
 
-
+/**
+ * Realiza a busca em profundidade (DFS) em um grafo a partir de um vértice inicial.
+ * Constrói uma árvore de busca e identifica arestas de retorno (back edges). 
+ * Usa a lista de adjacência para realizar a busca.
+ * 
+ * Parâmetros:
+ *   grafo - Referência ao grafo representado por GrafoListaAdj.
+ *   vertice - Índice do vértice inicial para a DFS.
+ * Retorno:
+ *   Um par contendo:
+ *     - Um mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
+ *     - Um vetor de pares representando as arestas de retorno (ciclos) encontradas durante a DFS.
+ * 
+ */
 std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundidade_lista_adj_recursiva(GrafoListaAdj grafo, int vertice) {
     int qtd_vertices = grafo.get_qtd_vertices();
 
@@ -88,10 +112,6 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
 
     std::cout << std::endl;
 
-    // std::cout << "Mapa de Predecessores:" << std::endl;
-    // for (const auto& par : predecessores) {
-    //     std::cout << "Vértice " << (par.first + 1) << " foi descoberto a partir de " << (par.second != -1 ? std::to_string(par.second + 1) : "Ninguém (raiz)") << "\n";
-    // }
 
     std::cout << std::endl;
     std::cout << "---------------------\n";
@@ -112,6 +132,20 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
     return {predecessores, arestas_retorno};
 }
 
+/**
+ * Função recursiva auxiliar para a busca em profundidade (DFS).
+ * Marca os vértices conforme são visitados e identifica arestas de retorno (back edges).
+ * 
+ * Parâmetros:
+ *   u - Vértice atual sendo visitado.
+ *   visitados - Vetor booleano indicando se cada vértice foi visitado.
+ *   predecessores - Mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
+ *   lista_adj - Mapa representando a lista de adjacência do grafo.
+ *   arestas_retorno - Vetor de pares para armazenar as arestas de retorno encontradas.
+ *   rotulos - Vetor de rótulos dos vértices para exibição.
+ * Retorno:
+ *   Nenhum (os resultados são armazenados nos parâmetros por referência).
+ */
 void busca_profundidade_lista_adj_recursiva_util(int u,
                                                 std::vector<bool>& visitados,
                                                 std::map<int, int>& predecessores,
@@ -180,6 +214,18 @@ void busca_articulacoes_dfs_recursiva(
     }
 }
 
+/**
+ * Exporta a árvore de busca em profundidade (DFS) para um arquivo DOT.
+ * A árvore é representada com arestas não direcionadas e inclui arestas de retorno.
+ * 
+ * Parâmetros:
+ *   filename - Nome do arquivo de saída onde o grafo será salvo.
+ *   arvore - Mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
+ *   arestas_retorno - Vetor de pares representando as arestas de retorno (ciclos) encontradas durante a DFS.
+ *   rotulos - Vetor de rótulos dos vértices para exibição.
+ * Retorno:
+ *   Nenhum.
+ */
 void exportar_arvore_profundidade_para_dot(const std::string& filename,
                                             std::map<int, int> arvore, 
                                             const std::vector<std::pair<int, int>>& arestas_retorno,
