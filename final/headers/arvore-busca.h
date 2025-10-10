@@ -27,7 +27,6 @@ protected:
     std::vector<std::pair<int, int>> arestas_cruzamento;
 
 public:
-
     ArvoreBusca(int vertices) : qtd_vertices(vertices) {
         predecessores.assign(vertices, -1);
 
