@@ -11,6 +11,8 @@ protected:
     std::vector<int> niveis; // Usado principalmente pela BFS
     std::vector<int> tempo_entrada; // Usado pela DFS
     std::vector<int> tempo_saida; // Usado pela DFS
+    
+    std::vector<std::string> rotulos;
 
     // Classificação das Arestas
     std::vector<std::pair<int, int>> arestas_arvore;
@@ -22,11 +24,16 @@ public:
 
     ArvoreBusca(int vertices) : qtd_vertices(vertices) {
         predecessores.assign(vertices, -1);
+
+        rotulos.resize(vertices);
+        for (int i = 0; i < vertices; i++) {
+            rotulos[i] = std::to_string(i);
+        }
     }
 
     virtual ~ArvoreBusca() = default;
 
-    int get_qtd_vertices() const;
+    int get_qtd_vertices() const { return this->qtd_vertices; };
     const std::vector<int>& get_predecessores() const { return predecessores; }
     const std::vector<int>& get_niveis() const { return niveis; }
     const std::vector<int>& get_tempo_entrada() const { return tempo_entrada; }
@@ -77,6 +84,8 @@ public:
         tempo_saida[v] = tempo;
     }
 
+    const std::vector<std::string>& get_rotulos() const { return rotulos; }
+    void set_rotulos(const std::vector<std::string>& novos_rotulos) { rotulos = novos_rotulos; }
 };
 
 #endif

@@ -293,8 +293,8 @@ void grafo(std::string txt){
     auto resultado_dfs = busca_profundidade_lista_adj_recursiva(grafo_original_lista, 0);
     std::map<int, int> predecessores_dfs = resultado_dfs.first;
     std::vector<std::pair<int, int>> arestas_retorno_dfs = resultado_dfs.second;
-    exportar_arvore_profundidade_para_dot("dfs_"+nome_grafo+"_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs, grafo_original_lista.get_rotulos());
-    gerar_imagem("dfs_"+nome_grafo+"_com_retorno.dot","dfs_"+nome_grafo+"_com_retorno.png");
+    exportar_arvore_profundidade_para_dot("arvore_dfs_"+nome_grafo+"_com_retorno.dot", predecessores_dfs, arestas_retorno_dfs, grafo_original_lista.get_rotulos());
+    gerar_imagem("arvore_dfs_"+nome_grafo+"_com_retorno.dot","arvore_dfs_"+nome_grafo+"_com_retorno.png");
 
     // 15 - Determinação de articulações e blocos (biconectividade), utilizando lowpt.
 
@@ -329,20 +329,19 @@ void digrafo(std::string txt){
 
     std::cout << "\n18 - DETERMINAÇÃO DO GRAFO SUBJACENTE\n";
     GrafoListaAdj grafo_subjacente = digrafo_lista.obter_grafo_subjacente(digrafo_lista);
-    grafo_subjacente.exportar_para_dot("GRAFO_SUBJACENTE_"+nome_grafo+"_lista_adj.dot", false);
-    analisar_e_gerar_imagem(grafo_subjacente, nome_grafo, "lista_adj_subjacente", true);
+    analisar_e_gerar_imagem(grafo_subjacente, nome_grafo, "lista_adj_subjacente", false);
     
     // 19 - Busca em Largura (BFS) - Implementação para Digrafo
     std::cout << "\n19 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM LARGURA (BFS)\n";
     
     auto arvore_bfs_digrafo = busca_largura_digrafo(digrafo_lista, 0);
-    exportar_arvore_bfs_para_dot("ARVORE_BFS_"+nome_grafo+".dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
-    gerar_imagem("ARVORE_BFS_"+nome_grafo+".dot", "ARVORE_BFS_"+nome_grafo+".png");
+    exportar_arvore_bfs_para_dot("arvore_bfs_"+nome_grafo+".dot", arvore_bfs_digrafo.get_qtd_vertices(), arvore_bfs_digrafo);
+    gerar_imagem("arvore_bfs_"+nome_grafo+".dot", "arvore_bfs_"+nome_grafo+".png");
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
     auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_lista, 0);
-    exportar_arvore_dfs_para_dot("ARVORE_DFS_"+nome_grafo+".dot", arvore_dfs_digrafo);
-    gerar_imagem("ARVORE_DFS_"+nome_grafo+".dot", "ARVORE_DFS_"+nome_grafo+".png");
+    exportar_arvore_dfs_para_dot("arvore_dfs_"+nome_grafo+".dot", arvore_dfs_digrafo);
+    gerar_imagem("arvore_dfs_"+nome_grafo+".dot", "arvore_dfs_"+nome_grafo+".png");
     
 }

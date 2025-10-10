@@ -16,9 +16,6 @@ include_directories(
 # Arquivos fonte comuns
 set(SOURCES
     source/arvore-largura.cpp
-    source/arvore_bfs.cpp
-    source/arvore_dfs.cpp
-    source/arvore_busca.cpp
     source/busca-profundidade.cpp
     source/busca-profundidade-digrafo.cpp
     source/busca-largura.cpp
@@ -34,12 +31,6 @@ set(SOURCES
 # Executável principal
 add_executable(main
     main.cpp
-    
-    ${SOURCES}
-)
-
-add_executable(teste
-    teste.cpp
     
     ${SOURCES}
 )
