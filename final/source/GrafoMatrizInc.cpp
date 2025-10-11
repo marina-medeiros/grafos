@@ -115,7 +115,7 @@ void GrafoMatrizInc::inserir_aresta(int u, int v, int peso) {
 
     int nova_aresta_idx = qtd_arestas;
     matriz_inc[u][nova_aresta_idx] = 1;
-    matriz_inc[v][nova_aresta_idx] = -1;
+    matriz_inc[v][nova_aresta_idx] = 1;
 
     arestas_info.push_back({u, v});
     qtd_arestas++;
