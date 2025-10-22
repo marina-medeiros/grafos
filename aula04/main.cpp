@@ -3,8 +3,6 @@
 #include "headers/grafo.h"
 #include "headers/estrela.h"
 
-
-
 int main(){
     // Grafo não direcionado --------------------------------------------------------------------
 
