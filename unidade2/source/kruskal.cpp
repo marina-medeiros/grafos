@@ -2,15 +2,74 @@
 #include <set>
 #include <stack>
 #include <utility> 
+#include <vector>
 #include "../../final/headers/busca-profundidade.h"
 #include "../../final/headers/Grafo.h"
 #include "../../final/headers/GrafoListaAdj.h"
+#include "../../final/headers/GrafoMatrizAdj.h"
 #include "arvore-minima.h"
 
-bool encontra_ciclo(const Grafo& grafo){
+// bool encontra_ciclo(const Grafo& grafo){
     
+// }
+
+// ArvoreMinima gerar_arvore_minima(const Grafo& grafo){
+    
+// }
+
+int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
+    int pivot = arestas_e_pesos[high][2];
+
+    int ii = (low = 1);
+
+    for(int jj = low; jj <= high - 1; jj++){
+        if(arestas_e_pesos[jj][2] <= pivot){
+            ii++;
+            swap(arestas_e_pesos[ii], arestas_e_pesos[jj]);
+        }
+    }
+
+    swap(arestas_e_pesos[ii], arestas_e_pesos[high]);
+    return(ii+1);
 }
 
-ArvoreMinima gerar_arvore_minima(const Grafo& grafo){
+void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
+    if(low < high){
+        int pi = partition(arestas_e_pesos, low, high);
 
+        quickSort_arestas(arestas_e_pesos, low, pi - 1);
+        quickSort_arestas(arestas_e_pesos, pi + 1, high);
+    }
+}
+
+std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
+    std::vector<std::vector<int>> arestas_e_pesos;
+    std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
+
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
+            std::cout << matriz_adj[ii][jj] << "  ";
+        }
+        std::cout << std::endl;
+    }
+
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
+            std::cout << ii << " " << jj << std::endl;
+            if(matriz_adj[ii][jj] != 0){
+                arestas_e_pesos[ii][0] = ii; // vértice a
+                arestas_e_pesos[ii][1] = jj; // vértice b
+                arestas_e_pesos[ii][2] = matriz_adj[ii][jj]; // peso da aresta
+            }
+        }
+    }
+
+    quickSort_arestas(arestas_e_pesos, 0, grafo.get_qtd_vertices());
+
+    // vendo se o quicksort funcionou
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        std::cout << arestas_e_pesos[ii][0] << " " << arestas_e_pesos[ii][1] << " " << arestas_e_pesos[ii][2] << std::endl;
+    }
+
+    return arestas_e_pesos;
 }
