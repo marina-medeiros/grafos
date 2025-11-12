@@ -11,12 +11,16 @@
 #include "headers/kruskal.h"
 
 int main(){
-    GrafoMatrizAdj grafo_0(4);
+    GrafoMatrizAdj grafo_0(8);
     
     grafo_0.inserir_aresta(0, 1, 8);
     grafo_0.inserir_aresta(1, 2, 5);
     grafo_0.inserir_aresta(2, 3, -1);
     grafo_0.inserir_aresta(3, 1, 1);
+    grafo_0.inserir_aresta(4, 1, 8);
+    grafo_0.inserir_aresta(5, 6, 6);
+    grafo_0.inserir_aresta(6, 7, -1);
+    grafo_0.inserir_aresta(7, 5, 3);
 
     ordenar_arestas(grafo_0);
 }

@@ -19,8 +19,7 @@
 
 int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
     int pivot = arestas_e_pesos[high][2];
-
-    int ii = (low = 1);
+    int ii = (low - 1);
 
     for(int jj = low; jj <= high - 1; jj++){
         if(arestas_e_pesos[jj][2] <= pivot){
@@ -29,7 +28,7 @@ int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high)
         }
     }
 
-    swap(arestas_e_pesos[ii], arestas_e_pesos[high]);
+    swap(arestas_e_pesos[ii+1], arestas_e_pesos[high]);
     return(ii+1);
 }
 
@@ -55,19 +54,18 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
         for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
-            std::cout << ii << " " << jj << std::endl;
-            if(matriz_adj[ii][jj] != 0){
-                arestas_e_pesos[ii][0] = ii; // vértice a
-                arestas_e_pesos[ii][1] = jj; // vértice b
-                arestas_e_pesos[ii][2] = matriz_adj[ii][jj]; // peso da aresta
+            if(matriz_adj[ii][jj] != 0  && ii <= jj){
+                std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
+                arestas_e_pesos.push_back(aresta);
             }
         }
     }
 
-    quickSort_arestas(arestas_e_pesos, 0, grafo.get_qtd_vertices());
+    quickSort_arestas(arestas_e_pesos, 0, arestas_e_pesos.size() - 1);
 
     // vendo se o quicksort funcionou
-    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+    std::cout << "qucksort" << std::endl;
+    for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
         std::cout << arestas_e_pesos[ii][0] << " " << arestas_e_pesos[ii][1] << " " << arestas_e_pesos[ii][2] << std::endl;
     }
 
