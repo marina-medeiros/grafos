@@ -9,13 +9,14 @@
 #include "../../final/headers/GrafoMatrizAdj.h"
 #include "arvore-minima.h"
 
-// bool encontra_ciclo(const Grafo& grafo){
-    
-// }
+bool encontra_ciclo(const GrafoListaAdj& grafo){
+    std::vector<std::pair<int, int>> arestas_retorno = busca_profundidade_lista_adj_recursiva(grafo, 0).second;
 
-// ArvoreMinima gerar_arvore_minima(const Grafo& grafo){
-    
-// }
+    if(arestas_retorno.size() > 0){
+        return true;
+    }
+    return false;
+}
 
 int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
     int pivot = arestas_e_pesos[high][2];
@@ -63,11 +64,35 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     quickSort_arestas(arestas_e_pesos, 0, arestas_e_pesos.size() - 1);
 
-    // vendo se o quicksort funcionou
-    std::cout << "qucksort" << std::endl;
+    std::cout << "quicksort" << std::endl;
     for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
         std::cout << arestas_e_pesos[ii][0] << " " << arestas_e_pesos[ii][1] << " " << arestas_e_pesos[ii][2] << std::endl;
     }
+    std::cout << "fim da ordenação" << std::endl;
 
     return arestas_e_pesos;
+}
+
+GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj, const GrafoListaAdj& grafoListaAdj){
+    int qtd_vertices = grafoListaAdj.get_qtd_vertices();
+    int qtd_arestas = 0;
+    GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
+    GrafoListaAdj agm_lista_adj(qtd_vertices);
+    
+    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(grafoMatrizAdj);
+
+    int indice_aresta = 0;
+
+    while(qtd_arestas < (qtd_vertices - 1)){
+        std::vector<int> aresta = arestas_ordenadas[indice_aresta];
+        std::cout << "aresta da vez: " << indice_aresta << std::endl;
+        std::cout << "aresta: " << aresta[0] << " " << aresta[1] << " peso: " << aresta[2] << std::endl;
+
+        
+
+        qtd_arestas++;
+        indice_aresta++;
+    }
+
+    return agm_matriz_adj;
 }

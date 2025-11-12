@@ -12,8 +12,8 @@
 #include "../../final/headers/GrafoMatrizAdj.h"
 #include "arvore-minima.h"
 
-bool encontra_ciclo(const Grafo& grafo);
-ArvoreMinima gerar_arvore_minima(const Grafo& grafo);
+bool encontra_ciclo(const GrafoListaAdj& grafo);
+ArvoreMinima gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj, const GrafoListaAdj& grafoListaAdj);
 std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo);
 
 #endif

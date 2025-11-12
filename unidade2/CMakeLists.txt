@@ -28,6 +28,7 @@ set(SOURCES
     ../final/source/DigrafoMatrizInc.cpp
     ../final/source/DigrafoMatrizAdj.cpp
     source/kruskal.cpp
+    source/arvore-minima.cpp
     source/dijkstra.cpp)
 
 # Executável principal
