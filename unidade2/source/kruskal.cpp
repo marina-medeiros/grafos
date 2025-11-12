@@ -68,7 +68,7 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
     return arestas_e_pesos;
 }
 
-GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj){
+GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     GrafoListaAdj grafoListaAdj = grafoMatrizAdj.converter_para_lista_adj();
 
     int qtd_vertices = grafoListaAdj.get_qtd_vertices();

@@ -12,6 +12,8 @@
 #include "headers/kruskal.h"
 #include "headers/dijkstra.h"
 
+void agm_basico();
+
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
 
@@ -30,62 +32,102 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     gerar_imagem(arq_dot, arq_png);
 }
 
-int main(){
-    ///////////// KRUSKAL //////////////////////////
-    GrafoMatrizAdj grafo0(5);
-    
-    grafo0.inserir_aresta(1, 2, 1);
-    grafo0.inserir_aresta(1, 3, 20);
-    grafo0.inserir_aresta(2, 3, 17);
-    grafo0.inserir_aresta(0, 2, 85);
-    grafo0.inserir_aresta(0, 3, 22);
-    grafo0.inserir_aresta(1, 4, 86);
-    grafo0.inserir_aresta(3, 4, 23);
-    grafo0.inserir_aresta(0, 4, 86);
-    grafo0.inserir_aresta(0, 1, 15);
-    grafo0.inserir_aresta(2, 4, 90);
-    
-    GrafoMatrizAdj AGM = gerar_arvore_minima(grafo0);
-
-    analisar_e_gerar_imagem(grafo0, "grafo_0", "matriz_adj");
-    analisar_e_gerar_imagem(AGM, "AGM_grafo0", "matriz_adj");
-
-    std::cout << std::endl << std::endl;
-
-    ///////////// DIJKSTRA //////////////////////////
-    GrafoMatrizAdj grafo1(7);
-    grafo1.inserir_aresta(0, 1, 2);
-    grafo1.inserir_aresta(0, 3, 5);
-    grafo1.inserir_aresta(0, 2, 4);
-    grafo1.inserir_aresta(1, 3, 2);
-    grafo1.inserir_aresta(2, 3, 1);
-    grafo1.inserir_aresta(2, 5, 4);
-    grafo1.inserir_aresta(3, 4, 2);
-    grafo1.inserir_aresta(3, 5, 3);
-    grafo1.inserir_aresta(4, 5, 1);
-    grafo1.inserir_aresta(4, 6, 5);
-    grafo1.inserir_aresta(5, 6, 7);
-
-
-    DigrafoMatrizAdj digrafo0(6);
-    digrafo0.inserir_aresta(0, 1, 5);
-    digrafo0.inserir_aresta(0, 2, 2);
-    digrafo0.inserir_aresta(1, 2, 1);
-    digrafo0.inserir_aresta(1, 3, 4);
-    digrafo0.inserir_aresta(1, 4, 2);
-    digrafo0.inserir_aresta(2, 4, 7);
-    digrafo0.inserir_aresta(3, 4, 6);
-    digrafo0.inserir_aresta(3, 5, 3);
-    digrafo0.inserir_aresta(4, 5, 1);
-
-    dijkstra_geral(grafo1, 0);
-    dijkstra_geral(digrafo0, 0);
-    dijkstra_geral(grafo1, 6);
-    dijkstra_geral(digrafo0, 5);
-    dijkstra_geral(digrafo0, 2);
-
-    dijkstra_especifico(grafo1, 0, 4); // 6
-    dijkstra_especifico(grafo1, 6, 3); // 8
-    dijkstra_especifico(digrafo0, 2, 3); // 999
+void menu() {
+    std::cout << "\nO que deseja fazer?\n" << std::endl;
+    std::cout << "1 | Árvore Geradora Mínima: Kruskal, Prim e Boruvka" << std::endl;
+    std::cout << "2 | Árvore Geradora Mínima: Chu-Liu/Edmonds" << std::endl;
+    std::cout << "3 | Caminho Mais Curto" << std::endl;
+    std::cout << "4 | Grafos Eulerianos" << std::endl;
+    std::cout << "\nDigite 'sair' ou 's' para terminar." << std::endl;
+    std::cout << "Insira a opção escolhida: ";
 }
 
+int main(){
+    while(true){
+        menu();
+        std::string entrada;
+        std::cin >> entrada;
+
+        std::transform(entrada.begin(), entrada.end(), entrada.begin(), ::tolower);
+
+        if (entrada == "sair" || entrada == "s") {
+            break;
+        }
+
+        if(entrada == "1"){
+            agm_basico();
+        }
+
+    }
+
+
+    // ///////////// KRUSKAL //////////////////////////
+    // GrafoMatrizAdj grafo0(5);
+    
+    // grafo0.inserir_aresta(1, 2, 1);
+    // grafo0.inserir_aresta(1, 3, 20);
+    // grafo0.inserir_aresta(2, 3, 17);
+    // grafo0.inserir_aresta(0, 2, 85);
+    // grafo0.inserir_aresta(0, 3, 22);
+    // grafo0.inserir_aresta(1, 4, 86);
+    // grafo0.inserir_aresta(3, 4, 23);
+    // grafo0.inserir_aresta(0, 4, 86);
+    // grafo0.inserir_aresta(0, 1, 15);
+    // grafo0.inserir_aresta(2, 4, 90);
+    
+    // GrafoMatrizAdj AGM = gerar_agm_kruskal(grafo0);
+
+    // analisar_e_gerar_imagem(grafo0, "grafo_0", "matriz_adj");
+    // analisar_e_gerar_imagem(AGM, "AGM_grafo0", "matriz_adj");
+
+    // std::cout << std::endl << std::endl;
+
+    // ///////////// DIJKSTRA //////////////////////////
+    // GrafoMatrizAdj grafo1(7);
+    // grafo1.inserir_aresta(0, 1, 2);
+    // grafo1.inserir_aresta(0, 3, 5);
+    // grafo1.inserir_aresta(0, 2, 4);
+    // grafo1.inserir_aresta(1, 3, 2);
+    // grafo1.inserir_aresta(2, 3, 1);
+    // grafo1.inserir_aresta(2, 5, 4);
+    // grafo1.inserir_aresta(3, 4, 2);
+    // grafo1.inserir_aresta(3, 5, 3);
+    // grafo1.inserir_aresta(4, 5, 1);
+    // grafo1.inserir_aresta(4, 6, 5);
+    // grafo1.inserir_aresta(5, 6, 7);
+
+
+    // DigrafoMatrizAdj digrafo0(6);
+    // digrafo0.inserir_aresta(0, 1, 5);
+    // digrafo0.inserir_aresta(0, 2, 2);
+    // digrafo0.inserir_aresta(1, 2, 1);
+    // digrafo0.inserir_aresta(1, 3, 4);
+    // digrafo0.inserir_aresta(1, 4, 2);
+    // digrafo0.inserir_aresta(2, 4, 7);
+    // digrafo0.inserir_aresta(3, 4, 6);
+    // digrafo0.inserir_aresta(3, 5, 3);
+    // digrafo0.inserir_aresta(4, 5, 1);
+
+    // dijkstra_geral(grafo1, 0);
+    // dijkstra_geral(digrafo0, 0);
+    // dijkstra_geral(grafo1, 6);
+    // dijkstra_geral(digrafo0, 5);
+    // dijkstra_geral(digrafo0, 2);
+
+    // dijkstra_especifico(grafo1, 0, 4); // 6
+    // dijkstra_especifico(grafo1, 6, 3); // 8
+    // dijkstra_especifico(digrafo0, 2, 3); // 999
+}
+
+void agm_basico(){
+    // kruskal
+    GrafoMatrizAdj grafo_kruskal(0);
+    grafo_kruskal.carregar_de_arquivo("../dados/GRAFO_KRUSKAL.txt");
+
+    analisar_e_gerar_imagem(grafo_kruskal, "grafo_kruskal", "matriz_adj");
+
+    GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
+
+    analisar_e_gerar_imagem(grafo_kruskal, "AGM_grafo0", "matriz_adj");
+
+}
