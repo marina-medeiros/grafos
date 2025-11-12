@@ -38,6 +38,37 @@ int vertice_com_menor_distancia(std::vector<int>& distancia, std::vector<int>& v
     return indice_menor_distancia;
 }
 
+void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& visitado, std::vector<int>& predecessor){
+    std::cout << "Vértices     | ";
+    for(int ii = 0; ii < int(visitado.size()); ii++){
+        if(ii+1 < 10 && ii+1 >= 0){ std::cout << " ";}
+        if(ii+1 < 100){ std::cout << " ";}
+        std::cout << (ii+1) << "  ";
+    }
+    std::cout << std::endl;
+    std::cout << "Visitado     | ";
+    for(int ii = 0; ii < int(visitado.size()); ii++){
+        if(visitado[ii] < 10 && visitado[ii] >= 0){ std::cout << " ";}
+        if(visitado[ii] < 100){ std::cout << " ";}
+        std::cout << visitado[ii] << "  ";
+    }
+    std::cout << std::endl;
+    std::cout << "Predecessor  | ";
+    for(int ii = 0; ii < int(predecessor.size()); ii++){
+        if(predecessor[ii]+1 < 10 && predecessor[ii]+1 >= 0){ std::cout << " ";}
+        if(predecessor[ii]+1 < 100){ std::cout << " ";}
+        std::cout << predecessor[ii]+1 << "  ";
+    }
+    std::cout << std::endl;
+    std::cout << "Distância    | ";
+    for(int ii = 0; ii < int(distancia.size()); ii++){
+        if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
+        if(distancia[ii] < 100){ std::cout << " ";}
+        std::cout << distancia[ii] << "  ";
+    }
+    std::cout << std::endl;
+}
+
 std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial){
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
@@ -71,31 +102,8 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
         }
     }
 
-    std::cout << "Dijkstra: menor distância do vértice " << vertice_inicial << " para os demais" << std::endl;
-    std::cout << "Vértices     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
-        if(ii < 10 && ii >= 0){ std::cout << " ";}
-        std::cout << ii << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Visitado     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
-        if(visitado[ii] < 10 && visitado[ii] >= 0){ std::cout << " ";}
-        std::cout << visitado[ii] << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Predecessor  | ";
-    for(int ii = 0; ii < int(predecessor.size()); ii++){
-        if(predecessor[ii] < 10 && predecessor[ii] >= 0){ std::cout << " ";}
-        std::cout << predecessor[ii] << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Distância    | ";
-    for(int ii = 0; ii < int(distancia.size()); ii++){
-        if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
-        std::cout << distancia[ii] << "  ";
-    }
-    std::cout << std::endl << std::endl;
+    std::cout << "Dijkstra: menor distância do vértice " << (vertice_inicial+1) << " para os demais" << std::endl;
+    imprimir_tabela_dijkstra(distancia, visitado, predecessor);
 
     return distancia;
 }
@@ -133,35 +141,8 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
         }
     }
 
-    std::cout << "Dijkstra: menor distância do vértice " << vertice_inicial << " para " << vertice_final << std::endl;
-    std::cout << "Vértices     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
-        if(ii < 10 && ii >= 0){ std::cout << " ";}
-        if(ii < 100){ std::cout << " ";}
-        std::cout << ii << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Visitado     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
-        if(visitado[ii] < 10 && visitado[ii] >= 0){ std::cout << " ";}
-        if(visitado[ii] < 100){ std::cout << " ";}
-        std::cout << visitado[ii] << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Predecessor  | ";
-    for(int ii = 0; ii < int(predecessor.size()); ii++){
-        if(predecessor[ii] < 10 && predecessor[ii] >= 0){ std::cout << " ";}
-        if(predecessor[ii] < 100){ std::cout << " ";}
-        std::cout << predecessor[ii] << "  ";
-    }
-    std::cout << std::endl;
-    std::cout << "Distância    | ";
-    for(int ii = 0; ii < int(distancia.size()); ii++){
-        if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
-        if(distancia[ii] < 100){ std::cout << " ";}
-        std::cout << distancia[ii] << "  ";
-    }
-    std::cout << std::endl;
+    std::cout << "Dijkstra: menor distância do vértice " << (vertice_inicial+1) << " para " << (vertice_final+1) << std::endl;
+    imprimir_tabela_dijkstra(distancia, visitado, predecessor);
 
     if(distancia[vertice_final] == 999){
         std::cout << "Não há caminho entre os dois vértices." << std::endl;
