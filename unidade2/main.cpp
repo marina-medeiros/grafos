@@ -13,6 +13,7 @@
 #include "headers/dijkstra.h"
 
 void agm_basico();
+void caminho_minimo();
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -59,34 +60,11 @@ int main(){
         }
 
     }
-
-
-    // ///////////// KRUSKAL //////////////////////////
-    // GrafoMatrizAdj grafo0(5);
-
-    // GrafoMatrizAdj AGM = gerar_agm_kruskal(grafo0);
-
-    // analisar_e_gerar_imagem(grafo0, "grafo_0", "matriz_adj");
-    // analisar_e_gerar_imagem(AGM, "AGM_grafo0", "matriz_adj");
-
-    // std::cout << std::endl << std::endl;
-
-    // ///////////// DIJKSTRA //////////////////////////
-    // GrafoMatrizAdj grafo1(7);
-    // DigrafoMatrizAdj digrafo0(6);
-    // dijkstra_geral(grafo1, 0);
-    // dijkstra_geral(digrafo0, 0);
-    // dijkstra_geral(grafo1, 6);
-    // dijkstra_geral(digrafo0, 5);
-    // dijkstra_geral(digrafo0, 2);
-    // dijkstra_especifico(grafo1, 0, 4); // 6
-    // dijkstra_especifico(grafo1, 6, 3); // 8
-    // dijkstra_especifico(digrafo0, 2, 3); // 999
 }
 
 void agm_basico(){
-    GrafoMatrizAdj digrafo_AGM(0); // grafo grande que está no arquivo do trabalho
-    digrafo_AGM.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    GrafoMatrizAdj digrafo(0); // grafo grande que está no arquivo do trabalho
+    digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
 
     //------------------------------------ kruskal -----------------------------------------
     // Exemplo dos slides
@@ -98,7 +76,7 @@ void agm_basico(){
     analisar_e_gerar_imagem(agm_kruskal, "agm_kruskal", "matriz_adj");
 
     // Exemplo do pdf do trabalho
-    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo_AGM);
+    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
     analisar_e_gerar_imagem(agm_kruskal_digrafo, "agm_kruskal_digrafo", "matriz_adj");
 
     //------------------------------------ prim -----------------------------------------
@@ -108,5 +86,26 @@ void agm_basico(){
 }
 
 void caminho_minimo(){
-    GrafoMatrizAdj grafo(0);
+    GrafoMatrizAdj digrafo(0); // grafo grande que está no arquivo do trabalho
+    digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+
+    //------------------------------------ dijkstra -----------------------------------------
+    // Exemplos dos slides
+    GrafoMatrizAdj grafo_dijkstra(0);
+    grafo_dijkstra.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
+    analisar_e_gerar_imagem(grafo_dijkstra, "grafo_dijkstra", "matriz_adj");
+    dijkstra_geral(grafo_dijkstra, 0);
+    dijkstra_geral(grafo_dijkstra, 4);
+    dijkstra_especifico(grafo_dijkstra, 0, 3);
+
+    GrafoMatrizAdj digrafo_dijkstra(0);
+    digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
+    analisar_e_gerar_imagem(digrafo_dijkstra, "digrafo_dijkstra", "matriz_adj");
+    dijkstra_geral(digrafo_dijkstra, 0);
+    dijkstra_especifico(digrafo_dijkstra, 1, 4);
+    dijkstra_especifico(digrafo_dijkstra, 2, 3);
+
+    // Exemplo do pdf do trabalho
+    dijkstra_geral(digrafo, 0);
+    dijkstra_especifico(digrafo, 0, 14);
 }
