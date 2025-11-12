@@ -42,6 +42,32 @@ void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, 
     }
 }
 
+void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
+    std::cout << "Arestas ordenadas:" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "índice |  (v1, v2) | peso " << std::endl;
+    for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
+        std::cout << "   ";
+        if(ii < 10){ 
+            std:: cout << " ";
+        }
+        std::cout << ii << "   |    ";
+        if(arestas_e_pesos[ii][0] < 10){ 
+            std:: cout << " ";
+        }
+        std::cout << arestas_e_pesos[ii][0]  << ", " ;
+        if(arestas_e_pesos[ii][1] < 10){ 
+            std:: cout << " ";
+        }
+        std:: cout <<  arestas_e_pesos[ii][1] << "   |   " ;
+        if(arestas_e_pesos[ii][2] < 10){ 
+            std:: cout << " ";
+        }
+        std:: cout <<  arestas_e_pesos[ii][2] << std::endl;
+    }
+    std::cout << "----------------------------------" << std::endl;
+}
+
 std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
     std::vector<std::vector<int>> arestas_e_pesos;
     std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
@@ -57,13 +83,7 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     quickSort_arestas(arestas_e_pesos, 0, arestas_e_pesos.size() - 1);
 
-    std::cout << "Arestas ordenadas:" << std::endl;
-    std::cout << "---------------------------" << std::endl;
-    std::cout << "índice |  (v1, v2) | peso " << std::endl;
-    for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
-        std::cout << "   "<< ii << "   |    " << arestas_e_pesos[ii][0] << ", " << arestas_e_pesos[ii][1] << "   |   " << arestas_e_pesos[ii][2] << std::endl;
-    }
-    std::cout << "---------------------------" << std::endl;
+    imprimir_arestas_ordenadas(arestas_e_pesos);
 
     return arestas_e_pesos;
 }
