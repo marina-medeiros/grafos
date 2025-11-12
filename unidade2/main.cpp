@@ -11,27 +11,18 @@
 #include "headers/kruskal.h"
 
 int main(){
-    GrafoMatrizAdj grafoMatrizAdj(8);
+    GrafoMatrizAdj grafoMatrizAdj(5);
     
-    grafoMatrizAdj.inserir_aresta(0, 1, 8);
-    grafoMatrizAdj.inserir_aresta(1, 2, 5);
-    grafoMatrizAdj.inserir_aresta(2, 3, -1);
-    grafoMatrizAdj.inserir_aresta(3, 1, 1);
-    grafoMatrizAdj.inserir_aresta(4, 1, 8);
-    grafoMatrizAdj.inserir_aresta(5, 6, 6);
-    grafoMatrizAdj.inserir_aresta(6, 7, -1);
-    grafoMatrizAdj.inserir_aresta(7, 5, 3);
-
-    GrafoListaAdj grafoListaAdj(8);
+    grafoMatrizAdj.inserir_aresta(1, 2, 1);
+    grafoMatrizAdj.inserir_aresta(1, 3, 20);
+    grafoMatrizAdj.inserir_aresta(2, 3, 17);
+    grafoMatrizAdj.inserir_aresta(0, 2, 85);
+    grafoMatrizAdj.inserir_aresta(0, 3, 22);
+    grafoMatrizAdj.inserir_aresta(1, 4, 86);
+    grafoMatrizAdj.inserir_aresta(3, 4, 23);
+    grafoMatrizAdj.inserir_aresta(0, 4, 86);
+    grafoMatrizAdj.inserir_aresta(0, 1, 15);
+    grafoMatrizAdj.inserir_aresta(2, 4, 90);
     
-    grafoListaAdj.inserir_aresta(0, 1, 8);
-    grafoListaAdj.inserir_aresta(1, 2, 5);
-    grafoListaAdj.inserir_aresta(2, 3, -1);
-    grafoListaAdj.inserir_aresta(3, 1, 1);
-    grafoListaAdj.inserir_aresta(4, 1, 8);
-    grafoListaAdj.inserir_aresta(5, 6, 6);
-    grafoListaAdj.inserir_aresta(6, 7, -1);
-    grafoListaAdj.inserir_aresta(7, 5, 3);
-
-    gerar_arvore_minima(grafoMatrizAdj, grafoListaAdj);
+    gerar_arvore_minima(grafoMatrizAdj);
 }

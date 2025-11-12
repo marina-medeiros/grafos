@@ -48,13 +48,6 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
         for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
-            std::cout << matriz_adj[ii][jj] << "  ";
-        }
-        std::cout << std::endl;
-    }
-
-    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
             if(matriz_adj[ii][jj] != 0  && ii <= jj){
                 std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
                 arestas_e_pesos.push_back(aresta);
@@ -64,16 +57,20 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     quickSort_arestas(arestas_e_pesos, 0, arestas_e_pesos.size() - 1);
 
-    std::cout << "quicksort" << std::endl;
+    std::cout << "Arestas ordenadas:" << std::endl;
+    std::cout << "---------------------------" << std::endl;
+    std::cout << "índice |  (v1, v2) | peso " << std::endl;
     for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
-        std::cout << arestas_e_pesos[ii][0] << " " << arestas_e_pesos[ii][1] << " " << arestas_e_pesos[ii][2] << std::endl;
+        std::cout << "   "<< ii << "   |    " << arestas_e_pesos[ii][0] << ", " << arestas_e_pesos[ii][1] << "   |   " << arestas_e_pesos[ii][2] << std::endl;
     }
-    std::cout << "fim da ordenação" << std::endl;
+    std::cout << "---------------------------" << std::endl;
 
     return arestas_e_pesos;
 }
 
-GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj, const GrafoListaAdj& grafoListaAdj){
+GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj){
+    GrafoListaAdj grafoListaAdj = grafoMatrizAdj.converter_para_lista_adj();
+
     int qtd_vertices = grafoListaAdj.get_qtd_vertices();
     int qtd_arestas = 0;
     GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
@@ -85,14 +82,24 @@ GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj, const G
 
     while(qtd_arestas < (qtd_vertices - 1)){
         std::vector<int> aresta = arestas_ordenadas[indice_aresta];
-        std::cout << "aresta da vez: " << indice_aresta << std::endl;
-        std::cout << "aresta: " << aresta[0] << " " << aresta[1] << " peso: " << aresta[2] << std::endl;
+        std::cout << "Índice da aresta: " << indice_aresta << std::endl;
+        std::cout << "Vértices: (" << aresta[0] << ", " << aresta[1] << ") | Peso: " << aresta[2];
 
-        
+        agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
 
-        qtd_arestas++;
+        if(encontra_ciclo(agm_lista_adj)){
+            agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
+            std::cout << "Essa aresta forma ciclo! Ela não será inserida na AGM." << std::endl << std::endl;
+        }else{
+            std::cout << "Aresta inserida na AGM!" << std::endl << std::endl;
+            agm_matriz_adj.inserir_aresta(aresta[0], aresta[1], aresta[2]);
+            qtd_arestas++;
+        }
         indice_aresta++;
     }
+
+    std::cout << "Arestas da AGM:" << std::endl;
+    ordenar_arestas(agm_matriz_adj);
 
     return agm_matriz_adj;
 }

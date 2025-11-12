@@ -13,7 +13,7 @@
 #include "arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo);
-ArvoreMinima gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj, const GrafoListaAdj& grafoListaAdj);
+GrafoMatrizAdj gerar_arvore_minima(const GrafoMatrizAdj& grafoMatrizAdj);
 std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo);
 
 #endif
