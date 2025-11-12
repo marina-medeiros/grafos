@@ -184,10 +184,11 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         if (linha.empty()) continue;
 
         std::stringstream ss(linha);
-        std::string rotulo1_str, rotulo2_str;
+        std::string rotulo1_str, rotulo2_str, rotulo3_str;
 
         std::getline(ss, rotulo1_str, ',');
-        std::getline(ss, rotulo2_str);
+        std::getline(ss, rotulo2_str, ',');
+        std::getline(ss, rotulo3_str);
 
         int indice1, indice2;
 
@@ -208,8 +209,11 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         } else {
             indice2 = mapa_rotulos[rotulo2_str];
         }
-        
-        this->inserir_aresta(indice1, indice2);
+        if(!rotulo3_str.empty()){
+            this->inserir_aresta(indice1, indice2, std::stoi(rotulo3_str));
+        }else{
+            this->inserir_aresta(indice1, indice2);
+        }
     }
     
     arquivo.close();

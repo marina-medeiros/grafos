@@ -49,7 +49,6 @@ void menu() {
 }
 
 int main(){
-
     const std::map<std::string, std::string> arquivos = {
         {"1", "GRAFO_0.txt"}, {"grafo_0", "GRAFO_0.txt"},
         {"2", "GRAFO_1.txt"}, {"grafo_1", "GRAFO_1.txt"},
@@ -96,7 +95,6 @@ int main(){
 }
 
 void grafo(std::string txt){
-
     std::string caminho_arquivo = "../dados/" + txt;
     std::string nome_grafo = txt.substr(0, txt.find(".txt"));
 
