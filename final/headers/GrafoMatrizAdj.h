@@ -28,6 +28,8 @@ public:
     std::list<int> get_vizinhos(int v) const override;
     void print() const override;
     GrafoListaAdj converter_para_lista_adj() const;
+
+    std::vector<std::vector<int>> get_matriz_adj() const {return matriz_adj;};
 };
 
 #endif

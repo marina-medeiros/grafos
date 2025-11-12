@@ -8,24 +8,6 @@
 #include "../headers/busca-profundidade.h"
 #include "../headers/GrafoListaAdj.h"
 
-
-/*
-    BuscaProfundidade(Grafo G, vértice V) {
-        Cria pilha vazia P;
-        Empilha (P, v);
-        Enquanto P.tamanho > 0 faça {
-            u = Consulta(P);
-            Se existe aresta uv pertencente ao grafo com v.visitado == 0, então {
-                v.visitado = 1
-                v.predecessor = u
-                Empilha(P, v);
-            } Senão {
-                Desempilha(P)
-            }
-        }
-    }
-*/
-
 /**
  * Realiza a busca em profundidade (DFS) em um grafo a partir de um vértice inicial.
  * Constrói uma árvore de busca. 
@@ -111,7 +93,6 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
     busca_profundidade_lista_adj_recursiva_util(vertice, visitados, predecessores, lista_adj, arestas_retorno, rotulos);
 
     std::cout << std::endl;
-
 
     std::cout << std::endl;
     std::cout << "---------------------\n";
