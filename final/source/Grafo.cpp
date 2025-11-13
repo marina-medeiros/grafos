@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <string>
 #include <cstdlib>
 #include <cstdio>
 
@@ -190,25 +191,31 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         std::getline(ss, rotulo2_str, ',');
         std::getline(ss, rotulo3_str);
 
-        int indice1, indice2;
+        // if (mapa_rotulos.find(rotulo1_str) == mapa_rotulos.end()) {
+        //     if (proximo_indice >= this->qtd_vertices) continue;
+        //     indice1 = proximo_indice++;
+        //     mapa_rotulos[rotulo1_str] = indice1;
+        //     this->rotulos[indice1] = rotulo1_str;
+        // } else {
+        //     indice1 = mapa_rotulos[rotulo1_str];
+        // }
 
-        if (mapa_rotulos.find(rotulo1_str) == mapa_rotulos.end()) {
-            if (proximo_indice >= this->qtd_vertices) continue;
-            indice1 = proximo_indice++;
-            mapa_rotulos[rotulo1_str] = indice1;
-            this->rotulos[indice1] = rotulo1_str;
-        } else {
-            indice1 = mapa_rotulos[rotulo1_str];
+        // if (mapa_rotulos.find(rotulo2_str) == mapa_rotulos.end()) {
+        //     if (proximo_indice >= this->qtd_vertices) continue;
+        //     indice2 = proximo_indice++;
+        //     mapa_rotulos[rotulo2_str] = indice2;
+        //     this->rotulos[indice2] = rotulo2_str;
+        // } else {
+        //     indice2 = mapa_rotulos[rotulo2_str];
+        // }
+
+        int indice1 = std::stoi(rotulo1_str);
+        int indice2 = std::stoi(rotulo2_str);
+        if (indice1 < 0 || indice1 >= this->qtd_vertices || indice2 < 0 || indice2 >= this->qtd_vertices) {
+            std::cerr << "Aviso: índice fora do intervalo na linha: " << linha << std::endl;
+            continue;
         }
 
-        if (mapa_rotulos.find(rotulo2_str) == mapa_rotulos.end()) {
-            if (proximo_indice >= this->qtd_vertices) continue;
-            indice2 = proximo_indice++;
-            mapa_rotulos[rotulo2_str] = indice2;
-            this->rotulos[indice2] = rotulo2_str;
-        } else {
-            indice2 = mapa_rotulos[rotulo2_str];
-        }
         if(!rotulo3_str.empty()){
             this->inserir_aresta(indice1, indice2, std::stoi(rotulo3_str));
         }else{
