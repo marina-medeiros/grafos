@@ -10,7 +10,7 @@
 #include "../headers/GrafoMatrizAdj.h"
 
 bool existem_nao_visitados(std::vector<int>& visitados){
-    for(int ii = 0; ii < int(visitados.size()); ii++){
+    for(int ii = 0; ii < (int)visitados.size(); ii++){
         if(visitados[ii] == 0){
             return true;
         }
@@ -19,15 +19,15 @@ bool existem_nao_visitados(std::vector<int>& visitados){
 }
 
 int vertice_com_menor_distancia(std::vector<int>& distancia, std::vector<int>& visitado){
-    int indice_menor_distancia;
-    for(int ii = 0; ii < int(visitado.size()); ii++){
+    int indice_menor_distancia = -1;
+    for(int ii = 0; ii < (int)visitado.size(); ii++){
         if(visitado[ii] == 0){
             indice_menor_distancia = ii;
             break;
         }
     }
 
-    for(int ii = 0; ii < int(distancia.size()); ii++){
+    for(int ii = 0; ii < (int)distancia.size(); ii++){
         if(visitado[ii] == 0){
             if(distancia[ii] < distancia[indice_menor_distancia]){
                 indice_menor_distancia = ii;
@@ -39,34 +39,34 @@ int vertice_com_menor_distancia(std::vector<int>& distancia, std::vector<int>& v
 }
 
 void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& visitado, std::vector<int>& predecessor){
-    std::cout << "Vértices     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
+    std::cout << std::endl << "Vértices     | ";
+    for(int ii = 0; ii < (int)visitado.size(); ii++){
         if(ii+1 < 10 && ii+1 >= 0){ std::cout << " ";}
         if(ii+1 < 100){ std::cout << " ";}
         std::cout << (ii+1) << "  ";
     }
     std::cout << std::endl;
     std::cout << "Visitado     | ";
-    for(int ii = 0; ii < int(visitado.size()); ii++){
+    for(int ii = 0; ii < (int)visitado.size(); ii++){
         if(visitado[ii] < 10 && visitado[ii] >= 0){ std::cout << " ";}
         if(visitado[ii] < 100){ std::cout << " ";}
         std::cout << visitado[ii] << "  ";
     }
     std::cout << std::endl;
     std::cout << "Predecessor  | ";
-    for(int ii = 0; ii < int(predecessor.size()); ii++){
+    for(int ii = 0; ii < (int)predecessor.size(); ii++){
         if(predecessor[ii]+1 < 10 && predecessor[ii]+1 >= 0){ std::cout << " ";}
         if(predecessor[ii]+1 < 100){ std::cout << " ";}
         std::cout << predecessor[ii]+1 << "  ";
     }
     std::cout << std::endl;
     std::cout << "Distância    | ";
-    for(int ii = 0; ii < int(distancia.size()); ii++){
+    for(int ii = 0; ii < (int)distancia.size(); ii++){
         if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
         if(distancia[ii] < 100){ std::cout << " ";}
         std::cout << distancia[ii] << "  ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 }
 
 std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial){
@@ -89,6 +89,9 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
 
     while(existem_nao_visitados(visitado)){
         int vertice = vertice_com_menor_distancia(distancia, visitado);
+        if(vertice == -1){
+            break;
+        }
         visitado[vertice] = 1;
         for(int ii = 0; ii < qtd_vertices; ii++){
             if(matriz_adj[vertice][ii] != 0){

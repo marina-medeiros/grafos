@@ -45,7 +45,7 @@ void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, 
 void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "Arestas ordenadas:" << std::endl;
     std::cout << "----------------------------------" << std::endl;
-    std::cout << "índice |  (v1, v2) | peso " << std::endl;
+    std::cout << "índice  |   (v1, v2)   | peso " << std::endl;
     for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
         std::cout << "   ";
         if(ii < 10){ 
@@ -102,23 +102,19 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
 
     while(qtd_arestas < (qtd_vertices - 1)){
         std::vector<int> aresta = arestas_ordenadas[indice_aresta];
-        std::cout << "Índice da aresta: " << indice_aresta << std::endl;
-        std::cout << "Vértices: (" << aresta[0] << ", " << aresta[1] << ") | Peso: " << aresta[2];
 
         agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
 
         if(encontra_ciclo(agm_lista_adj)){
             agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
-            std::cout << "Essa aresta forma ciclo! Ela não será inserida na AGM." << std::endl << std::endl;
         }else{
-            std::cout << "Aresta inserida na AGM!" << std::endl << std::endl;
             agm_matriz_adj.inserir_aresta(aresta[0], aresta[1], aresta[2]);
             qtd_arestas++;
         }
         indice_aresta++;
     }
 
-    std::cout << "Arestas da AGM:" << std::endl;
+    std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
     ordenar_arestas(agm_matriz_adj);
 
     return agm_matriz_adj;
