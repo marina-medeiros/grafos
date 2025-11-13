@@ -91,25 +91,25 @@ void agm_basico(){
 void caminho_minimo(){
     GrafoMatrizAdj digrafo(0); // grafo grande que está no arquivo do trabalho
     digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
 
     //------------------------------------ dijkstra -----------------------------------------
     // Exemplos dos slides
+    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
     GrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
-    analisar_e_gerar_imagem(grafo_dijkstra, "grafo_slides_dijkstra", "matriz_adj");
     dijkstra_geral(grafo_dijkstra, 0);
-    dijkstra_geral(grafo_dijkstra, 4);
-    dijkstra_especifico(grafo_dijkstra, 0, 3);
+    dijkstra_especifico(grafo_dijkstra, 2, 7);
+    
+    // std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    // GrafoMatrizAdj digrafo_dijkstra(0);
+    // digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
+    // analisar_e_gerar_imagem(digrafo_dijkstra, "dirafo_slides_dijkstra", "matriz_adj");
+    // dijkstra_geral(digrafo_dijkstra, 0);
+    // dijkstra_especifico(digrafo_dijkstra, 1, 4);
+    // dijkstra_especifico(digrafo_dijkstra, 2, 3);
 
-    GrafoMatrizAdj digrafo_dijkstra(0);
-    digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
-    analisar_e_gerar_imagem(digrafo_dijkstra, "dirafo_slides_dijkstra", "matriz_adj");
-    dijkstra_geral(digrafo_dijkstra, 0);
-    dijkstra_especifico(digrafo_dijkstra, 1, 4);
-    dijkstra_especifico(digrafo_dijkstra, 2, 3);
-
-    // Exemplo do pdf do trabalho
-    dijkstra_geral(digrafo, 0);
-    dijkstra_especifico(digrafo, 0, 14);
+    // std::cout << "------------------ exemplo do pdf --------------------------------------" << std::endl;
+    // // Exemplo do pdf do trabalho
+    // dijkstra_geral(digrafo, 0);
+    // dijkstra_especifico(digrafo, 0, 14);
 }
