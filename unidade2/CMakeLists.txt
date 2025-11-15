@@ -25,6 +25,7 @@ set(SOURCES
     ../final/source/GrafoMatrizAdj.cpp
     ../final/source/GrafoMatrizInc.cpp
     ../final/source/DigrafoListaAdj.cpp
+    ../final/source/DigrafoListaAdjPonderada.cpp
     ../final/source/DigrafoMatrizInc.cpp
     ../final/source/DigrafoMatrizAdj.cpp
     source/kruskal.cpp

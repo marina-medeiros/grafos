@@ -30,7 +30,6 @@ public:
     GrafoListaAdj converter_para_lista_adj() const;
 
     std::vector<std::vector<int>> get_matriz_adj() const {return matriz_adj;};
-    int get_peso(int u, int v) const;
 };
 
 #endif

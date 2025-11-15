@@ -6,9 +6,7 @@
 #include <limits>
 
 #include "../headers/Grafo.h"
-#include "../headers/busca-profundidade.h"
-#include "../headers/GrafoListaAdj.h"
-#include "../headers/DigrafoMatrizAdj.h"
+#include "../headers/DigrafoListaAdjPonderada.h"
 
 const int INF = std::numeric_limits<int>::max() / 2;
 
@@ -26,7 +24,7 @@ static void imprimir_caminho_recursivo(int vertice_inicial, int vertice_final, c
 }
 
 
-bool bellman_ford(const DigrafoMatrizAdj& grafo, int s, std::vector<int>& distancia, std::vector<int>& predecessor) {
+bool bellman_ford(const DigrafoListaAdjPonderada& grafo, int s, std::vector<int>& distancia, std::vector<int>& predecessor) {
     int V = grafo.get_qtd_vertices();
     distancia.assign(V, INF);
     predecessor.assign(V, -1);
@@ -34,25 +32,25 @@ bool bellman_ford(const DigrafoMatrizAdj& grafo, int s, std::vector<int>& distan
 
     for (int i = 1; i <= V - 1; ++i) {
         for (int u = 0; u < V; ++u) {
-            for (int v = 0; v < V; ++v) {
-                if (grafo.existe_aresta(u, v)) {
-                    int peso_uv = grafo.get_peso(u, v);
-                    if (distancia[u] != INF && distancia[v] > distancia[u] + peso_uv) {
-                        distancia[v] = distancia[u] + peso_uv;
-                        predecessor[v] = u;
-                    }
+            for (const auto& par : grafo.get_arestas_saindo(u)) {
+                int v = par.first;
+                int peso = par.second;
+                
+                if (distancia[u] != INF && distancia[v] > distancia[u] + peso) {
+                    distancia[v] = distancia[u] + peso;
+                    predecessor[v] = u;
                 }
             }
         }
     }
 
     for (int u = 0; u < V; ++u) {
-        for (int v = 0; v < V; ++v) {
-            if (grafo.existe_aresta(u, v)) {
-                int peso_uv = grafo.get_peso(u, v);
-                if (distancia[u] != INF && distancia[v] > distancia[u] + peso_uv) {
-                    return false; 
-                }
+        for (const auto& par : grafo.get_arestas_saindo(u)) {
+            int v = par.first;
+            int peso = par.second;
+            
+            if (distancia[u] != INF && distancia[v] > distancia[u] + peso) {
+                return false; 
             }
         }
     }
@@ -60,8 +58,15 @@ bool bellman_ford(const DigrafoMatrizAdj& grafo, int s, std::vector<int>& distan
     return true; 
 }
 
-void bellman_ford_geral(const DigrafoMatrizAdj& grafo, int s) {
+void bellman_ford_geral(const DigrafoListaAdjPonderada& grafo, int s) {
+
     int V = grafo.get_qtd_vertices();
+
+    if (s < 0 || s >= V) {
+        std::cerr << "Erro: Vértice de origem " << s << " fora do intervalo [0, " << V-1 << "]." << std::endl;
+        return;
+    }
+
     std::vector<int> distancia;
     std::vector<int> predecessor;
 
@@ -87,7 +92,7 @@ void bellman_ford_geral(const DigrafoMatrizAdj& grafo, int s) {
     }
 }
 
-void bellman_ford_especifico(const DigrafoMatrizAdj& grafo, int s, int d) {
+void bellman_ford_especifico(const DigrafoListaAdjPonderada& grafo, int s, int d) {
     int V = grafo.get_qtd_vertices();
 
     if (s < 0 || s >= V) {
@@ -102,7 +107,7 @@ void bellman_ford_especifico(const DigrafoMatrizAdj& grafo, int s, int d) {
     std::vector<int> distancia;
     std::vector<int> predecessor;
 
-    std::cout << "Executando Bellman-Ford, origem " << s << ", destino " << std::endl;
+    std::cout << "Executando Bellman-Ford, origem " << s << ", destino " << d << std::endl;
     bool resultado = bellman_ford(grafo, s, distancia, predecessor);
 
     if (resultado) {
