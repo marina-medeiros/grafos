@@ -9,11 +9,13 @@
 #include "../../final/headers/GrafoMatrizAdj.h"
 #include "../../final/headers/DigrafoMatrizAdj.h"
 #include "headers/arvore-minima.h"
+#include "headers/bellmanford.h"
 #include "headers/kruskal.h"
 #include "headers/dijkstra.h"
 
 void agm_kruskal();
 void caminho_minimo_dijkstra();
+void caminho_minimo_bellmanford();
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -66,9 +68,11 @@ int main(){
         case 1:
             agm_kruskal();
             break;
-        case 3:
+        case 5:
             caminho_minimo_dijkstra();
             break;
+        case 6:
+            caminho_minimo_bellmanford();
         default:
             break;
         }
@@ -115,4 +119,20 @@ void caminho_minimo_dijkstra(){
     analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
     dijkstra_geral(digrafo, 0);
     dijkstra_especifico(digrafo, 0, 14);
+}
+
+void caminho_minimo_bellmanford(){
+    std::cout << "------------------ exemplo com ciclo negativo --------------------------------------" << std::endl;
+    DigrafoMatrizAdj digrafo_ciclo(0); 
+    digrafo_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_1.txt");
+    //analisar_e_gerar_imagem(digrafo_ciclo, "digrafo_ciclo_negativo", "matriz_adj", true); 
+    bellman_ford_geral(digrafo_ciclo, 0);
+    bellman_ford_especifico(digrafo_ciclo, 0, 3);
+
+    std::cout << "------------------ exemplo sem ciclo negativo --------------------------------------" << std::endl;
+    DigrafoMatrizAdj digrafo_sem_ciclo(0); 
+    digrafo_sem_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_0.txt");
+    //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
+    bellman_ford_geral(digrafo_sem_ciclo, 0);
+    bellman_ford_especifico(digrafo_sem_ciclo, 0, 3);
 }

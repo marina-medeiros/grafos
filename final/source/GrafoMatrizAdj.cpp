@@ -216,3 +216,10 @@ GrafoListaAdj GrafoMatrizAdj::converter_para_lista_adj() const {
 
     return lista_adj;
 }
+
+int GrafoMatrizAdj::get_peso(int u, int v) const {
+    if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
+        return this->matriz_adj[u][v];
+    }
+    return 0;
+}
