@@ -10,6 +10,7 @@
 #include "../headers/arvore-minima.h"
 #include "../headers/boruvka.h"
 #include <climits>
+const int INF = INT_MAX; 
 
 int find_set(int u, std::vector<int>& parent) {
     if (parent[u] == u) {
@@ -37,6 +38,7 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     ArvoreMinima agm(qtd_vertices);
     GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
+    agm_matriz_adj.set_rotulos(grafoMatrizAdj.get_rotulos());
 
     std::vector<std::vector<int>> cheapest(qtd_vertices, std::vector<int>(3, -1));
     std::vector<int> parent(qtd_vertices);
@@ -49,24 +51,38 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
 
     int num_components = qtd_vertices;
     int agmWeight = 0;
+    bool aresta_encontrada = false;
 
     while (num_components > 1) {
+        for(int i = 0; i < qtd_vertices; i++) {
+            cheapest[i] = {-1, -1, INF}; 
+        }
 
-        for (int i = 0; i < qtd_vertices; i++) {
-            int u = grafoMatrizAdj.get_matriz_adj()[i][0];
-            int v = grafoMatrizAdj.get_matriz_adj()[i][1];
-            int w = grafoMatrizAdj.get_matriz_adj()[i][2];
-            int set1 = find_set(u, parent);
-            int set2 = find_set(v, parent);
-            if (set1 != set2) {
-                if (cheapest[set1][2] == -1 || cheapest[set1][2] > w) {
-                    cheapest[set1] = {u,v,w};
+        for (int u = 0; u < qtd_vertices; u++) {
+            for (int v = u + 1; v < qtd_vertices; v++) { 
+                int w = grafoMatrizAdj.get_matriz_adj()[u][v];
+
+                if (w == 0 || w == INF) {
+                    continue; 
                 }
-                if (cheapest[set2][2] == -1 || w < cheapest[set2][2]) {
-                    cheapest[set2] = {u,v,w};
+
+                int set1 = find_set(u, parent);
+                int set2 = find_set(v, parent);
+
+                if (set1 != set2) {
+                    aresta_encontrada = true;
+                    if (w < cheapest[set1][2]) {
+                        cheapest[set1] = {u, v, w};
+                    }
+                    if (w < cheapest[set2][2]) {
+                        cheapest[set2] = {u, v, w};
+                    }
                 }
-            }   
-            
+            }
+        }
+        if (!aresta_encontrada) {
+            std::cerr << "Aviso (Boruvka): Grafo desconexo. Interrompendo.\n";
+            break;
         }
 
         for (int i = 0; i < qtd_vertices; i++) {
@@ -78,8 +94,8 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
                 int set2 = find_set(v, parent);
 
                 if (set1 != set2) {
-                    //agm.inserir_aresta(u, v, w);
-                    //agm_matriz_adj.inserir_aresta(u, v, w);
+                    agm.inserir_aresta(u, v, w);
+                    agm_matriz_adj.inserir_aresta(u, v, w);
                     agmWeight += w;
                     unite_sets(set1, set2, parent, rank);
                     printf("Aresta adicionada à AGM: (%d, %d) com peso %d\n", u, v, w);

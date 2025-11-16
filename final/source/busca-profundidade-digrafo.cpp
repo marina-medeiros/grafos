@@ -33,7 +33,7 @@ ArvoreBusca busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial
     int tempo1 = 0;
     int tempo2 = 0;
 
-    std::cout << "\n--- Iniciando Busca em Profundidade de um Digrafo (com análise de arestas) a partir de " << rotulos_grafo[verticeInicial]<< " ---\n";
+    //std::cout << "\n--- Iniciando Busca em Profundidade de um Digrafo (com análise de arestas) a partir de " << rotulos_grafo[verticeInicial]<< " ---\n";
     
     busca_profundidade_digrafo_rec(verticeInicial, grafo, cores, arvore, tempo1, tempo2);
    
@@ -42,20 +42,20 @@ ArvoreBusca busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial
             busca_profundidade_digrafo_rec(i, grafo, cores, arvore, tempo1, tempo2);
         }
     }
-    std::cout << "\n--- Fim da Execucao da DFS ---\n\n";
+    //std::cout << "\n--- Fim da Execucao da DFS ---\n\n";
     
     
 
-    std::cout << "----------------------------------------------------------------------\n";
-    std::cout << "Vertice | Predecessor | Tempo Entrada (PE) | Tempo Saida (PS)\n";
-    std::cout << "----------------------------------------------------------------------\n";
-    for(int i = 0; i < qtd_vertices; ++i) {
-        std::cout << std::setw(8) << std::left << rotulos_grafo[i] << "| "
-                  << std::setw(12) << std::left << (arvore.get_predecessores()[i] == -1 ? "Raiz" : rotulos_grafo[arvore.get_predecessores()[i]]) << "| "
-                  << std::setw(19) << std::left << arvore.get_tempo_entrada()[i] << "| "
-                  << std::setw(15) << std::left << arvore.get_tempo_saida()[i] << std::endl;
-    }
-    std::cout << "----------------------------------------------------------------------\n";
+    // std::cout << "----------------------------------------------------------------------\n";
+    // std::cout << "Vertice | Predecessor | Tempo Entrada (PE) | Tempo Saida (PS)\n";
+    // std::cout << "----------------------------------------------------------------------\n";
+    // for(int i = 0; i < qtd_vertices; ++i) {
+    //     std::cout << std::setw(8) << std::left << rotulos_grafo[i] << "| "
+    //               << std::setw(12) << std::left << (arvore.get_predecessores()[i] == -1 ? "Raiz" : rotulos_grafo[arvore.get_predecessores()[i]]) << "| "
+    //               << std::setw(19) << std::left << arvore.get_tempo_entrada()[i] << "| "
+    //               << std::setw(15) << std::left << arvore.get_tempo_saida()[i] << std::endl;
+    // }
+    // std::cout << "----------------------------------------------------------------------\n";
     return arvore;
 }
 
