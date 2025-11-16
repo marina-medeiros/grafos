@@ -7,7 +7,7 @@
 #include "../headers/Grafo.h"
 #include "../headers/busca-profundidade.h"
 #include "../headers/GrafoListaAdj.h"
-#include "../headers/GrafoMatrizAdj.h"
+#include "../headers/DigrafoMatrizAdj.h"
 
 bool existem_nao_visitados(std::vector<int>& visitados){
     for(int ii = 0; ii < (int)visitados.size(); ii++){
@@ -56,11 +56,11 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
     std::cout << "Predecessor  | ";
     for(int ii = 0; ii < (int)predecessor.size(); ii++){
         if (predecessor[ii] == -1) {
-            std::cout << " - ";
+            std::cout << "  - ";
         }else{
             if(rotulos.at(predecessor[ii]).length() < 2){ std::cout << " ";}
-            if(rotulos.at(predecessor[ii]).length() < 2){ std::cout << " ";}
-            std::cout << rotulos.at(predecessor[ii]) << "  ";
+            if(rotulos.at(predecessor[ii]).length() < 3){ std::cout << " ";}
+            std::cout << rotulos.at(predecessor[ii]) << " ";
         }
     }
     std::cout << std::endl;
@@ -81,7 +81,7 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
     std::cout << std::endl << std::endl;
 }
 
-std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial){
+std::vector<int> dijkstra_geral(const DigrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial){
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
     const std::vector<std::string>& rotulos = grafoMatrizAdj.get_rotulos();
@@ -140,7 +140,7 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
     return distancia;
 }
 
-std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial, int vertice_final){
+std::vector<int> dijkstra_especifico(const DigrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial, int vertice_final){
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
     const std::vector<std::string>& rotulos = grafoMatrizAdj.get_rotulos();

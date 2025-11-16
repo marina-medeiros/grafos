@@ -101,14 +101,14 @@ void agm_kruskal(){
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
     std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
-    GrafoMatrizAdj grafo_dijkstra(0);
+    DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
     int inicio = grafo_dijkstra.get_indice_do_rotulo("0");
     int fim = grafo_dijkstra.get_indice_do_rotulo("6");
     dijkstra_geral(grafo_dijkstra, inicio);
     dijkstra_especifico(grafo_dijkstra, inicio, fim);
 
-    GrafoMatrizAdj digrafo_dijkstra(0);
+    DigrafoMatrizAdj digrafo_dijkstra(0);
     digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
     inicio = digrafo_dijkstra.get_indice_do_rotulo("0");
     fim = digrafo_dijkstra.get_indice_do_rotulo("5");
@@ -116,7 +116,7 @@ void caminho_minimo_dijkstra(){
     dijkstra_especifico(digrafo_dijkstra, inicio, fim);
 
     // Exemplo do pdf do trabalho
-    GrafoMatrizAdj digrafo(0); 
+    DigrafoMatrizAdj digrafo(0); 
     digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
     inicio = digrafo.get_indice_do_rotulo("0");
     fim = digrafo.get_indice_do_rotulo("14");
