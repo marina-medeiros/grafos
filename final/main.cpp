@@ -338,7 +338,7 @@ void digrafo(std::string txt){
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
-    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_lista, 0);
+    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_matriz, 0);
     exportar_arvore_dfs_para_dot("ARVORE_DFS_"+nome_grafo+".dot", arvore_dfs_digrafo);
     gerar_imagem("ARVORE_DFS_"+nome_grafo+".dot", "ARVORE_DFS_"+nome_grafo+".png");
     
