@@ -69,12 +69,12 @@ void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "----------------------------------" << std::endl;
 }
 
-std::vector<std::vector<int>> ordenar_arestas(const DigrafoMatrizAdj& digrafo){
+std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
     std::vector<std::vector<int>> arestas_e_pesos;
-    std::vector<std::vector<int>> matriz_adj = digrafo.get_matriz_adj();
+    std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
 
-    for(int ii = 0; ii < digrafo.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < digrafo.get_qtd_vertices(); jj++){
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
             if(matriz_adj[ii][jj] != 0  && ii <= jj){
                 std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
                 arestas_e_pesos.push_back(aresta);
