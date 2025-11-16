@@ -171,8 +171,9 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     }
     
     this->limpar();
+    this->rotulos.resize(num_vertices_arquivo); 
     for (int i = 0; i < num_vertices_arquivo; ++i) {
-        this->inserir_vertice(); 
+        this->inserir_vertice(std::to_string(i)); 
     }
 
     std::map<std::string, int> mapa_rotulos;
@@ -191,29 +192,24 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         std::getline(ss, rotulo2_str, ',');
         std::getline(ss, rotulo3_str);
 
-        // if (mapa_rotulos.find(rotulo1_str) == mapa_rotulos.end()) {
-        //     if (proximo_indice >= this->qtd_vertices) continue;
-        //     indice1 = proximo_indice++;
-        //     mapa_rotulos[rotulo1_str] = indice1;
-        //     this->rotulos[indice1] = rotulo1_str;
-        // } else {
-        //     indice1 = mapa_rotulos[rotulo1_str];
-        // }
+        int indice1, indice2;
 
-        // if (mapa_rotulos.find(rotulo2_str) == mapa_rotulos.end()) {
-        //     if (proximo_indice >= this->qtd_vertices) continue;
-        //     indice2 = proximo_indice++;
-        //     mapa_rotulos[rotulo2_str] = indice2;
-        //     this->rotulos[indice2] = rotulo2_str;
-        // } else {
-        //     indice2 = mapa_rotulos[rotulo2_str];
-        // }
+        if (mapa_rotulos.find(rotulo1_str) == mapa_rotulos.end()) {
+            if (proximo_indice >= this->qtd_vertices) continue;
+            indice1 = proximo_indice++;
+            mapa_rotulos[rotulo1_str] = indice1;
+            this->rotulos[indice1] = rotulo1_str;
+        } else {
+            indice1 = mapa_rotulos[rotulo1_str];
+        }
 
-        int indice1 = std::stoi(rotulo1_str);
-        int indice2 = std::stoi(rotulo2_str);
-        if (indice1 < 0 || indice1 >= this->qtd_vertices || indice2 < 0 || indice2 >= this->qtd_vertices) {
-            std::cerr << "Aviso: índice fora do intervalo na linha: " << linha << std::endl;
-            continue;
+        if (mapa_rotulos.find(rotulo2_str) == mapa_rotulos.end()) {
+            if (proximo_indice >= this->qtd_vertices) continue;
+            indice2 = proximo_indice++;
+            mapa_rotulos[rotulo2_str] = indice2;
+            this->rotulos[indice2] = rotulo2_str;
+        } else {
+            indice2 = mapa_rotulos[rotulo2_str];
         }
 
         if(!rotulo3_str.empty()){
@@ -269,6 +265,22 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     file.close();
 }
 
+/**
+ * Retorna o indice daquele rotulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Nome do rotulo.
+ * Retorno:
+ *  Indice do rotulo, ou -1 caso não exista.
+ */
+int Grafo::get_indice_do_rotulo(const std::string& rotulo) const {
+    for (int i = 0; i < this->qtd_vertices; ++i) {
+        if (this->rotulos[i] == rotulo) {
+            return i; 
+        }
+    }
+    return -1; 
+}
 /**
  * Gera uma imagem PNG a partir de um arquivo DOT usando o Graphviz.
  * 

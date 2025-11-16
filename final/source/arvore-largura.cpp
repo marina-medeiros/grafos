@@ -9,6 +9,9 @@
 
 #include "../headers/arvore-largura.h"
 
+const int ArvoreLargura::INF = std::numeric_limits<int>::max() / 2;
+
+
 /** 
  *  Insere um novo vértice na árvore, atualizando a matriz de adjacência.
  *  A nova linha e coluna são inicializadas com zeros.
@@ -24,7 +27,7 @@ void ArvoreLargura::inserir_vertice() {
     matriz_adj.resize(qtd_vertices);
 
     for (auto& row : matriz_adj) {
-        row.resize(qtd_vertices, 0);
+        row.resize(qtd_vertices, INF);
     }
 }
 
@@ -76,8 +79,8 @@ void ArvoreLargura::inserir_aresta_ndir(int u, int v, int peso) {
  *  Nenhum.
  */
 void ArvoreLargura::remover_aresta_ndir(int u, int v) {
-    matriz_adj[u-1][v-1] = 0;
-    matriz_adj[v-1][u-1] = 0;
+    matriz_adj[u-1][v-1] = INF;
+    matriz_adj[v-1][u-1] = INF;
 }
 
 /**
@@ -106,7 +109,7 @@ void ArvoreLargura::exportar_arvore_bfs(ArvoreLargura arvore, const std::string&
     auto matriz = arvore.get_matriz_adj();
     for (int i = 0; i < qtd; i++) {
         for (int j = i+1; j < qtd; j++) {
-            if (matriz[i][j] != 0) {
+            if (matriz[i][j] != INF) {
                 file << "  " << i << " -- " << j; 
                 if (matriz[i][j] == 1) 
                     file << " [color=black, penwidth=2];\n";   // árvore (pai-filho)

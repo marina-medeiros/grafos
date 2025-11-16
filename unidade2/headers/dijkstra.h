@@ -7,9 +7,9 @@
 #include <vector>
 #include <utility> 
 #include "Grafo.h"
-#include "GrafoListaAdj.h"
+#include "DigrafoMatrizAdj.h"
 
-std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial);
-std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial, int vertice_final);
+std::vector<int> dijkstra_geral(const DigrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial);
+std::vector<int> dijkstra_especifico(const DigrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial, int vertice_final);
 
 #endif

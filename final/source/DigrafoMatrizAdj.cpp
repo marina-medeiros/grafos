@@ -13,7 +13,7 @@
  */
 void DigrafoMatrizAdj::inserir_aresta(int u, int v, int peso) {
     if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
-        if (matriz_adj[u][v] == 0) {
+        if (matriz_adj[u][v] == INF) {
             qtd_arestas++;
         }
 
@@ -33,9 +33,9 @@ void DigrafoMatrizAdj::inserir_aresta(int u, int v, int peso) {
  */
 void DigrafoMatrizAdj::remover_aresta(int u, int v) {
     if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
-        if (matriz_adj[u][v] != 0) {
+        if (matriz_adj[u][v] != INF) {
             qtd_arestas--;
         }
-        matriz_adj[u][v] = 0;
+        matriz_adj[u][v] = INF;
     }
 }
