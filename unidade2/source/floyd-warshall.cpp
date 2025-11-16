@@ -107,3 +107,24 @@ void imprimirMatrizPredecessores(const std::vector<std::vector<int>>& pred, cons
         std::cout << std::endl;
     }
 }
+
+DigrafoMatrizAdj gerarArvoreCaminhos(int origem, const ResultadoFloydWarshall& resultado, const DigrafoMatrizAdj& grafoOriginal) {
+  int V = grafoOriginal.get_qtd_vertices();
+  DigrafoMatrizAdj arvoreCaminhos(V);
+  arvoreCaminhos.set_rotulos(grafoOriginal.get_rotulos());
+
+  for (int j = 0; j < V; j++) {
+    if (j == origem) {
+      continue;
+    }
+
+    int p = resultado.pred[origem][j];
+
+    if (p != -1) {
+      int pesoAresta = resultado.dist[p][j];
+      arvoreCaminhos.inserir_aresta(p, j, pesoAresta);
+    }
+  }
+
+  return arvoreCaminhos;
+}

@@ -205,7 +205,17 @@ void caminho_minimo_floyd_warshall() {
     imprimirMatrizDistancias(resultado_exemplo.dist, rotulos_digrafo_exemplo);
     std::cout << std::endl;
     imprimirMatrizPredecessores(resultado_exemplo.pred, rotulos_digrafo_exemplo);
+
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a A" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminhoExemplo = gerarArvoreCaminhos(0, resultado_exemplo, digrafo_floyd_warshall);
     
+    std::string arq_dot_exemplo =  "digrafo_exemplo_floyd_warshall.dot";
+    std::string arq_png_exemplo = "digrafo_exemplo_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png_exemplo << "'...\n\n";
+    arvoreRecuperacaoCaminhoExemplo.exportar_para_dot_com_pesos(arq_dot_exemplo);
+    gerar_imagem(arq_dot_exemplo, arq_png_exemplo);
+
     std::cout << std::endl <<  "------------------ Digrafo do trabalho ------------------" << std::endl << std::endl;
     DigrafoMatrizAdj digrafo(0);
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
@@ -218,4 +228,14 @@ void caminho_minimo_floyd_warshall() {
     imprimirMatrizPredecessores(resultado.pred, rotulos_digrafo);
 
     std::cout << std::endl << "A menor distância de 1 para 15 é: " <<  resultado.dist[0][14] << std::endl;
+    
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a 1" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminho = gerarArvoreCaminhos(0, resultado, digrafo);
+    
+    std::string arq_dot =  "digrafo_principal_floyd_warshall.dot";
+    std::string arq_png = "digrafo_principal_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
+    arvoreRecuperacaoCaminho.exportar_para_dot_com_pesos(arq_dot);
+    gerar_imagem(arq_dot, arq_png);
 }
