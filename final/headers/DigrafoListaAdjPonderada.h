@@ -29,6 +29,7 @@ public:
     int get_grau_saida(int v) const;
     const std::list<std::pair<int, int>>& get_arestas_saindo(int u) const;
     int get_peso(int u, int v) const;
+    std::map<int, std::list<std::pair<int, int>>> get_lista_adj()const {return lista_adj;};
 };
 
 #endif
