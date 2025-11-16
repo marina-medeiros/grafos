@@ -157,7 +157,7 @@ void agm_boruvka(){
 
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
-    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
@@ -185,30 +185,29 @@ void caminho_minimo_bellmanford(){
 }
 
 void caminho_minimo_floyd_warshall() {
-    // Exemplos dos slides
-    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ FLOYD-WARSHALL --------------------------------------" << std::endl << std::endl;
+
+    std::cout << "------------------ Exemplo dos slides ------------------" << std::endl << std::endl;
     DigrafoMatrizAdj digrafo_floyd_warshall(0);
     digrafo_floyd_warshall.carregar_de_arquivo("../dados/DIGRAFO_FLOYD_WARSHALL.txt");
-    ResultadoFloydWarshall resultado = floyd_warshall(digrafo_floyd_warshall);
-
-    auto rotulos_digrafo = digrafo_floyd_warshall.get_rotulos();
-
-    for (size_t i = 0; i < rotulos_digrafo.size(); ++i) {
-        std::cout << i << ": " << rotulos_digrafo[i] << '\n';
-    }
-
-
-    imprimirMatrizDistancias(resultado.dist);
     
-    // Exemplo do pdf do trabalho
-    // DigrafoMatrizAdj digrafo(0); 
-    // digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
-    // ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
-    // auto rotulos_digrafo = digrafo.get_rotulos();
+    ResultadoFloydWarshall resultado_exemplo = floyd_warshall(digrafo_floyd_warshall);
+    auto rotulos_digrafo_exemplo = digrafo_floyd_warshall.get_rotulos();
 
-    // int inicio = digrafo.get_indice_do_rotulo("1");
-    // int fim = digrafo.get_indice_do_rotulo("6");
+    imprimirMatrizDistancias(resultado_exemplo.dist, rotulos_digrafo_exemplo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado_exemplo.pred, rotulos_digrafo_exemplo);
+    
+    std::cout << std::endl <<  "------------------ Digrafo do trabalho ------------------" << std::endl << std::endl;
+    DigrafoMatrizAdj digrafo(0);
+    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    
+    ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
+    auto rotulos_digrafo = digrafo.get_rotulos();
 
-    // std::cout << "Distância de 1 a 6: "<< resultado.dist[inicio][fim] << std::endl;
-    // std::cout << "Predecessor de 6 no caminho 1->6: " << resultado.pred[inicio][fim] << std::endl;
+    imprimirMatrizDistancias(resultado.dist, rotulos_digrafo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado.pred, rotulos_digrafo);
+
+    std::cout << std::endl << "A menor distância de 1 para 15 é: " <<  resultado.dist[0][14] << std::endl;
 }

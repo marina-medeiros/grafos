@@ -171,10 +171,10 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     }
     
     this->limpar();
-    this->rotulos.resize(num_vertices_arquivo); 
     for (int i = 0; i < num_vertices_arquivo; ++i) {
         this->inserir_vertice(std::to_string(i)); 
     }
+    this->rotulos.resize(num_vertices_arquivo); 
 
     std::map<std::string, int> mapa_rotulos;
     int proximo_indice = 0;
@@ -186,11 +186,11 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         if (linha.empty()) continue;
 
         std::stringstream ss(linha);
-        std::string rotulo1_str, rotulo2_str, rotulo3_str;
+        std::string rotulo1_str, rotulo2_str, peso_str;
 
         std::getline(ss, rotulo1_str, ',');
         std::getline(ss, rotulo2_str, ',');
-        std::getline(ss, rotulo3_str);
+        std::getline(ss, peso_str);
 
         int indice1, indice2;
 
@@ -212,8 +212,8 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
             indice2 = mapa_rotulos[rotulo2_str];
         }
 
-        if(!rotulo3_str.empty()){
-            this->inserir_aresta(indice1, indice2, std::stoi(rotulo3_str));
+        if(!peso_str.empty()){
+            this->inserir_aresta(indice1, indice2, std::stoi(peso_str));
         }else{
             this->inserir_aresta(indice1, indice2);
         }

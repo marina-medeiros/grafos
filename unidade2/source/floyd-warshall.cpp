@@ -36,16 +36,16 @@ ResultadoFloydWarshall floyd_warshall(const DigrafoMatrizAdj& grafo) {
   return {dist, pred};
 }
 
-void imprimirMatrizDistancias(const std::vector<std::vector<int>>& dist) {
+void imprimirMatrizDistancias(const std::vector<std::vector<int>>& dist, const std::vector<std::string>& rotulos_digrafo) {
     int N = dist.size();
     if (N == 0) return;
 
-    std::cout << "--- Matriz de Distancias ---" << std::endl;
-
+    std::cout << "------- Matriz de distâncias -------" << std::endl;
     // Imprime o cabeçalho das colunas
     std::cout << std::setw(5) << " ";
     for (int j = 0; j < N; ++j) {
-        std::cout << std::setw(5) << j;
+        std::string label = rotulos_digrafo[j].empty() ? std::to_string(j + 1) : rotulos_digrafo[j];
+        std::cout << std::setw(5) << label;
     }
     std::cout << "\n" << std::setw(5) << "----";
     for (int j = 0; j < N; ++j) {
@@ -56,13 +56,52 @@ void imprimirMatrizDistancias(const std::vector<std::vector<int>>& dist) {
 
     // Imprime as linhas
     for (int i = 0; i < N; ++i) {
-        std::cout << std::setw(3) << i << " | ";
+        std::string linha_label = rotulos_digrafo[i].empty() ? std::to_string(i + 1) : rotulos_digrafo[i];
+        std::cout << std::setw(3) << linha_label << " | ";
         
         for (int j = 0; j < N; ++j) {
             if (dist[i][j] == INF) {
-                std::cout << std::setw(5) << "Inf";
+                std::cout << std::setw(5) << "INF";
             } else {
                 std::cout << std::setw(5) << dist[i][j];
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * Imprime uma matriz de predecessores formatada.
+ */
+void imprimirMatrizPredecessores(const std::vector<std::vector<int>>& pred, const std::vector<std::string>& rotulos_digrafo) {
+    int N = pred.size();
+    if (N == 0) return;
+
+    std::cout << "------- Matriz de predecessores -------" << std::endl;
+
+    // Imprime o cabeçalho das colunas
+    std::cout << std::setw(5) << " ";
+    for (int j = 0; j < N; ++j) {
+        std::string label = rotulos_digrafo[j].empty() ? std::to_string(j + 1) : rotulos_digrafo[j];
+        std::cout << std::setw(5) << label;
+    }
+    std::cout << "\n" << std::setw(5) << "----";
+    for (int j = 0; j < N; ++j) {
+        std::cout << std::setw(5) << "----";
+    }
+    std::cout << std::endl;
+
+    // Imprime as linhas
+    for (int i = 0; i < N; ++i) {
+        std::string linha_label = rotulos_digrafo[i].empty() ? std::to_string(i + 1) : rotulos_digrafo[i];
+        std::cout << std::setw(3) << linha_label << " | ";
+        
+        for (int j = 0; j < N; ++j) {
+            if (pred[i][j] == -1) {
+                std::cout << std::setw(5) << "NIL";
+            } else {
+                std::string val_pred = rotulos_digrafo[pred[i][j]].empty() ? std::to_string(pred[i][j]) : rotulos_digrafo[pred[i][j]];
+                std::cout << std::setw(5) << val_pred;
             }
         }
         std::cout << std::endl;
