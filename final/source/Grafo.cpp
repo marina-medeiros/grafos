@@ -266,6 +266,22 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
 }
 
 /**
+ * Retorna o indice daquele rotulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Nome do rotulo.
+ * Retorno:
+ *  Indice do rotulo, ou -1 caso não exista.
+ */
+int Grafo::get_indice_do_rotulo(const std::string& rotulo) const {
+    for (int i = 0; i < this->qtd_vertices; ++i) {
+        if (this->rotulos[i] == rotulo) {
+            return i; 
+        }
+    }
+    return -1; 
+}
+/**
  * Gera uma imagem PNG a partir de um arquivo DOT usando o Graphviz.
  * 
  * Parâmetros:
