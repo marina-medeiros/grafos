@@ -110,27 +110,15 @@ void agm_kruskal(){
     GrafoMatrizAdj grafo_kruskal(0);
     grafo_kruskal.carregar_de_arquivo_numeros("../dados/GRAFO_KRUSKAL.txt");
     gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
-
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
     gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
 
     std::cout << "---------------------------------------------------------------------------------------" << std::endl;
 
-    // Exemplo do pdf do trabalho
-    DigrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_0.txt");
-    gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
-    
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
-
-    std::cout << "---------------------------------------------------------------------------------------" << std::endl;
-
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
-    grafo_principal.carregar_de_arquivo_numeros("../dados/GRAFO_0.txt");
+    grafo_principal.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
     gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
