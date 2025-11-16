@@ -122,7 +122,7 @@ void agm_kruskal(){
     gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
+    gerar_imagem(agm_kruskal_grafo, "agm_principal", "matriz_adj");
 
 }
 
