@@ -38,7 +38,7 @@ public:
     int get_qtd_arestas() const { return qtd_arestas; }
     const std::vector<std::string>& get_rotulos() const { return rotulos; }
     void set_rotulos(const std::vector<std::string>& novos_rotulos) { rotulos = novos_rotulos; }
-
+    int get_indice_do_rotulo(const std::string& rotulo) const;
     virtual bool is_conexo();
     virtual bool is_bipartido();
     virtual void determinar_articulacoes_blocos_lowpt();
