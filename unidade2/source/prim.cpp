@@ -28,6 +28,7 @@ GrafoMatrizAdj prim(const GrafoMatrizAdj& grafoMatrizAdj){
     int qnt_vertices = grafoMatrizAdj.get_qtd_vertices();
     ArvoreMinima agm(qnt_vertices);
     GrafoMatrizAdj agm_matriz_adj(qnt_vertices);
+    agm_matriz_adj.set_rotulos(grafoMatrizAdj.get_rotulos());
 
     std::vector<bool> in_agm(qnt_vertices, false);
     std::vector<int> key(qnt_vertices, INT_MAX);

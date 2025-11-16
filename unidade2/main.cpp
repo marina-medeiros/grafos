@@ -3,10 +3,12 @@
 #include <stack>
 #include <utility> 
 #include <vector>
-#include "../../final/headers/busca-profundidade.h"
-#include "../../final/headers/Grafo.h"
-#include "../../final/headers/GrafoListaAdj.h"
-#include "../../final/headers/GrafoMatrizAdj.h"
+#include <algorithm>
+#include <iostream>
+#include "../final/headers/busca-profundidade.h"
+#include "../final/headers/Grafo.h"
+#include "../final/headers/GrafoListaAdj.h"
+#include "../final/headers/GrafoMatrizAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
@@ -145,6 +147,14 @@ void agm_boruvka(){
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_boruvka = boruvka(grafo_boruvka);
     analisar_e_gerar_imagem(agm_boruvka, "agm_slides_boruvka", "matriz_adj");
+
+    // Exemplo do pdf do trabalho
+    GrafoMatrizAdj grafo(0); 
+    grafo.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_boruvka_digrafo =  boruvka(grafo);
+    analisar_e_gerar_imagem(agm_boruvka_digrafo, "grafo_principal_boruvka", "matriz_adj");
 }
 
 void caminho_minimo_dijkstra(){
