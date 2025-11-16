@@ -75,7 +75,7 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
         for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
-            if(matriz_adj[ii][jj] != 0  && ii <= jj){
+            if(matriz_adj[ii][jj] != GrafoMatrizAdj::INF  && ii <= jj){
                 std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
                 arestas_e_pesos.push_back(aresta);
             }
