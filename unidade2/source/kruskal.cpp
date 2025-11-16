@@ -8,6 +8,7 @@
 #include "../../final/headers/GrafoListaAdj.h"
 #include "../../final/headers/GrafoMatrizAdj.h"
 #include "../../final/headers/DigrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoListaAdj.h"
 #include "../headers/arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo){
@@ -46,21 +47,21 @@ void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, 
 void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "Arestas ordenadas:" << std::endl;
     std::cout << "----------------------------------" << std::endl;
-    std::cout << "índice  |   (v1, v2)   | peso " << std::endl;
-    for(int ii = 0; ii < arestas_e_pesos.size(); ii++){
+    std::cout << "índice  |  (v1, v2)   | peso " << std::endl;
+    for(int ii = 0; ii < (int)arestas_e_pesos.size(); ii++){
         std::cout << "   ";
-        if(ii < 10){ 
+        if(ii+1 < 10){ 
             std:: cout << " ";
         }
-        std::cout << ii << "   |    ";
-        if(arestas_e_pesos[ii][0] < 10){ 
+        std::cout << ii+1 << "   |    ";
+        if(arestas_e_pesos[ii][0]+1 < 10){ 
             std:: cout << " ";
         }
-        std::cout << arestas_e_pesos[ii][0]  << ", " ;
-        if(arestas_e_pesos[ii][1] < 10){ 
+        std::cout << arestas_e_pesos[ii][0]+1  << ", " ;
+        if(arestas_e_pesos[ii][1]+1 < 10){ 
             std:: cout << " ";
         }
-        std:: cout <<  arestas_e_pesos[ii][1] << "   |   " ;
+        std:: cout <<  arestas_e_pesos[ii][1]+1 << "   |   " ;
         if(arestas_e_pesos[ii][2] < 10){ 
             std:: cout << " ";
         }
@@ -75,7 +76,7 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
         for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
-            if(matriz_adj[ii][jj] != 0  && ii <= jj){
+            if(matriz_adj[ii][jj] != GrafoMatrizAdj::INF  && jj <= ii){
                 std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
                 arestas_e_pesos.push_back(aresta);
             }
@@ -91,12 +92,19 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
 
 GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     GrafoListaAdj grafoListaAdj = grafoMatrizAdj.converter_para_lista_adj();
+GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
+    GrafoListaAdj grafoListaAdj = grafoMatrizAdj.converter_para_lista_adj();
 
     int qtd_vertices = grafoListaAdj.get_qtd_vertices();
     int qtd_arestas = 0;
     GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
     GrafoListaAdj agm_lista_adj(qtd_vertices);
+    int qtd_vertices = grafoListaAdj.get_qtd_vertices();
+    int qtd_arestas = 0;
+    GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
+    GrafoListaAdj agm_lista_adj(qtd_vertices);
     
+    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(grafoMatrizAdj);
     std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(grafoMatrizAdj);
 
     int indice_aresta = 0;
@@ -105,7 +113,16 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
         std::vector<int> aresta = arestas_ordenadas[indice_aresta];
 
         agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
+        agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
 
+        if(encontra_ciclo(agm_lista_adj)){
+            agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
+        }else{
+            agm_matriz_adj.inserir_aresta(aresta[0], aresta[1], aresta[2]);
+            qtd_arestas++;
+        }
+        indice_aresta++;
+    }
         if(encontra_ciclo(agm_lista_adj)){
             agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
         }else{
@@ -117,6 +134,10 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
 
     std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
     ordenar_arestas(agm_matriz_adj);
+    std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
+    ordenar_arestas(agm_matriz_adj);
 
+    return agm_matriz_adj;
+}
     return agm_matriz_adj;
 }
