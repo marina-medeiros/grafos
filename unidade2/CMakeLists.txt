@@ -33,7 +33,8 @@ set(SOURCES
     source/kruskal.cpp
     source/arvore-minima.cpp
     source/dijkstra.cpp
-    source/bellmanford.cpp)
+    source/bellmanford.cpp
+    source/floyd-warshall.cpp)
 
 # Executável principal
 add_executable(main

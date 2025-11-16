@@ -13,10 +13,12 @@
 #include "headers/dijkstra.h"
 #include "headers/prim.h"
 #include "headers/boruvka.h"
+#include "headers/floyd-warshall.h"
 
 void agm_kruskal();
 void caminho_minimo_dijkstra();
 void caminho_minimo_bellmanford();
+void caminho_minimo_floyd_warshall();
 void agm_prim();
 void agm_boruvka();
 
@@ -82,6 +84,10 @@ int main(){
             break;
         case 6:
             caminho_minimo_bellmanford();
+            break;
+        case 7:
+            caminho_minimo_floyd_warshall();
+            break;
         default:
             break;
         }
@@ -194,4 +200,23 @@ void caminho_minimo_bellmanford(){
     //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
+}
+
+void caminho_minimo_floyd_warshall() {
+    // Exemplos dos slides
+    // std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    // DigrafoMatrizAdj digrafo_floyd_warshall(0);
+    // digrafo_floyd_warshall.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
+
+    // Exemplo do pdf do trabalho
+    DigrafoMatrizAdj digrafo(0); 
+    digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
+    ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
+    auto rotulos_digrafo = digrafo.get_rotulos();
+
+    int inicio = digrafo.get_indice_do_rotulo("1");
+    int fim = digrafo.get_indice_do_rotulo("6");
+
+    std::cout << "Distância de 1 a 6: "<< resultado.dist[inicio][fim] << std::endl;
+    std::cout << "Predecessor de 6 no caminho 1->6: " << resultado.pred[inicio][fim] << std::endl;
 }
