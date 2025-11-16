@@ -11,9 +11,13 @@
 #include "headers/arvore-minima.h"
 #include "headers/kruskal.h"
 #include "headers/dijkstra.h"
+#include "headers/prim.h"
+#include "headers/boruvka.h"
 
 void agm_kruskal();
 void caminho_minimo_dijkstra();
+void agm_prim();
+void agm_boruvka();
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -66,7 +70,13 @@ int main(){
         case 1:
             agm_kruskal();
             break;
+        case 2:
+            agm_prim();
+            break;
         case 3:
+            agm_boruvka();
+            break;
+        case 5:
             caminho_minimo_dijkstra();
             break;
         default:
@@ -93,6 +103,45 @@ void agm_kruskal(){
     GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
     analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
 
+    // Exemplo do pdf do trabalho como grafo não direcionado
+    GrafoMatrizAdj grafo_principal(0); 
+    grafo_principal.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
+    analisar_e_gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
+
+}
+
+void agm_prim(){
+    // Exemplos dos slides
+    GrafoMatrizAdj grafo_prim(0);
+    grafo_prim.carregar_de_arquivo("../dados/GRAFO_PRIM.txt");
+    analisar_e_gerar_imagem(grafo_prim, "grafo_slides_prim", "matriz_adj");
+    //grafo_prim.print();
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_prim = prim(grafo_prim);
+    analisar_e_gerar_imagem(agm_prim, "agm_slides_prim", "matriz_adj");
+
+    // Exemplo do pdf do trabalho
+    GrafoMatrizAdj grafo(0); 
+    grafo.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_prim_digrafo =  prim(grafo);
+    analisar_e_gerar_imagem(agm_prim_digrafo, "grafo_principal_prim", "matriz_adj");
+    
+}
+
+void agm_boruvka(){
+    // Exemplos dos slides
+    GrafoMatrizAdj grafo_boruvka(0);
+    grafo_boruvka.carregar_de_arquivo("../dados/GRAFO_BORUVKA.txt");
+    analisar_e_gerar_imagem(grafo_boruvka, "grafo_slides_boruvka", "matriz_adj");
+    grafo_boruvka.print();
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_boruvka = boruvka(grafo_boruvka);
+    analisar_e_gerar_imagem(agm_boruvka, "agm_slides_boruvka", "matriz_adj");
 }
 
 void caminho_minimo_dijkstra(){

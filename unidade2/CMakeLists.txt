@@ -27,6 +27,8 @@ set(SOURCES
     ../final/source/DigrafoListaAdj.cpp
     ../final/source/DigrafoMatrizInc.cpp
     ../final/source/DigrafoMatrizAdj.cpp
+    source/boruvka.cpp
+    source/prim.cpp
     source/kruskal.cpp
     source/arvore-minima.cpp
     source/dijkstra.cpp)

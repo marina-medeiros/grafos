@@ -7,7 +7,7 @@
 #include "../../final/headers/Grafo.h"
 #include "../../final/headers/GrafoListaAdj.h"
 #include "../../final/headers/GrafoMatrizAdj.h"
-#include "arvore-minima.h"
+#include "../headers/arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo){
     std::vector<std::pair<int, int>> arestas_retorno = busca_profundidade_lista_adj_recursiva(grafo, 0).second;
