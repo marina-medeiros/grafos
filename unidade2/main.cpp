@@ -81,20 +81,22 @@ int main(){
 
 void agm_kruskal(){
     //Exemplo dos slides
-    GrafoMatrizAdj grafo_kruskal(0);
+    DigrafoMatrizAdj grafo_kruskal(0);
     grafo_kruskal.carregar_de_arquivo("../dados/GRAFO_KRUSKAL.txt");
     analisar_e_gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
-    analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+    ordenar_arestas(grafo_kruskal);
 
-    // Exemplo do pdf do trabalho
-    GrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
+    // // ----- Árvore mínima gerada:
+    // GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
+    // analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+
+    // // Exemplo do pdf do trabalho
+    // GrafoMatrizAdj digrafo(0); 
+    // digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    // analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
+    // // ----- Árvore mínima gerada:
+    // GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
+    // analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
 
 }
 
