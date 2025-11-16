@@ -10,5 +10,6 @@ struct ResultadoFloydWarshall {
 };
 
 ResultadoFloydWarshall floyd_warshall(const DigrafoMatrizAdj& grafoMatrizAdj);
+void imprimirMatrizDistancias(const std::vector<std::vector<int>>& dist);
 
 #endif

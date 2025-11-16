@@ -186,19 +186,29 @@ void caminho_minimo_bellmanford(){
 
 void caminho_minimo_floyd_warshall() {
     // Exemplos dos slides
-    // std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
-    // DigrafoMatrizAdj digrafo_floyd_warshall(0);
-    // digrafo_floyd_warshall.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
+    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    DigrafoMatrizAdj digrafo_floyd_warshall(0);
+    digrafo_floyd_warshall.carregar_de_arquivo("../dados/DIGRAFO_FLOYD_WARSHALL.txt");
+    ResultadoFloydWarshall resultado = floyd_warshall(digrafo_floyd_warshall);
 
+    auto rotulos_digrafo = digrafo_floyd_warshall.get_rotulos();
+
+    for (size_t i = 0; i < rotulos_digrafo.size(); ++i) {
+        std::cout << i << ": " << rotulos_digrafo[i] << '\n';
+    }
+
+
+    imprimirMatrizDistancias(resultado.dist);
+    
     // Exemplo do pdf do trabalho
-    DigrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
-    ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
-    auto rotulos_digrafo = digrafo.get_rotulos();
+    // DigrafoMatrizAdj digrafo(0); 
+    // digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
+    // ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
+    // auto rotulos_digrafo = digrafo.get_rotulos();
 
-    int inicio = digrafo.get_indice_do_rotulo("1");
-    int fim = digrafo.get_indice_do_rotulo("6");
+    // int inicio = digrafo.get_indice_do_rotulo("1");
+    // int fim = digrafo.get_indice_do_rotulo("6");
 
-    std::cout << "Distância de 1 a 6: "<< resultado.dist[inicio][fim] << std::endl;
-    std::cout << "Predecessor de 6 no caminho 1->6: " << resultado.pred[inicio][fim] << std::endl;
+    // std::cout << "Distância de 1 a 6: "<< resultado.dist[inicio][fim] << std::endl;
+    // std::cout << "Predecessor de 6 no caminho 1->6: " << resultado.pred[inicio][fim] << std::endl;
 }
