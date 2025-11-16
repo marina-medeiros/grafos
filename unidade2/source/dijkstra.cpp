@@ -111,16 +111,6 @@ std::vector<int> dijkstra_geral(const DigrafoMatrizAdj& grafoMatrizAdj, int vert
         }
 
         visitado[vertice] = 1;
-        // for(int ii = 0; ii < qtd_vertices; ii++){
-        //     if(matriz_adj[vertice][ii] != 0){
-        //         if(visitado[ii] == 0){
-        //             if(distancia[ii] > (distancia[vertice] + matriz_adj[vertice][ii])){
-        //                 distancia[ii] = (distancia[vertice] + matriz_adj[vertice][ii]);
-        //                 predecessor[ii] = vertice;
-        //             }
-        //         }
-        //     }
-        // }
 
         for(int ii = 0; ii < qtd_vertices; ii++){
             if(matriz_adj[vertice][ii] != GrafoMatrizAdj::INF){
