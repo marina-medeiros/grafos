@@ -96,8 +96,8 @@ void agm_kruskal(){
     analisar_e_gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
     ordenar_arestas(grafo_kruskal);
 
-    // // ----- Árvore mínima gerada:
-    // GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
     // analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
 
     // // Exemplo do pdf do trabalho
@@ -106,15 +106,15 @@ void agm_kruskal(){
     // analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
     // // ----- Árvore mínima gerada:
     // GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    // analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
+    // // analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
 
-    // Exemplo do pdf do trabalho como grafo não direcionado
-    GrafoMatrizAdj grafo_principal(0); 
-    grafo_principal.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    analisar_e_gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
+    // // Exemplo do pdf do trabalho como grafo não direcionado
+    // GrafoMatrizAdj grafo_principal(0); 
+    // grafo_principal.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    // analisar_e_gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
+    // // ----- Árvore mínima gerada:
+    // GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
+    // analisar_e_gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
 
 }
 
