@@ -55,9 +55,13 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
     std::cout << std::endl;
     std::cout << "Predecessor  | ";
     for(int ii = 0; ii < (int)predecessor.size(); ii++){
-        if(predecessor[ii]+1 < 10 && predecessor[ii]+1 >= 0){ std::cout << " ";}
-        if(predecessor[ii]+1 < 100){ std::cout << " ";}
-        std::cout << rotulos.at(predecessor[ii]) << "  ";
+        if (predecessor[ii] == -1) {
+            std::cout << " - ";
+        }else{
+            if(rotulos.at(predecessor[ii]).length() < 2){ std::cout << " ";}
+            if(rotulos.at(predecessor[ii]).length() < 2){ std::cout << " ";}
+            std::cout << rotulos.at(predecessor[ii]) << "  ";
+        }
     }
     std::cout << std::endl;
     std::cout << "Distância    | ";
@@ -175,7 +179,9 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
         }
     }
 
-    std::cout << "Dijkstra: menor distância do vértice " << rotulos.at(vertice_inicial) << " para " << rotulos.at(vertice_final) << std::endl;
+    std::string rotulo_inicio = (vertice_inicial == -1) ? "INDEFINIDO" : rotulos.at(vertice_inicial);
+    std::string rotulo_fim = (vertice_final == -1) ? "INDEFINIDO" : rotulos.at(vertice_final);
+    std::cout << "Dijkstra: menor distância do vértice " << rotulo_inicio << " para " << rotulo_fim << std::endl;
     imprimir_tabela_dijkstra(distancia, visitado, predecessor,rotulos);
 
     if(distancia[vertice_final] == GrafoMatrizAdj::INF){
