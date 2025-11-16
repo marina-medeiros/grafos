@@ -40,6 +40,22 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     gerar_imagem(arq_dot, arq_png);
 }
 
+void gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
+    std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
+
+    // Testa os algoritmos
+    std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
+    std::cout << "Total de Arestas: " << grafo.get_qtd_arestas() << std::endl;
+        
+    // Gera a imagem de visualização   
+    std::string arq_dot =  nome_arquivo + "_" + tipo_impl + ".dot";
+    std::string arq_png = nome_arquivo + "_" + tipo_impl + ".png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
+    grafo.exportar_para_dot(arq_dot, eh_digrafo);
+    gerar_imagem(arq_dot, arq_png);
+}
+
 void menu() {
     std::cout << "\nO que deseja fazer?\n" << std::endl;
     std::cout << "1 | Árvore Geradora Mínima: Kruskal" << std::endl;
@@ -99,28 +115,20 @@ void agm_kruskal(){
     //Exemplo dos slides
     GrafoMatrizAdj grafo_kruskal(0);
     grafo_kruskal.carregar_de_arquivo_numeros("../dados/GRAFO_KRUSKAL.txt");
-    analisar_e_gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
-    ordenar_arestas(grafo_kruskal);
+    gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
+    gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
 
-    // // ----- Árvore mínima gerada:
-    // GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
-    // analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
-
-    // // Exemplo do pdf do trabalho
-    // GrafoMatrizAdj digrafo(0); 
-    // digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    // analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
-    // // ----- Árvore mínima gerada:
-    // GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    // analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
+    std::cout << "---------------------------------------------------------------------------------------" << std::endl;
 
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
-    grafo_principal.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
+    grafo_principal.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
+    gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    analisar_e_gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
+    gerar_imagem(agm_kruskal_grafo, "agm_principal", "matriz_adj");
 
 }
 

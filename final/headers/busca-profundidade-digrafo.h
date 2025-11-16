@@ -10,9 +10,9 @@
 
 enum class Cor { BRANCO, CINZA, PRETO };
 
-ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int verticeInicial);
+ArvoreBusca busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial);
 void busca_profundidade_digrafo_rec(int ultimoVertice, 
-                                    std::map<int, std::list<int>>& lista_adj,
+                                    Grafo& grafo,
                                     std::vector<Cor>& cores,
                                     ArvoreBusca& arvore,
                                     int& tempo1, int& tempo2);
