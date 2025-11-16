@@ -10,17 +10,17 @@
 
 const int INF = std::numeric_limits<int>::max() / 2;
 
-static void imprimir_caminho_recursivo(int vertice_inicial, int vertice_final, const std::vector<int>& predecessor, const std::vector<std::string>& rotulos) {
+static void imprimir_caminho_recursivo(int vertice_inicial, int vertice_final, const std::vector<int>& predecessor) {
     if (vertice_final == vertice_inicial) {
-        std::cout << rotulos.at(vertice_inicial);
+        std::cout << vertice_inicial+1;
         return;
     }
     if (predecessor[vertice_final] == -1) {
-        std::cout << "Nenhum caminho de " << rotulos.at(vertice_inicial) << " para " << rotulos.at(vertice_final) << " encontrado.";
+        std::cout << "Nenhum caminho de " << vertice_inicial+1 << " para " << vertice_final+1 << " encontrado.";
         return;
     }
-    imprimir_caminho_recursivo(vertice_inicial, predecessor[vertice_final], predecessor,rotulos);
-    std::cout << " -> " << rotulos.at(vertice_final);
+    imprimir_caminho_recursivo(vertice_inicial, predecessor[vertice_final], predecessor);
+    std::cout << " -> " << vertice_final+1;
 }
 
 
@@ -63,28 +63,26 @@ void bellman_ford_geral(const DigrafoListaAdjPonderada& grafo, int s) {
     int V = grafo.get_qtd_vertices();
 
     if (s < 0 || s >= V) {
-        std::cerr << "Erro: Vértice de origem " << s << " fora do intervalo [0, " << V-1 << "]." << std::endl;
+        std::cerr << "Erro: Vértice de origem " << s+1 << " fora do intervalo [0, " << V << "]." << std::endl;
         return;
     }
-
-    const std::vector<std::string>& rotulos = grafo.get_rotulos();
 
     std::vector<int> distancia;
     std::vector<int> predecessor;
 
-    std::cout << "Executando Bellman-Ford, origem " << rotulos.at(s) << std::endl;
+    std::cout << "Executando Bellman-Ford, origem " << s+1 << std::endl;
     bool resultado = bellman_ford(grafo, s, distancia, predecessor);
 
     if (resultado) {
-        std::cout << "\nDistâncias mais curtas a partir de " << rotulos.at(s) << ":" << std::endl << std::endl;
+        std::cout << "\nDistâncias mais curtas a partir de " << s+1 << ":" << std::endl << std::endl;
         for (int i = 0; i < V; ++i) {
-            std::cout << "Vértice " << rotulos.at(i) << ": ";
+            std::cout << "Vértice " << i+1 << ": ";
             if (distancia[i] == INF) {
                 std::cout << "Inalcançável (INF)" << std::endl;
             } else {
                 std::cout << "Distância = " << distancia[i];
                 std::cout << " | Caminho: ";
-                imprimir_caminho_recursivo(s, i, predecessor, rotulos);
+                imprimir_caminho_recursivo(s, i, predecessor);
                 std::cout << std::endl;
             }
         }
@@ -98,31 +96,29 @@ void bellman_ford_especifico(const DigrafoListaAdjPonderada& grafo, int s, int d
     int V = grafo.get_qtd_vertices();
 
     if (s < 0 || s >= V) {
-        std::cerr << "Erro: Vértice de origem " << s << " fora do intervalo [0, " << V-1 << "]." << std::endl;
+        std::cerr << "Erro: Vértice de origem " << s+1 << " fora do intervalo [0, " << V << "]." << std::endl;
         return;
     }
     if (d < 0 || d >= V) {
-        std::cerr << "Erro: Vértice de destino " << d << " fora do intervalo [0, " << V-1 << "]." << std::endl;
+        std::cerr << "Erro: Vértice de destino " << d+1 << " fora do intervalo [0, " << V << "]." << std::endl;
         return;
     }
-
-    const std::vector<std::string>& rotulos = grafo.get_rotulos();
 
     std::vector<int> distancia;
     std::vector<int> predecessor;
 
-    std::cout << "Executando Bellman-Ford, origem " << rotulos.at(s) << ", destino " << rotulos.at(d) << std::endl;
+    std::cout << "Executando Bellman-Ford, origem " << s+1 << ", destino " << d+1 << std::endl;
     bool resultado = bellman_ford(grafo, s, distancia, predecessor);
 
     if (resultado) {
-        std::cout << "\nCaminho mais curto de " << rotulos.at(s) << " para " << rotulos.at(d) << ":" << std::endl;
+        std::cout << "\nCaminho mais curto de " << s+1 << " para " << d+1 << ":" << std::endl;
 
         if (distancia[d] == INF) {
-            std::cout << "\nDestino " << rotulos.at(d) << ": Inalcançável (INF)" << std::endl;
+            std::cout << "\nDestino " << d+1 << ": Inalcançável (INF)" << std::endl;
         } else {
             std::cout << "\nDistância = " << distancia[d];
             std::cout << " | Caminho: ";
-            imprimir_caminho_recursivo(s, d, predecessor,rotulos);
+            imprimir_caminho_recursivo(s, d, predecessor);
             std::cout << std::endl;
         }
     } else {

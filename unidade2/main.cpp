@@ -176,23 +176,9 @@ void caminho_minimo_dijkstra(){
 }
 
 void caminho_minimo_bellmanford(){
-    std::cout << "------------------ exemplo com ciclo negativo --------------------------------------" << std::endl;
-    DigrafoListaAdjPonderada digrafo_ciclo(0); 
-    digrafo_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_1.txt");
-    //analisar_e_gerar_imagem(digrafo_ciclo, "digrafo_ciclo_negativo", "matriz_adj", true); 
-    bellman_ford_geral(digrafo_ciclo, 0);
-    bellman_ford_especifico(digrafo_ciclo, 0, 3);
-
-    std::cout << "------------------ exemplo sem ciclo negativo --------------------------------------" << std::endl;
-    DigrafoListaAdjPonderada digrafo_sem_ciclo(0); 
-    digrafo_sem_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_0.txt");
-    //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
-    bellman_ford_geral(digrafo_sem_ciclo, 0);
-    bellman_ford_especifico(digrafo_sem_ciclo, 0, 3);
-
-    std::cout << "------------------ exemplo sem ciclo negativo --------------------------------------" << std::endl;
+    std::cout << "------------------ BELLMAN-FORD --------------------------------------" << std::endl;
     DigrafoListaAdjPonderada digrafo_lista(0); 
-    digrafo_lista.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
+    digrafo_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
