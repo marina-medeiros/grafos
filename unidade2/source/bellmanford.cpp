@@ -63,7 +63,7 @@ void bellman_ford_geral(const DigrafoListaAdjPonderada& grafo, int s) {
     int V = grafo.get_qtd_vertices();
 
     if (s < 0 || s >= V) {
-        std::cerr << "Erro: Vértice de origem " << s << " fora do intervalo [0, " << V-1 << "]." << std::endl;
+        std::cerr << "Erro: Vértice de origem " << s+1 << " fora do intervalo [0, " << V << "]." << std::endl;
         return;
     }
 
@@ -107,7 +107,7 @@ void bellman_ford_especifico(const DigrafoListaAdjPonderada& grafo, int s, int d
     std::vector<int> distancia;
     std::vector<int> predecessor;
 
-    std::cout << "Executando Bellman-Ford, origem " << s << ", destino " << d << std::endl;
+    std::cout << "Executando Bellman-Ford, origem " << s+1 << ", destino " << d+1 << std::endl;
     bool resultado = bellman_ford(grafo, s, distancia, predecessor);
 
     if (resultado) {
