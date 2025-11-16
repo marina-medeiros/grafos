@@ -58,11 +58,6 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
         if(predecessor[ii]+1 < 10 && predecessor[ii]+1 >= 0){ std::cout << " ";}
         if(predecessor[ii]+1 < 100){ std::cout << " ";}
         std::cout << rotulos.at(predecessor[ii]) << "  ";
-        if (predecessor[ii] == -1) {
-            std::cout << "  ";
-        } else {
-            std::cout << " " << rotulos.at(predecessor[ii]) << "  "; 
-        }
     }
     std::cout << std::endl;
     std::cout << "Distância    | ";
