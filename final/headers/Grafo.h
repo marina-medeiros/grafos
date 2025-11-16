@@ -46,6 +46,8 @@ public:
     void carregar_de_arquivo(const std::string& filename);
     void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;
     virtual void print() const = 0;
+
+    void carregar_de_arquivo_numeros(const std::string& filename);
 };
 
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);
