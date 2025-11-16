@@ -154,7 +154,7 @@ void agm_prim(){
 
     // Exemplo do pdf do trabalho
     GrafoMatrizAdj grafo(0); 
-    grafo.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    grafo.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_prim_digrafo =  prim(grafo);
@@ -174,7 +174,7 @@ void agm_boruvka(){
 
     // Exemplo do pdf do trabalho
     GrafoMatrizAdj grafo(0); 
-    grafo.carregar_de_arquivo("../dados/GRAFO_0.txt");
+    grafo.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_boruvka_digrafo =  boruvka(grafo);
