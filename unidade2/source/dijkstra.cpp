@@ -62,9 +62,17 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
     std::cout << std::endl;
     std::cout << "Distância    | ";
     for(int ii = 0; ii < (int)distancia.size(); ii++){
-        if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
-        if(distancia[ii] < 100){ std::cout << " ";}
-        std::cout << distancia[ii] << "  ";
+        // if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
+        // if(distancia[ii] < 100){ std::cout << " ";}
+        // std::cout << distancia[ii] << "  ";
+
+        if (distancia[ii] == GrafoMatrizAdj::INF) {
+            std::cout << " INF ";
+        } else {
+            if(distancia[ii] < 10 && distancia[ii] >= 0){ std::cout << " ";}
+            if(distancia[ii] < 100){ std::cout << " ";}
+            std::cout << distancia[ii] << "  ";
+        }
     }
     std::cout << std::endl << std::endl;
 }
@@ -73,7 +81,7 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
 
-    std::vector<int> distancia(qtd_vertices, 999);
+    std::vector<int> distancia(qtd_vertices, GrafoMatrizAdj::INF);
     std::vector<int> predecessor(qtd_vertices, -1);
     std::vector<int> visitado(qtd_vertices, 0);
 
@@ -81,7 +89,7 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
     distancia[vertice_inicial] = 0;
 
     for(int ii = 0; ii < qtd_vertices; ii++){
-        if(matriz_adj[vertice_inicial][ii] != 0){
+        if(matriz_adj[vertice_inicial][ii] != GrafoMatrizAdj::INF){
             predecessor[ii] = vertice_inicial;
             distancia[ii] = matriz_adj[vertice_inicial][ii];
         }
@@ -92,9 +100,25 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
         if(vertice == -1){
             break;
         }
+
+        if (distancia[vertice] == GrafoMatrizAdj::INF) {
+            break;
+        }
+
         visitado[vertice] = 1;
+        // for(int ii = 0; ii < qtd_vertices; ii++){
+        //     if(matriz_adj[vertice][ii] != 0){
+        //         if(visitado[ii] == 0){
+        //             if(distancia[ii] > (distancia[vertice] + matriz_adj[vertice][ii])){
+        //                 distancia[ii] = (distancia[vertice] + matriz_adj[vertice][ii]);
+        //                 predecessor[ii] = vertice;
+        //             }
+        //         }
+        //     }
+        // }
+
         for(int ii = 0; ii < qtd_vertices; ii++){
-            if(matriz_adj[vertice][ii] != 0){
+            if(matriz_adj[vertice][ii] != GrafoMatrizAdj::INF){
                 if(visitado[ii] == 0){
                     if(distancia[ii] > (distancia[vertice] + matriz_adj[vertice][ii])){
                         distancia[ii] = (distancia[vertice] + matriz_adj[vertice][ii]);
@@ -102,7 +126,7 @@ std::vector<int> dijkstra_geral(const GrafoMatrizAdj& grafoMatrizAdj, int vertic
                     }
                 }
             }
-        }
+        } 
     }
 
     std::cout << "Dijkstra: menor distância do vértice " << (vertice_inicial+1) << " para os demais" << std::endl;
@@ -115,7 +139,7 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
 
-    std::vector<int> distancia(qtd_vertices, 999);
+    std::vector<int> distancia(qtd_vertices, GrafoMatrizAdj::INF);
     std::vector<int> predecessor(qtd_vertices, -1);
     std::vector<int> visitado(qtd_vertices, 0);
 
@@ -123,7 +147,7 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
     distancia[vertice_inicial] = 0;
 
     for(int ii = 0; ii < qtd_vertices; ii++){
-        if(matriz_adj[vertice_inicial][ii] != 0){
+        if(matriz_adj[vertice_inicial][ii] != GrafoMatrizAdj::INF){
             predecessor[ii] = vertice_inicial;
             distancia[ii] = matriz_adj[vertice_inicial][ii];
         }
@@ -131,9 +155,14 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
 
     while(visitado[vertice_final] == 0){
         int vertice = vertice_com_menor_distancia(distancia, visitado);
+
+        if(vertice == -1 || distancia[vertice] == GrafoMatrizAdj::INF){
+            break;
+        }
+
         visitado[vertice] = 1;
         for(int ii = 0; ii < qtd_vertices; ii++){
-            if(matriz_adj[vertice][ii] != 0){
+            if(matriz_adj[vertice][ii] != GrafoMatrizAdj::INF){
                 if(visitado[ii] == 0){
                     if(distancia[ii] > (distancia[vertice] + matriz_adj[vertice][ii])){
                         distancia[ii] = (distancia[vertice] + matriz_adj[vertice][ii]);
@@ -147,7 +176,7 @@ std::vector<int> dijkstra_especifico(const GrafoMatrizAdj& grafoMatrizAdj, int v
     std::cout << "Dijkstra: menor distância do vértice " << (vertice_inicial+1) << " para " << (vertice_final+1) << std::endl;
     imprimir_tabela_dijkstra(distancia, visitado, predecessor);
 
-    if(distancia[vertice_final] == 999){
+    if(distancia[vertice_final] == GrafoMatrizAdj::INF){
         std::cout << "Não há caminho entre os dois vértices." << std::endl;
     }else{
         std::cout << "Menor distância encontrada: " << distancia[vertice_final] << std::endl << std::endl;

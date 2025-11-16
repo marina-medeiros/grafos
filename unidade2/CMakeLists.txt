@@ -25,11 +25,13 @@ set(SOURCES
     ../final/source/GrafoMatrizAdj.cpp
     ../final/source/GrafoMatrizInc.cpp
     ../final/source/DigrafoListaAdj.cpp
+    ../final/source/DigrafoListaAdjPonderada.cpp
     ../final/source/DigrafoMatrizInc.cpp
     ../final/source/DigrafoMatrizAdj.cpp
     source/kruskal.cpp
     source/arvore-minima.cpp
-    source/dijkstra.cpp)
+    source/dijkstra.cpp
+    source/bellmanford.cpp)
 
 # Executável principal
 add_executable(main

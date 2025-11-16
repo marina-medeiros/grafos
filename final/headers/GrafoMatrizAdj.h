@@ -3,6 +3,7 @@
 
 #include "Grafo.h"
 #include <vector>
+#include <limits>
 
 class GrafoListaAdj;
 
@@ -16,6 +17,8 @@ protected:
     std::vector<std::vector<int>> matriz_adj;
 
 public:
+    static const int INF;
+
     GrafoMatrizAdj(int vertices);
     virtual ~GrafoMatrizAdj() override = default;
 
