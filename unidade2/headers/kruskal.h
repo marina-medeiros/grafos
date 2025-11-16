@@ -14,7 +14,9 @@
 #include "arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo);
+bool encontra_ciclo_digrafo( GrafoListaAdj& grafo);
 GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj);
-std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo);
+DigrafoMatrizAdj gerar_agm_kruskal_digrafo(const DigrafoMatrizAdj& digrafoMatrizAdj, const DigrafoListaAdj& digrafoListaAdj);
+std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo, bool digrafo);
 
 #endif

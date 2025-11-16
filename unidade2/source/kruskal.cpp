@@ -4,17 +4,28 @@
 #include <utility> 
 #include <vector>
 #include "../../final/headers/busca-profundidade.h"
+#include "../../final/headers/busca-profundidade-digrafo.h"
 #include "../../final/headers/Grafo.h"
 #include "../../final/headers/GrafoListaAdj.h"
 #include "../../final/headers/GrafoMatrizAdj.h"
 #include "../../final/headers/DigrafoMatrizAdj.h"
 #include "../../final/headers/DigrafoListaAdj.h"
+#include "../../final/headers/arvore-busca.h"
 #include "../headers/arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo){
     std::vector<std::pair<int, int>> arestas_retorno = busca_profundidade_lista_adj_recursiva(grafo, 0).second;
 
     if(arestas_retorno.size() > 0){
+        return true;
+    }
+    return false;
+}
+
+bool encontra_ciclo_digrafo(DigrafoListaAdj &grafo){
+    ArvoreBusca arvore = busca_profundidade_digrafo_completa(grafo, 0);
+
+    if((arvore.get_arestas_retorno()).size() > 0){
         return true;
     }
     return false;
@@ -70,15 +81,21 @@ void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "----------------------------------" << std::endl;
 }
 
-std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo){
+std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo, bool digrafo){
     std::vector<std::vector<int>> arestas_e_pesos;
     std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
 
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
         for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
-            if(matriz_adj[ii][jj] != GrafoMatrizAdj::INF  && jj <= ii){
-                std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
-                arestas_e_pesos.push_back(aresta);
+            if(matriz_adj[ii][jj] != GrafoMatrizAdj::INF){
+                if(digrafo){
+                    std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
+                    arestas_e_pesos.push_back(aresta);
+                }
+                if(!digrafo && jj <= ii){
+                    std::vector<int> aresta = {ii, jj, matriz_adj[ii][jj]};
+                    arestas_e_pesos.push_back(aresta);
+                }
             }
         }
     }
@@ -98,7 +115,7 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     GrafoMatrizAdj agm_matriz_adj(qtd_vertices);
     GrafoListaAdj agm_lista_adj(qtd_vertices);
     
-    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(grafoMatrizAdj);
+    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(grafoMatrizAdj, 0);
 
     int indice_aresta = 0;
     while(qtd_arestas < (qtd_vertices - 1)){
@@ -116,7 +133,37 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     }
 
     std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
-    ordenar_arestas(agm_matriz_adj);
+    ordenar_arestas(agm_matriz_adj, 0);
+
+    return agm_matriz_adj;
+}
+
+DigrafoMatrizAdj gerar_agm_kruskal_digrafo(const DigrafoMatrizAdj& digrafoMatrizAdj, const DigrafoListaAdj& digrafoListaAdj){
+    int qtd_vertices = digrafoListaAdj.get_qtd_vertices();
+    int qtd_arestas = 0;
+    DigrafoMatrizAdj agm_matriz_adj(qtd_vertices);
+    DigrafoListaAdj agm_lista_adj(qtd_vertices);
+    
+    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(digrafoMatrizAdj, 1);
+
+    int indice_aresta = 0;
+    while(qtd_arestas < (qtd_vertices - 1) &&
+      indice_aresta < (int)arestas_ordenadas.size()){
+        std::vector<int> aresta = arestas_ordenadas[indice_aresta];
+
+        agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
+
+        if(encontra_ciclo_digrafo(agm_lista_adj)){
+            agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
+        }else{
+            agm_matriz_adj.inserir_aresta(aresta[0], aresta[1], aresta[2]);
+            qtd_arestas++;
+        }
+        indice_aresta++;
+    }
+
+    std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
+    ordenar_arestas(agm_matriz_adj, 1);
 
     return agm_matriz_adj;
 }

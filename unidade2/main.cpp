@@ -7,6 +7,8 @@
 #include "../../final/headers/Grafo.h"
 #include "../../final/headers/GrafoListaAdj.h"
 #include "../../final/headers/GrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoListaAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
@@ -114,7 +116,7 @@ void agm_kruskal(){
     GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
     gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
 
-    std::cout << "---------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "######################################################################################" << std::endl;
 
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
@@ -122,7 +124,19 @@ void agm_kruskal(){
     gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    gerar_imagem(agm_kruskal_grafo, "agm_principal", "matriz_adj");
+    gerar_imagem(agm_kruskal_grafo, "agm_principal_grafo", "matriz_adj");
+
+    std::cout << "######################################################################################" << std::endl;
+
+    // Exemplo do pdf do trabalho como dígrafo
+    DigrafoMatrizAdj digrafo_principal(0); 
+    DigrafoListaAdj digrafo_principal_lista(0); 
+    digrafo_principal.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    digrafo_principal_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    gerar_imagem(digrafo_principal_lista, "digrafo_principal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    DigrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal_digrafo(digrafo_principal, digrafo_principal_lista);
+    gerar_imagem(agm_kruskal_digrafo, "agm_principal_digrafo", "matriz_adj");
 
 }
 
