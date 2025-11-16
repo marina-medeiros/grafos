@@ -222,6 +222,53 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     arquivo.close();
 }
 
+void Grafo::carregar_de_arquivo_numeros(const std::string& filename){
+    std::ifstream arquivo(filename);
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro: Nao foi possivel abrir o arquivo " << filename << std::endl;
+        return;
+    }
+
+    int num_vertices_arquivo;
+    arquivo >> num_vertices_arquivo;
+    if (arquivo.fail()) {
+        std::cerr << "Erro ao ler o numero de vertices do arquivo." << std::endl;
+        return;
+    }
+    
+    this->limpar();
+    this->rotulos.resize(num_vertices_arquivo); 
+    for (int i = 0; i < num_vertices_arquivo; ++i) {
+        this->inserir_vertice(std::to_string(i)); 
+    }
+
+    std::string linha;
+    std::getline(arquivo, linha);
+
+    while(std::getline(arquivo, linha)){
+        if (linha.empty()) continue;
+
+        std::stringstream ss(linha);
+        std::string rotulo1_str, rotulo2_str, rotulo3_str;
+
+        std::getline(ss, rotulo1_str, ',');
+        std::getline(ss, rotulo2_str, ',');
+        std::getline(ss, rotulo3_str);
+
+        int vertice1 = stoi(rotulo1_str);
+        int vertice2 = stoi(rotulo2_str);
+
+        if(!rotulo3_str.empty()){
+            int peso = stoi(rotulo3_str);
+            this->inserir_aresta(vertice1, vertice2, peso);
+        }else{
+            this->inserir_aresta(vertice1, vertice2);
+        }
+    }
+
+    arquivo.close();
+}
+
 /**
  * Exporta o grafo para um arquivo no formato DOT, adequado para visualização com Graphviz.
  * 
@@ -247,7 +294,11 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     }
 
     for (int i = 0; i < qtd_vertices; i++) {
-        file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
+        if(rotulos.at(i).empty()){
+            file << "    " << i << " [label=\"" << i+1 << "\"];\n";
+        }else{
+            file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
+        }
     }
     file << "\n";
 

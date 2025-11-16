@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <fstream>
+#include <cstring>
 
 #include "../headers/GrafoListaAdj.h"
 #include "../headers/GrafoMatrizAdj.h"
@@ -183,12 +184,20 @@ void GrafoMatrizAdj::print() const {
 
     std::cout << "\t";
     for (int i = 0; i < qtd_vertices; ++i) {
-        std::cout << rotulos.at(i) << "\t";
+        if (rotulos.at(i).empty()) {
+            std::cout << i << "\t";
+        }else{
+            std::cout << rotulos.at(i) << "\t";
+        }
     }
     std::cout << std::endl;
 
     for (int i = 0; i < qtd_vertices; ++i) {
-        std::cout << rotulos.at(i) << "\t";
+        if (rotulos.at(i).empty()) {
+            std::cout << i << "\t";
+        }else{
+            std::cout << rotulos.at(i) << "\t";
+        }
         for (int j = 0; j < qtd_vertices; ++j) {
             if (matriz_adj.at(i).at(j) == INF) {
                 std::cout << "-\t"; 

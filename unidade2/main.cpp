@@ -9,6 +9,8 @@
 #include "../final/headers/Grafo.h"
 #include "../final/headers/GrafoListaAdj.h"
 #include "../final/headers/GrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoListaAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
@@ -26,6 +28,22 @@ void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, cons
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
 
     grafo.print();
+
+    // Testa os algoritmos
+    std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
+    std::cout << "Total de Arestas: " << grafo.get_qtd_arestas() << std::endl;
+        
+    // Gera a imagem de visualização   
+    std::string arq_dot =  nome_arquivo + "_" + tipo_impl + ".dot";
+    std::string arq_png = nome_arquivo + "_" + tipo_impl + ".png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
+    grafo.exportar_para_dot(arq_dot, eh_digrafo);
+    gerar_imagem(arq_dot, arq_png);
+}
+
+void gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
+    std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
 
     // Testa os algoritmos
     std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
@@ -94,27 +112,33 @@ int main(){
 void agm_kruskal(){
     //Exemplo dos slides
     GrafoMatrizAdj grafo_kruskal(0);
-    grafo_kruskal.carregar_de_arquivo("../dados/GRAFO_KRUSKAL.txt");
-    analisar_e_gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
+    grafo_kruskal.carregar_de_arquivo_numeros("../dados/GRAFO_KRUSKAL.txt");
+    gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
-    analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+    gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
 
-    // Exemplo do pdf do trabalho
-    GrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
+    std::cout << "######################################################################################" << std::endl;
 
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
-    grafo_principal.carregar_de_arquivo("../dados/GRAFO_0.txt");
-    analisar_e_gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
+    grafo_principal.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
+    gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    analisar_e_gerar_imagem(agm_kruskal_grafo, "grafo_principal_kruskal", "matriz_adj");
+    gerar_imagem(agm_kruskal_grafo, "agm_principal_grafo", "matriz_adj");
+
+    std::cout << "######################################################################################" << std::endl;
+
+    // Exemplo do pdf do trabalho como dígrafo
+    DigrafoMatrizAdj digrafo_principal(0); 
+    DigrafoListaAdj digrafo_principal_lista(0); 
+    digrafo_principal.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    digrafo_principal_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    gerar_imagem(digrafo_principal_lista, "digrafo_principal", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    DigrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal_digrafo(digrafo_principal, digrafo_principal_lista);
+    gerar_imagem(agm_kruskal_digrafo, "agm_principal_digrafo", "matriz_adj");
 
 }
 
@@ -161,46 +185,26 @@ void caminho_minimo_dijkstra(){
     // Exemplos dos slides
     std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
-    grafo_dijkstra.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
-    int inicio = grafo_dijkstra.get_indice_do_rotulo("0");
-    int fim = grafo_dijkstra.get_indice_do_rotulo("6");
-    dijkstra_geral(grafo_dijkstra, inicio);
-    dijkstra_especifico(grafo_dijkstra, inicio, fim);
+    grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
+    dijkstra_geral(grafo_dijkstra, 0);
+    dijkstra_especifico(grafo_dijkstra, 0, 6);
 
     DigrafoMatrizAdj digrafo_dijkstra(0);
-    digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
-    inicio = digrafo_dijkstra.get_indice_do_rotulo("0");
-    fim = digrafo_dijkstra.get_indice_do_rotulo("5");
-    dijkstra_geral(digrafo_dijkstra, inicio);
-    dijkstra_especifico(digrafo_dijkstra, inicio, fim);
+    digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
+    dijkstra_geral(digrafo_dijkstra, 0);
+    dijkstra_especifico(digrafo_dijkstra, 0, 5);
 
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
-    inicio = digrafo.get_indice_do_rotulo("0");
-    fim = digrafo.get_indice_do_rotulo("14");
-    dijkstra_geral(digrafo, inicio);
-    dijkstra_especifico(digrafo, inicio, fim);
+    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    dijkstra_geral(digrafo, 0);
+    dijkstra_especifico(digrafo, 0, 14);
 }
 
 void caminho_minimo_bellmanford(){
-    std::cout << "------------------ exemplo com ciclo negativo --------------------------------------" << std::endl;
-    DigrafoListaAdjPonderada digrafo_ciclo(0); 
-    digrafo_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_1.txt");
-    //analisar_e_gerar_imagem(digrafo_ciclo, "digrafo_ciclo_negativo", "matriz_adj", true); 
-    bellman_ford_geral(digrafo_ciclo, 0);
-    bellman_ford_especifico(digrafo_ciclo, 0, 3);
-
-    std::cout << "------------------ exemplo sem ciclo negativo --------------------------------------" << std::endl;
-    DigrafoListaAdjPonderada digrafo_sem_ciclo(0); 
-    digrafo_sem_ciclo.carregar_de_arquivo("../dados/DIGRAFO_BELLMANFORD_0.txt");
-    //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
-    bellman_ford_geral(digrafo_sem_ciclo, 0);
-    bellman_ford_especifico(digrafo_sem_ciclo, 0, 3);
-
-    std::cout << "------------------ exemplo sem ciclo negativo --------------------------------------" << std::endl;
+    std::cout << "------------------ BELLMAN-FORD --------------------------------------" << std::endl;
     DigrafoListaAdjPonderada digrafo_lista(0); 
-    digrafo_lista.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
+    digrafo_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
