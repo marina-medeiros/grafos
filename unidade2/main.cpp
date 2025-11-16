@@ -98,19 +98,21 @@ int main(){
 void agm_kruskal(){
     //Exemplo dos slides
     GrafoMatrizAdj grafo_kruskal(0);
-    grafo_kruskal.carregar_de_arquivo("../dados/GRAFO_KRUSKAL.txt");
+    grafo_kruskal.carregar_de_arquivo_numeros("../dados/GRAFO_KRUSKAL.txt");
     analisar_e_gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
-    analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+    ordenar_arestas(grafo_kruskal);
 
-    // Exemplo do pdf do trabalho
-    GrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
-    analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
-    analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
+    // // ----- Árvore mínima gerada:
+    // GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
+    // analisar_e_gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+
+    // // Exemplo do pdf do trabalho
+    // GrafoMatrizAdj digrafo(0); 
+    // digrafo.carregar_de_arquivo("../dados/DIGRAFO_0.txt");
+    // analisar_e_gerar_imagem(digrafo, "digrafo_principal", "matriz_adj");
+    // // ----- Árvore mínima gerada:
+    // GrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal(digrafo);
+    // analisar_e_gerar_imagem(agm_kruskal_digrafo, "digrafo_principal_kruskal", "matriz_adj");
 
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
@@ -157,26 +159,20 @@ void caminho_minimo_dijkstra(){
     // Exemplos dos slides
     std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
-    grafo_dijkstra.carregar_de_arquivo("../dados/GRAFO_DIJKSTRA.txt");
-    int inicio = grafo_dijkstra.get_indice_do_rotulo("0");
-    int fim = grafo_dijkstra.get_indice_do_rotulo("6");
-    dijkstra_geral(grafo_dijkstra, inicio);
-    dijkstra_especifico(grafo_dijkstra, inicio, fim);
+    grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
+    dijkstra_geral(grafo_dijkstra, 0);
+    dijkstra_especifico(grafo_dijkstra, 0, 6);
 
     DigrafoMatrizAdj digrafo_dijkstra(0);
-    digrafo_dijkstra.carregar_de_arquivo("../dados/DIGRAFO_DIJKSTRA.txt");
-    inicio = digrafo_dijkstra.get_indice_do_rotulo("0");
-    fim = digrafo_dijkstra.get_indice_do_rotulo("5");
-    dijkstra_geral(digrafo_dijkstra, inicio);
-    dijkstra_especifico(digrafo_dijkstra, inicio, fim);
+    digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
+    dijkstra_geral(digrafo_dijkstra, 0);
+    dijkstra_especifico(digrafo_dijkstra, 0, 5);
 
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
-    digrafo.carregar_de_arquivo("../dados/DIGRAFO_LISTA.txt");
-    inicio = digrafo.get_indice_do_rotulo("0");
-    fim = digrafo.get_indice_do_rotulo("14");
-    dijkstra_geral(digrafo, inicio);
-    dijkstra_especifico(digrafo, inicio, fim);
+    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    dijkstra_geral(digrafo, 0);
+    dijkstra_especifico(digrafo, 0, 14);
 }
 
 void caminho_minimo_bellmanford(){

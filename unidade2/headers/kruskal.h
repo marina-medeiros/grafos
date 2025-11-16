@@ -10,6 +10,7 @@
 #include "../../final/headers/Grafo.h"
 #include "../../final/headers/GrafoListaAdj.h"
 #include "../../final/headers/GrafoMatrizAdj.h"
+#include "../../final/headers/DigrafoMatrizAdj.h"
 #include "arvore-minima.h"
 
 bool encontra_ciclo(const GrafoListaAdj& grafo);
