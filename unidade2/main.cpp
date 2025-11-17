@@ -190,12 +190,11 @@ void caminho_minimo_dijkstra(){
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
-    dijkstra_especifico(grafo_dijkstra, 0, 6);
+    dijkstra_especifico(grafo_dijkstra, 1, 6);
 
     DigrafoMatrizAdj digrafo_dijkstra(0);
     digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
     dijkstra_geral(digrafo_dijkstra, 0);
-    dijkstra_especifico(digrafo_dijkstra, 0, 5);
 
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 

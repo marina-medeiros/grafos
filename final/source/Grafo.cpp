@@ -292,8 +292,8 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     } else {
         file << "graph G {\n";
     }
-
     for (int i = 0; i < qtd_vertices; i++) {
+        //Se der problema, tirar esse "ou"
         if(rotulos.at(i).empty() || rotulos.at(0) == "0"){
             file << "    " << i << " [label=\"" << i+1 << "\"];\n";
         }else{
