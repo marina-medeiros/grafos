@@ -186,17 +186,18 @@ void agm_boruvka(){
 
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
-    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
     dijkstra_especifico(grafo_dijkstra, 1, 6);
 
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj digrafo_dijkstra(0);
     digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
     dijkstra_geral(digrafo_dijkstra, 0);
 
-    std::cout << "------------------ Questão do trabalho --------------------------------------" << std::endl;
+    std::cout << "------------------ Questão do trabalho --------------------------------------\n" << std::endl;
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");

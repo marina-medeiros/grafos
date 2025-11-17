@@ -38,7 +38,7 @@ int vertice_com_menor_distancia(std::vector<int>& distancia, std::vector<int>& v
     return indice_menor_distancia;
 }
 
-void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& visitado, std::vector<int>& predecessor, const std::vector<std::string>& rotulos){
+void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& visitado, std::vector<int>& predecessor){
     std::cout << std::endl << "Vértices     | ";
     for(int ii = 0; ii < (int)visitado.size(); ii++){
         if((ii+1) < 10 && (ii+1) >= 0){ std::cout << " ";}
@@ -81,7 +81,6 @@ void imprimir_tabela_dijkstra(std::vector<int>& distancia, std::vector<int>& vis
 std::vector<int> dijkstra_geral(const DigrafoMatrizAdj& grafoMatrizAdj, int vertice_inicial){
     int qtd_vertices = grafoMatrizAdj.get_qtd_vertices();
     std::vector<std::vector<int>> matriz_adj = grafoMatrizAdj.get_matriz_adj();
-    const std::vector<std::string>& rotulos = grafoMatrizAdj.get_rotulos();
 
     std::vector<int> distancia(qtd_vertices, GrafoMatrizAdj::INF);
     std::vector<int> predecessor(qtd_vertices, -1);
@@ -122,7 +121,7 @@ std::vector<int> dijkstra_geral(const DigrafoMatrizAdj& grafoMatrizAdj, int vert
     }
 
     std::cout << "Dijkstra: menor distância do vértice " << (vertice_inicial+1) << " para os demais" << std::endl;
-    imprimir_tabela_dijkstra(distancia, visitado, predecessor,rotulos);
+    imprimir_tabela_dijkstra(distancia, visitado, predecessor);
 
     return distancia;
 }
