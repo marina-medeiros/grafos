@@ -225,6 +225,20 @@ void caminho_minimo_dijkstra(){
 
 void caminho_minimo_bellmanford(){
     std::cout << "------------------ BELLMAN-FORD --------------------------------------" << std::endl;
+
+    std::cout << "------------------ Exemplo 1 dos slides --------------------------------------\n" << std::endl;
+    DigrafoListaAdjPonderada digrafo_slide_1(0); 
+    digrafo_slide_1.carregar_de_arquivo_numeros("../dados/DIGRAFO_BELLMANFORD_0.txt");
+    bellman_ford_geral(digrafo_slide_1, 0);
+    bellman_ford_especifico(digrafo_slide_1, 0, 4);
+
+    std::cout << "------------------ Exemplo 2 dos slides --------------------------------------\n" << std::endl;
+    DigrafoListaAdjPonderada digrafo_slide_2(0); 
+    digrafo_slide_2.carregar_de_arquivo_numeros("../dados/DIGRAFO_BELLMANFORD_1.txt");
+    bellman_ford_geral(digrafo_slide_2, 0);
+    bellman_ford_especifico(digrafo_slide_2, 0, 2);
+
+    std::cout << "------------------ Questão do trabalho --------------------------------------\n" << std::endl;
     DigrafoListaAdjPonderada digrafo_lista(0); 
     digrafo_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     bellman_ford_geral(digrafo_lista, 0);
