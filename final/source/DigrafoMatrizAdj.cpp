@@ -45,7 +45,6 @@ void DigrafoMatrizAdj::remover_aresta(int u, int v) {
  * 
  * Parâmetros:
  *  filename - Nome do arquivo de saída.
- *  eh_digrafo - Indica se o grafo é direcionado (true) ou não (false).
  * Retorno:
  *  Nenhum.
  */
