@@ -149,7 +149,7 @@ std::vector<int> dijkstra_especifico(const DigrafoMatrizAdj& grafoMatrizAdj, int
     while(visitado[vertice_final] == 0){
         int vertice = vertice_com_menor_distancia(distancia, visitado);
 
-        if(vertice == -1 || distancia[vertice] == GrafoMatrizAdj::INF){
+        if(distancia[vertice] == GrafoMatrizAdj::INF){
             break;
         }
 
@@ -167,7 +167,6 @@ std::vector<int> dijkstra_especifico(const DigrafoMatrizAdj& grafoMatrizAdj, int
     }
 
     std::cout << "Dijkstra: menor distância do vértice " << vertice_inicial+1 << " para " << vertice_final+1 << std::endl;
-    imprimir_tabela_dijkstra(distancia, visitado, predecessor,rotulos);
 
     if(distancia[vertice_final] == GrafoMatrizAdj::INF){
         std::cout << "Não há caminho entre os dois vértices." << std::endl;
