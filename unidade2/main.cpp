@@ -196,6 +196,7 @@ void caminho_minimo_dijkstra(){
     digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
     dijkstra_geral(digrafo_dijkstra, 0);
 
+    std::cout << "------------------ Questão do trabalho --------------------------------------" << std::endl;
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
