@@ -41,7 +41,6 @@ set(SOURCES
 # Executável principal
 add_executable(main
     main.cpp
-    
     ${SOURCES}
 )
 

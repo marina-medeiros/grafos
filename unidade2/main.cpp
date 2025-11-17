@@ -1,16 +1,4 @@
-#include <map>
-#include <set>
-#include <stack>
-#include <utility> 
-#include <vector>
-#include <algorithm>
 #include <iostream>
-#include "../final/headers/busca-profundidade.h"
-#include "../final/headers/Grafo.h"
-#include "../final/headers/GrafoListaAdj.h"
-#include "../final/headers/GrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoListaAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
@@ -209,17 +197,18 @@ void agm_chuliu(){
 
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
-    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
     dijkstra_especifico(grafo_dijkstra, 1, 6);
 
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj digrafo_dijkstra(0);
     digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
     dijkstra_geral(digrafo_dijkstra, 0);
 
-    std::cout << "------------------ Questão do trabalho --------------------------------------" << std::endl;
+    std::cout << "------------------ Questão do trabalho --------------------------------------\n" << std::endl;
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
@@ -259,7 +248,7 @@ void caminho_minimo_floyd_warshall() {
     arvoreRecuperacaoCaminhoExemplo.exportar_para_dot_com_pesos(arq_dot_exemplo);
     gerar_imagem(arq_dot_exemplo, arq_png_exemplo);
 
-    std::cout << std::endl <<  "------------------ Digrafo do trabalho ------------------" << std::endl << std::endl;
+    std::cout << std::endl <<  "------------------ Questão do trabalho ------------------" << std::endl << std::endl;
     DigrafoMatrizAdj digrafo(0);
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     

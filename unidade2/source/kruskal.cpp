@@ -13,6 +13,16 @@
 #include "../../final/headers/arvore-busca.h"
 #include "../headers/arvore-minima.h"
 
+/**
+ * @brief Verifica se um grafo contém ciclo utilizando busca em profundidade.
+ *
+ * Usa a função recursiva de DFS em lista de adjacência para detectar a existência
+ * de arestas de retorno, que indicam um ciclo no grafo.
+ *
+ * @param grafo Grafo representado por lista de adjacência.
+ * @return true Se existe ciclo.
+ * @return false Se o grafo é acíclico.
+ */
 bool encontra_ciclo(const GrafoListaAdj& grafo){
     std::vector<std::pair<int, int>> arestas_retorno = busca_profundidade_lista_adj_recursiva(grafo, 0).second;
 
@@ -22,6 +32,18 @@ bool encontra_ciclo(const GrafoListaAdj& grafo){
     return false;
 }
 
+/**
+ * @brief Particiona vetor de arestas segundo o peso (QuickSort).
+ *
+ * Função auxiliar para o algoritmo QuickSort. Seleciona o último elemento como
+ * pivô e rearranja o vetor de forma que todos os pesos menores ou iguais ao pivô
+ * fiquem à esquerda, e os maiores à direita.
+ *
+ * @param arestas_e_pesos Vetor contendo arestas no formato {v1, v2, peso}.
+ * @param low Índice inicial da partição.
+ * @param high Índice final da partição.
+ * @return int Índice final do pivô após o particionamento.
+ */
 int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
     int pivot = arestas_e_pesos[high][2];
     int ii = (low - 1);
@@ -37,6 +59,16 @@ int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high)
     return(ii+1);
 }
 
+/**
+ * @brief Ordena vetor de arestas pelo peso usando QuickSort.
+ *
+ * Ordena todas as arestas no vetor com base no valor do peso,
+ * utilizando o algoritmo QuickSort clássico.
+ *
+ * @param arestas_e_pesos Vetor contendo as arestas no formato {v1, v2, peso}.
+ * @param low Índice inicial.
+ * @param high Índice final.
+ */
 void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
     if(low < high){
         int pi = partition(arestas_e_pesos, low, high);
@@ -45,6 +77,15 @@ void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, 
         quickSort_arestas(arestas_e_pesos, pi + 1, high);
     }
 }
+
+/**
+ * @brief Imprime as arestas ordenadas e seus pesos.
+ *
+ * Exibe as arestas no formato (v1, v2) juntamente com seus pesos,
+ * após a ordenação.
+ *
+ * @param arestas_e_pesos Vetor com as arestas ordenadas.
+ */
 
 void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "\nArestas ordenadas:\n";
@@ -72,6 +113,17 @@ void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
     std::cout << "----------------------------------" << std::endl;
 }
 
+/**
+ * @brief Extrai e ordena todas as arestas de um grafo.
+ *
+ * Lê a matriz de adjacência do grafo e monta um vetor contendo todas
+ * as arestas válidas (peso diferente de INF). Em seguida, ordena o vetor
+ * pelo peso utilizando QuickSort.
+ *
+ * @param grafo Grafo representado por matriz de adjacência.
+ * @param digrafo Indica se o grafo é direcionado (true) ou não (false).
+ * @return std::vector<std::vector<int>> Vetor de arestas no formato {v1, v2, peso}.
+ */
 std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo, bool digrafo){
     std::vector<std::vector<int>> arestas_e_pesos;
     std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
@@ -98,6 +150,19 @@ std::vector<std::vector<int>> ordenar_arestas(const GrafoMatrizAdj& grafo, bool 
     return arestas_e_pesos;
 }
 
+/**
+ * @brief Gera uma Árvore Geradora Mínima (AGM) utilizando o algoritmo de Kruskal.
+ *
+ * O algoritmo:
+ *  1. Cria uma cópia do grafo usando lista de adjacência (necessário para a função de ordenar arestas)
+ *  2. Ordena todas as arestas por peso.
+ *  3. Percorre as arestas da menor para a maior.
+ *  4. Insere a aresta na AGM se não formar ciclo.
+ *  5. Repete até obter (n - 1) arestas.
+ *
+ * @param grafoMatrizAdj Grafo original representado por matriz de adjacência.
+ * @return GrafoMatrizAdj A AGM resultante.
+ */
 GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     GrafoListaAdj grafoListaAdj = grafoMatrizAdj.converter_para_lista_adj();
 
