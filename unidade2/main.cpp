@@ -136,8 +136,18 @@ void agm_kruskal(){
 
     std::cout << "######################################################################################" << std::endl;
 
+    // Exemplo do pdf do trabalho como grafo não direcionado
+    GrafoMatrizAdj grafo_principal2(0);
+    grafo_principal2.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
+    gerar_imagem(grafo_principal2, "grafo_principal2", "matriz_adj");
+    // ----- Árvore mínima gerada:
+    GrafoMatrizAdj agm_kruskal_grafo2 =  gerar_agm_kruskal(grafo_principal2);
+    gerar_imagem(agm_kruskal_grafo2, "agm_principal_grafo2", "matriz_adj");
+
+    std::cout << "######################################################################################" << std::endl;
+
     // Exemplo do pdf do trabalho como dígrafo
-    DigrafoMatrizAdj digrafo_principal(0); 
+    DigrafoMatrizAdj digrafo_principal(0);
     DigrafoListaAdj digrafo_principal_lista(0); 
     digrafo_principal.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     digrafo_principal_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
@@ -164,7 +174,7 @@ void agm_prim(){
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_prim_digrafo =  prim(grafo);
-    analisar_e_gerar_imagem(agm_prim_digrafo, "grafo_principal_prim", "matriz_adj");
+    analisar_e_gerar_imagem(agm_prim_digrafo, "agm_grafo_principal_prim", "matriz_adj");
     
 }
 
@@ -184,7 +194,7 @@ void agm_boruvka(){
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_boruvka_digrafo =  boruvka(grafo);
-    analisar_e_gerar_imagem(agm_boruvka_digrafo, "grafo_principal_boruvka", "matriz_adj");
+    analisar_e_gerar_imagem(agm_boruvka_digrafo, "agm_grafo_principal_boruvka", "matriz_adj");
 }
 
 void caminho_minimo_dijkstra(){

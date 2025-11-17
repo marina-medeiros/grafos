@@ -62,7 +62,7 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
             for (int v = u + 1; v < qtd_vertices; v++) { 
                 int w = grafoMatrizAdj.get_matriz_adj()[u][v];
 
-                if (w == 0 || w == INF) {
+                if (w == INF) {
                     continue; 
                 }
 
