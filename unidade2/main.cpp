@@ -1,28 +1,21 @@
-#include <map>
-#include <set>
-#include <stack>
-#include <utility> 
-#include <vector>
-#include <algorithm>
 #include <iostream>
-#include "../final/headers/busca-profundidade.h"
-#include "../final/headers/Grafo.h"
-#include "../final/headers/GrafoListaAdj.h"
-#include "../final/headers/GrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoListaAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
 #include "headers/dijkstra.h"
 #include "headers/prim.h"
 #include "headers/boruvka.h"
+#include "headers/floyd-warshall.h"
+#include "headers/hierholzer.h"
 
 void agm_kruskal();
-void caminho_minimo_dijkstra();
-void caminho_minimo_bellmanford();
 void agm_prim();
 void agm_boruvka();
+void caminho_minimo_dijkstra();
+void caminho_minimo_bellmanford();
+void caminho_minimo_floyd_warshall();
+void hierholzer_ciclos();
+void hierholzer_caminhos();
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -102,6 +95,16 @@ int main(){
             break;
         case 6:
             caminho_minimo_bellmanford();
+            break;
+        case 7:
+            caminho_minimo_floyd_warshall();
+            break;
+        case 8:
+            hierholzer_ciclos();
+            break;
+        case 9:
+            hierholzer_caminhos();
+            break;
         default:
             break;
         }
@@ -111,67 +114,45 @@ int main(){
 
 void agm_kruskal(){
     //Exemplo dos slides
+    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
     GrafoMatrizAdj grafo_kruskal(0);
     grafo_kruskal.carregar_de_arquivo_numeros("../dados/GRAFO_KRUSKAL.txt");
-    gerar_imagem(grafo_kruskal, "grafo_slides_kruskal", "matriz_adj");
+    gerar_imagem(grafo_kruskal, "KRUSKAL_slides", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal = gerar_agm_kruskal(grafo_kruskal);
-    gerar_imagem(agm_kruskal, "agm_slides_kruskal", "matriz_adj");
+    gerar_imagem(agm_kruskal, "KRUSKAL_AGM_slides", "matriz_adj");
 
-    std::cout << "######################################################################################" << std::endl;
 
+    std::cout << "------------------ Questão do trabalho --------------------------------------" << std::endl;
     // Exemplo do pdf do trabalho como grafo não direcionado
     GrafoMatrizAdj grafo_principal(0); 
     grafo_principal.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
-    gerar_imagem(grafo_principal, "grafo_principal", "matriz_adj");
+    gerar_imagem(grafo_principal, "KRUSKAL_pdf", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_kruskal_grafo =  gerar_agm_kruskal(grafo_principal);
-    gerar_imagem(agm_kruskal_grafo, "agm_principal_grafo", "matriz_adj");
-
-    std::cout << "######################################################################################" << std::endl;
-
-    // Exemplo do pdf do trabalho como grafo não direcionado
-    GrafoMatrizAdj grafo_principal2(0);
-    grafo_principal2.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
-    gerar_imagem(grafo_principal2, "grafo_principal2", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    GrafoMatrizAdj agm_kruskal_grafo2 =  gerar_agm_kruskal(grafo_principal2);
-    gerar_imagem(agm_kruskal_grafo2, "agm_principal_grafo2", "matriz_adj");
-
-    std::cout << "######################################################################################" << std::endl;
-
-    // Exemplo do pdf do trabalho como dígrafo
-    DigrafoMatrizAdj digrafo_principal(0);
-    DigrafoListaAdj digrafo_principal_lista(0); 
-    digrafo_principal.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
-    digrafo_principal_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
-    gerar_imagem(digrafo_principal_lista, "digrafo_principal", "matriz_adj");
-    // ----- Árvore mínima gerada:
-    DigrafoMatrizAdj agm_kruskal_digrafo =  gerar_agm_kruskal_digrafo(digrafo_principal, digrafo_principal_lista);
-    gerar_imagem(agm_kruskal_digrafo, "agm_principal_digrafo", "matriz_adj");
-
+    gerar_imagem(agm_kruskal_grafo, "KRUSKAL_AGM_pdf", "matriz_adj");
 }
 
 void agm_prim(){
     // Exemplos dos slides
     std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
     GrafoMatrizAdj grafo_prim(0);
-    grafo_prim.carregar_de_arquivo("../dados/GRAFO_PRIM.txt");
+    grafo_prim.carregar_de_arquivo_numeros("../dados/GRAFO_PRIM.txt");
     analisar_e_gerar_imagem(grafo_prim, "grafo_slides_prim", "matriz_adj");
-    //grafo_prim.print();
+    
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_prim = prim(grafo_prim);
-    analisar_e_gerar_imagem(agm_prim, "agm_slides_prim", "matriz_adj");
+    gerar_imagem(agm_prim, "agm_slides_prim", "matriz_adj");
 
     std::cout << "######################################################################################" << std::endl;
 
     // Exemplo do pdf do trabalho
     GrafoMatrizAdj grafo(0); 
-    grafo.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
+    grafo.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_prim_digrafo =  prim(grafo);
-    analisar_e_gerar_imagem(agm_prim_digrafo, "agm_grafo_principal_prim", "matriz_adj");
+    gerar_imagem(agm_prim_digrafo, "agm_grafo_principal_prim", "matriz_adj");
     
 }
 
@@ -179,39 +160,39 @@ void agm_boruvka(){
     // Exemplos dos slides
     std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
     GrafoMatrizAdj grafo_boruvka(0);
-    grafo_boruvka.carregar_de_arquivo("../dados/GRAFO_BORUVKA.txt");
+    grafo_boruvka.carregar_de_arquivo_numeros("../dados/GRAFO_BORUVKA.txt");
     analisar_e_gerar_imagem(grafo_boruvka, "grafo_slides_boruvka", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_boruvka = boruvka(grafo_boruvka);
-    analisar_e_gerar_imagem(agm_boruvka, "agm_slides_boruvka", "matriz_adj");
+    gerar_imagem(agm_boruvka, "agm_slides_boruvka", "matriz_adj");
 
     
     std::cout << "######################################################################################" << std::endl;
 
     // Exemplo do pdf do trabalho
     GrafoMatrizAdj grafo(0); 
-    grafo.carregar_de_arquivo("../dados/GRAFO_LISTA.txt");
+    grafo.carregar_de_arquivo_numeros("../dados/GRAFO_LISTA.txt");
     analisar_e_gerar_imagem(grafo, "grafo_principal", "matriz_adj");
     // ----- Árvore mínima gerada:
     GrafoMatrizAdj agm_boruvka_digrafo =  boruvka(grafo);
-    analisar_e_gerar_imagem(agm_boruvka_digrafo, "agm_grafo_principal_boruvka", "matriz_adj");
-
+    gerar_imagem(agm_boruvka_digrafo, "agm_grafo_principal_boruvka", "matriz_adj");
     
 }
 
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
-    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
-    dijkstra_especifico(grafo_dijkstra, 0, 6);
+    dijkstra_especifico(grafo_dijkstra, 1, 6);
 
+    std::cout << "------------------ Exemplo dos slides --------------------------------------\n" << std::endl;
     DigrafoMatrizAdj digrafo_dijkstra(0);
     digrafo_dijkstra.carregar_de_arquivo_numeros("../dados/DIGRAFO_DIJKSTRA.txt");
     dijkstra_geral(digrafo_dijkstra, 0);
-    dijkstra_especifico(digrafo_dijkstra, 0, 5);
 
+    std::cout << "------------------ Questão do trabalho --------------------------------------\n" << std::endl;
     // Exemplo do pdf do trabalho
     DigrafoMatrizAdj digrafo(0); 
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
@@ -226,4 +207,70 @@ void caminho_minimo_bellmanford(){
     //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
+}
+
+void caminho_minimo_floyd_warshall() {
+    std::cout << "------------------ FLOYD-WARSHALL --------------------------------------" << std::endl << std::endl;
+
+    std::cout << "------------------ Exemplo dos slides ------------------" << std::endl << std::endl;
+    DigrafoMatrizAdj digrafo_floyd_warshall(0);
+    digrafo_floyd_warshall.carregar_de_arquivo("../dados/DIGRAFO_FLOYD_WARSHALL.txt");
+    
+    ResultadoFloydWarshall resultado_exemplo = floyd_warshall(digrafo_floyd_warshall);
+    auto rotulos_digrafo_exemplo = digrafo_floyd_warshall.get_rotulos();
+
+    imprimirMatrizDistancias(resultado_exemplo.dist, rotulos_digrafo_exemplo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado_exemplo.pred, rotulos_digrafo_exemplo);
+
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a A" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminhoExemplo = gerarArvoreCaminhos(0, resultado_exemplo, digrafo_floyd_warshall);
+    
+    std::string arq_dot_exemplo =  "digrafo_exemplo_floyd_warshall.dot";
+    std::string arq_png_exemplo = "digrafo_exemplo_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png_exemplo << "'...\n\n";
+    arvoreRecuperacaoCaminhoExemplo.exportar_para_dot_com_pesos(arq_dot_exemplo);
+    gerar_imagem(arq_dot_exemplo, arq_png_exemplo);
+
+    std::cout << std::endl <<  "------------------ Questão do trabalho ------------------" << std::endl << std::endl;
+    DigrafoMatrizAdj digrafo(0);
+    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    
+    ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
+    auto rotulos_digrafo = digrafo.get_rotulos();
+
+    imprimirMatrizDistancias(resultado.dist, rotulos_digrafo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado.pred, rotulos_digrafo);
+
+    std::cout << std::endl << "A menor distância de 1 para 15 é: " <<  resultado.dist[0][14] << std::endl;
+    
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a 1" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminho = gerarArvoreCaminhos(0, resultado, digrafo);
+    
+    std::string arq_dot =  "digrafo_principal_floyd_warshall.dot";
+    std::string arq_png = "digrafo_principal_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
+    arvoreRecuperacaoCaminho.exportar_para_dot_com_pesos(arq_dot);
+    gerar_imagem(arq_dot, arq_png);
+}
+
+void hierholzer_ciclos() {
+    std::cout << "------------------ HIERHOLZER (CICLOS) --------------------------------------" << std::endl;
+    std::cout << std::endl <<  "------------------ Digrafo para ciclos ------------------" << std::endl;
+    DigrafoListaAdj digrafo_lista(0); 
+    digrafo_lista.carregar_de_arquivo("../dados/DIGRAFO_HIERHOLZER_CICLOS.txt");
+    digrafo_lista.print();
+    hierholzer_digrafo(digrafo_lista);
+}
+
+void hierholzer_caminhos() {
+    std::cout << "------------------ HIERHOLZER (CAMINHOS) --------------------------------------" << std::endl;
+    std::cout << std::endl <<  "------------------ Grafo para caminhos ------------------" << std::endl;
+    GrafoListaAdj grafo_lista(0); 
+    grafo_lista.carregar_de_arquivo("../dados/GRAFO_HIERHOLZER_CAMINHOS.txt");
+    grafo_lista.print();
+    hierholzer_grafo(grafo_lista);
 }
