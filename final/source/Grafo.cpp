@@ -294,7 +294,7 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     }
 
     for (int i = 0; i < qtd_vertices; i++) {
-        if(rotulos.at(i).empty()){
+        if(rotulos.at(i).empty() || rotulos.at(0) == "0"){
             file << "    " << i << " [label=\"" << i+1 << "\"];\n";
         }else{
             file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
