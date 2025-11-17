@@ -6,18 +6,35 @@
 #include <set>
 #include <algorithm>
 #include <numeric>
-
 #include "../headers/DigrafoListaAdjPonderada.h"
 
+/**
+ * @brief Estrutura auxiliar para representar uma aresta ponderada.
+ *
+ * Armazena a origem, destino e peso de uma aresta.
+ * Criada para facilitar maninupalacao interna, sem necessitar acessar e modificar a estrutura do grafo principal
+ *
+ * Inicializa a aresta com um peso infinito (max_int)
+ */
 struct Aresta {
-    int u, v, peso;
+    int origem, destino, peso;
     Aresta(int u = -1, int v = -1, int p = std::numeric_limits<int>::max())
-        : u(u), v(v), peso(p) {}
+        : origem(u), destino(v), peso(p) {}
 };
 
 using MapaArestas = std::map<std::pair<int, int>, std::pair<int, int>>;
 
-
+/**
+ * @brief Detecta um ciclo no grafo formado pelas arestas de menor custo.
+ *
+ * Se um nó já visitado na chamada atual for encontrado, um ciclo é
+ * identificado e seus nós são retornados.
+ *
+ * @param aresta_min Vetor com a aresta de entrada de menor custo para cada nó.
+ * @param raiz O nó raiz
+ * @param n O número total de vértices.
+ * @return Uma lista com os nós do ciclo, ou uma lista vazia se não houver ciclo.
+ */
 static std::list<int> detetar_ciclo(const std::vector<Aresta>& aresta_min, int raiz, int n) {
     std::vector<int> visitado(n, -1);
     int visita_atual = 0;
@@ -34,23 +51,38 @@ static std::list<int> detetar_ciclo(const std::vector<Aresta>& aresta_min, int r
                 int no_ciclo = atual;
                 do {
                     ciclo.push_back(no_ciclo);
-                    no_ciclo = aresta_min[no_ciclo].u;
+                    no_ciclo = aresta_min[no_ciclo].origem;
                 } while (no_ciclo != atual);
                 return ciclo;
             }
             if (visitado[atual] == -2) break;
             visitado[atual] = visita_atual;
-            atual = aresta_min[atual].u;
+            atual = aresta_min[atual].origem;
         }
         atual = i;
         while (atual != -1 && atual != raiz && visitado[atual] == visita_atual) {
             visitado[atual] = -2;
-            atual = aresta_min[atual].u;
+            atual = aresta_min[atual].origem;
         }
     }
     return {}; 
 }
 
+/**
+ * @brief Função recursiva que implementa a lógica central de Chu-Liu/Edmonds.
+ *
+ * Executa os passos:
+ * 1. encontra o conjunto de arestas de entrada de menor custo.
+ * 2. verifica se este conjunto forma um ciclo.
+ * 3. se não houver ciclo, retorna o conjunto como a arborescencia.
+ * 4. se houver ciclo (passo recursivo), contrai o ciclo, recalculando os pesos, e chama a recursão sobre o grafo contraído.
+ * 5. expande a arborescencia resultante para formar o resultado final.
+ *
+ * @param digrafo O grafo que será processado.
+ * @param raiz O nó raiz para essa iteração.
+ * @param arestas_contraidas Mapa que rastreia a correspondencia entre arestas contraídas e originais.
+ * @return Uma lista de Aresta (auxiliar) representando a arborescencia.
+ */
 static std::list<Aresta> chu_liu_recursivo(const DigrafoListaAdjPonderada& digrafo, int raiz, MapaArestas& arestas_contraidas) {
     int n = digrafo.get_qtd_vertices();
     if (n <= 0) return {};
@@ -70,7 +102,7 @@ static std::list<Aresta> chu_liu_recursivo(const DigrafoListaAdjPonderada& digra
                 aresta_min[j] = aresta;
             }
         }
-        if (aresta_min[j].u == -1) {
+        if (aresta_min[j].origem == -1) {
             return {};
         }
     }
@@ -117,15 +149,13 @@ static std::list<Aresta> chu_liu_recursivo(const DigrafoListaAdjPonderada& digra
             if (novo_i == novo_u) continue;
             if (novo_u == temp) { 
                 int novo_peso = peso_original - (aresta_min[u].peso - custo_min);
-                if (!digrafo_contraido.existe_aresta(novo_i, novo_u) || novo_peso < digrafo_contraido.get_peso(novo_i, novo_u)) 
-                {
+                if (!digrafo_contraido.existe_aresta(novo_i, novo_u) || novo_peso < digrafo_contraido.get_peso(novo_i, novo_u)) {
                     digrafo_contraido.remover_aresta(novo_i, novo_u); 
                     digrafo_contraido.inserir_aresta(novo_i, novo_u, novo_peso);
                     arestas_contraidas[{novo_i, novo_u}] = {i, u}; 
                 }
             } else { 
-               if (!digrafo_contraido.existe_aresta(novo_i, novo_u) || peso_original < digrafo_contraido.get_peso(novo_i, novo_u)) 
-                {
+               if (!digrafo_contraido.existe_aresta(novo_i, novo_u) || peso_original < digrafo_contraido.get_peso(novo_i, novo_u)) {
                     digrafo_contraido.remover_aresta(novo_i, novo_u);
                     digrafo_contraido.inserir_aresta(novo_i, novo_u, peso_original);
                     arestas_contraidas[{novo_i, novo_u}] = {i, u};
@@ -133,31 +163,43 @@ static std::list<Aresta> chu_liu_recursivo(const DigrafoListaAdjPonderada& digra
             }
         }
     }
-
     std::list<Aresta> arvore_contraida = chu_liu_recursivo(digrafo_contraido, raiz, arestas_contraidas);
     std::list<Aresta> arvore;
     Aresta aresta_entrada;
 
     for (const auto& aresta : arvore_contraida) {
-        if (arestas_contraidas.find({aresta.u, aresta.v}) == arestas_contraidas.end()) {
+        if (arestas_contraidas.find({aresta.origem, aresta.destino}) == arestas_contraidas.end()) {
              continue;
         }
-        auto par_original = arestas_contraidas.at({aresta.u, aresta.v});
+        auto par_original = arestas_contraidas.at({aresta.origem, aresta.destino});
         Aresta aresta_original(par_original.first, par_original.second, digrafo.get_peso(par_original.first, par_original.second));
         arvore.push_back(aresta_original);
-        if (nos_ciclo.count(aresta_original.v)) {
+        if (nos_ciclo.count(aresta_original.destino)) {
             aresta_entrada = aresta_original;
         }
     }
 
     for (int c : ciclo) {
-        if (aresta_min[c].v != aresta_entrada.v) {
+        if (aresta_min[c].destino != aresta_entrada.destino) {
             arvore.push_back(aresta_min[c]);
         }
     }
     return arvore;
 }
 
+/**
+ * @brief Função responsável por inicializar o processo
+ *
+ * Inicializa o processo, chamando a função 'chu_liu_recursivo' para
+ * obter a lista de arestas, depois constrói o grafo da (AGM) a partir dessa lista.
+ *
+ * A função também imprime o resultado (arestas e custo total) no console.
+ *
+ * @param grafo O digrafo ponderado de entrada.
+ * @param raiz O índice do nó de origem (raiz) da arborescência.
+ * @return Um novo 'DigrafoListaAdjPonderada' contendo a arborescência.
+ * Retorna um grafo vazio se nenhuma arborescência for encontrada.
+ */
 DigrafoListaAdjPonderada chu_liu(const DigrafoListaAdjPonderada& grafo, int raiz) {
 
     DigrafoListaAdjPonderada agm(grafo.get_qtd_vertices());
@@ -179,9 +221,9 @@ DigrafoListaAdjPonderada chu_liu(const DigrafoListaAdjPonderada& grafo, int raiz
 
         int custo = 0;
         for (const auto& aresta : arestas_agm) {
-            std::cout << "  (" << aresta.u+1 << " -> " << aresta.v+1 << ") com peso: " << aresta.peso << std::endl;
+            std::cout << "  (" << aresta.origem+1 << " -> " << aresta.destino+1 << ") com peso: " << aresta.peso << std::endl;
             custo += aresta.peso;
-            agm.inserir_aresta(aresta.u, aresta.v, aresta.peso);
+            agm.inserir_aresta(aresta.origem, aresta.destino, aresta.peso);
         }
 
         std::cout << "------------------------------------------------\n";
