@@ -19,10 +19,12 @@
 #include "headers/boruvka.h"
 #include "headers/floyd-warshall.h"
 #include "headers/hierholzer.h"
+#include "headers/chuliu.h"
 
 void agm_kruskal();
 void agm_prim();
 void agm_boruvka();
+void agm_chuliu();
 void caminho_minimo_dijkstra();
 void caminho_minimo_bellmanford();
 void caminho_minimo_floyd_warshall();
@@ -101,6 +103,9 @@ int main(){
             break;
         case 3:
             agm_boruvka();
+            break;
+        case 4:
+            agm_chuliu();
             break;
         case 5:
             caminho_minimo_dijkstra();
@@ -184,6 +189,24 @@ void agm_boruvka(){
     analisar_e_gerar_imagem(agm_boruvka_digrafo, "agm_grafo_principal_boruvka", "matriz_adj");
 }
 
+void agm_chuliu(){
+    std::cout << "------------------ CHU-LIU EDMONDS --------------------------------------" << std::endl;
+
+    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
+    DigrafoListaAdjPonderada grafo_chuliu(0);
+    grafo_chuliu.carregar_de_arquivo_numeros("../dados/DIGRAFO_CHU_SLIDE.txt");
+    analisar_e_gerar_imagem(grafo_chuliu, "grafo_chu_slide", "lista_adj",true);
+    DigrafoListaAdjPonderada agm_chuliu = chu_liu(grafo_chuliu,0);
+    analisar_e_gerar_imagem(agm_chuliu, "agm_grafo_chu_slide", "lista_adj",true);
+
+    std::cout << "------------------ Questão do trabalho --------------------------------------" << std::endl;
+    DigrafoListaAdjPonderada grafo_chuliu_pdf(0);
+    grafo_chuliu_pdf.carregar_de_arquivo_numeros("../dados/DIGRAFO_CHU.txt");
+    analisar_e_gerar_imagem(grafo_chuliu_pdf, "grafo_chu", "lista_adj",true);
+    DigrafoListaAdjPonderada agm_chuliu_pdf = chu_liu(grafo_chuliu_pdf,0);
+    analisar_e_gerar_imagem(agm_chuliu_pdf, "agm_grafo_chu", "lista_adj",true);
+}
+
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
     std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
@@ -208,7 +231,6 @@ void caminho_minimo_bellmanford(){
     std::cout << "------------------ BELLMAN-FORD --------------------------------------" << std::endl;
     DigrafoListaAdjPonderada digrafo_lista(0); 
     digrafo_lista.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
-    //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
 }
