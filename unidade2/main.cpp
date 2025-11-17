@@ -18,13 +18,16 @@
 #include "headers/prim.h"
 #include "headers/boruvka.h"
 #include "headers/floyd-warshall.h"
+#include "headers/hierholzer.h"
 
 void agm_kruskal();
+void agm_prim();
+void agm_boruvka();
 void caminho_minimo_dijkstra();
 void caminho_minimo_bellmanford();
 void caminho_minimo_floyd_warshall();
-void agm_prim();
-void agm_boruvka();
+void hierholzer_ciclos();
+void hierholzer_caminhos();
 
 void analisar_e_gerar_imagem(Grafo& grafo, const std::string& nome_arquivo, const std::string& tipo_impl, bool eh_digrafo = false) {
     std::cout << "\n\nAnálise do " << nome_arquivo << std::endl;
@@ -107,6 +110,12 @@ int main(){
             break;
         case 7:
             caminho_minimo_floyd_warshall();
+            break;
+        case 8:
+            hierholzer_ciclos();
+            break;
+        case 9:
+            hierholzer_caminhos();
             break;
         default:
             break;
@@ -272,4 +281,22 @@ void caminho_minimo_floyd_warshall() {
     std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
     arvoreRecuperacaoCaminho.exportar_para_dot_com_pesos(arq_dot);
     gerar_imagem(arq_dot, arq_png);
+}
+
+void hierholzer_ciclos() {
+    std::cout << "------------------ HIERHOLZER (CICLOS) --------------------------------------" << std::endl;
+    std::cout << std::endl <<  "------------------ Digrafo para ciclos ------------------" << std::endl;
+    DigrafoListaAdj digrafo_lista(0); 
+    digrafo_lista.carregar_de_arquivo("../dados/DIGRAFO_HIERHOLZER_CICLOS.txt");
+    digrafo_lista.print();
+    hierholzer_digrafo(digrafo_lista);
+}
+
+void hierholzer_caminhos() {
+    std::cout << "------------------ HIERHOLZER (CAMINHOS) --------------------------------------" << std::endl;
+    std::cout << std::endl <<  "------------------ Grafo para caminhos ------------------" << std::endl;
+    GrafoListaAdj grafo_lista(0); 
+    grafo_lista.carregar_de_arquivo("../dados/GRAFO_HIERHOLZER_CAMINHOS.txt");
+    grafo_lista.print();
+    hierholzer_grafo(grafo_lista);
 }
