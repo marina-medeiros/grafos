@@ -22,15 +22,6 @@ bool encontra_ciclo(const GrafoListaAdj& grafo){
     return false;
 }
 
-bool encontra_ciclo_digrafo(DigrafoListaAdj &grafo){
-    ArvoreBusca arvore = busca_profundidade_digrafo_completa(grafo, 0);
-
-    if((arvore.get_arestas_retorno()).size() > 0){
-        return true;
-    }
-    return false;
-}
-
 int partition(std::vector<std::vector<int>> &arestas_e_pesos, int low, int high){
     int pivot = arestas_e_pesos[high][2];
     int ii = (low - 1);
@@ -56,7 +47,7 @@ void quickSort_arestas(std::vector<std::vector<int>> &arestas_e_pesos, int low, 
 }
 
 void imprimir_arestas_ordenadas(std::vector<std::vector<int>>& arestas_e_pesos){
-    std::cout << "Arestas ordenadas:" << std::endl;
+    std::cout << "\nArestas ordenadas:\n";
     std::cout << "----------------------------------" << std::endl;
     std::cout << "índice  |  (v1, v2)   | peso " << std::endl;
     for(int ii = 0; ii < (int)arestas_e_pesos.size(); ii++){
@@ -138,32 +129,3 @@ GrafoMatrizAdj gerar_agm_kruskal(const GrafoMatrizAdj& grafoMatrizAdj){
     return agm_matriz_adj;
 }
 
-DigrafoMatrizAdj gerar_agm_kruskal_digrafo(const DigrafoMatrizAdj& digrafoMatrizAdj, const DigrafoListaAdj& digrafoListaAdj){
-    int qtd_vertices = digrafoListaAdj.get_qtd_vertices();
-    int qtd_arestas = 0;
-    DigrafoMatrizAdj agm_matriz_adj(qtd_vertices);
-    DigrafoListaAdj agm_lista_adj(qtd_vertices);
-    
-    std::vector<std::vector<int>> arestas_ordenadas = ordenar_arestas(digrafoMatrizAdj, 1);
-
-    int indice_aresta = 0;
-    while(qtd_arestas < (qtd_vertices - 1) &&
-      indice_aresta < (int)arestas_ordenadas.size()){
-        std::vector<int> aresta = arestas_ordenadas[indice_aresta];
-
-        agm_lista_adj.inserir_aresta(aresta[0], aresta[1]);
-
-        if(encontra_ciclo_digrafo(agm_lista_adj)){
-            agm_lista_adj.remover_aresta(aresta[0], aresta[1]);
-        }else{
-            agm_matriz_adj.inserir_aresta(aresta[0], aresta[1], aresta[2]);
-            qtd_arestas++;
-        }
-        indice_aresta++;
-    }
-
-    std::cout << "Árvore Geradora Mínima do Grafo:" << std::endl;
-    ordenar_arestas(agm_matriz_adj, 1);
-
-    return agm_matriz_adj;
-}
