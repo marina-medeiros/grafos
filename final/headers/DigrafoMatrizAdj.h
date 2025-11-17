@@ -16,6 +16,8 @@ public:
 
     void inserir_aresta(int u, int v, int peso = 1) override;
     void remover_aresta(int u, int v) override;
+
+    void exportar_para_dot_com_pesos(const std::string& filename) const;
 };
 
 #endif

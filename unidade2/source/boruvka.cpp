@@ -90,6 +90,7 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
                 int u = cheapest[i][0];
                 int v = cheapest[i][1];
                 int w = cheapest[i][2];
+                if (u < 0 || v < 0) continue;
                 int set1 = find_set(u, parent);
                 int set2 = find_set(v, parent);
 

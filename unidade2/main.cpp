@@ -17,10 +17,12 @@
 #include "headers/dijkstra.h"
 #include "headers/prim.h"
 #include "headers/boruvka.h"
+#include "headers/floyd-warshall.h"
 
 void agm_kruskal();
 void caminho_minimo_dijkstra();
 void caminho_minimo_bellmanford();
+void caminho_minimo_floyd_warshall();
 void agm_prim();
 void agm_boruvka();
 
@@ -102,6 +104,10 @@ int main(){
             break;
         case 6:
             caminho_minimo_bellmanford();
+            break;
+        case 7:
+            caminho_minimo_floyd_warshall();
+            break;
         default:
             break;
         }
@@ -193,7 +199,7 @@ void agm_boruvka(){
 
 void caminho_minimo_dijkstra(){
     // Exemplos dos slides
-    std::cout << "------------------ exemplo dos slides --------------------------------------" << std::endl;
+    std::cout << "------------------ Exemplo dos slides --------------------------------------" << std::endl;
     DigrafoMatrizAdj grafo_dijkstra(0);
     grafo_dijkstra.carregar_de_arquivo_numeros("../dados/GRAFO_DIJKSTRA.txt");
     dijkstra_geral(grafo_dijkstra, 0);
@@ -218,4 +224,52 @@ void caminho_minimo_bellmanford(){
     //analisar_e_gerar_imagem(digrafo_sem_ciclo, "digrafo_sem_ciclo", "matriz_adj", true); 
     bellman_ford_geral(digrafo_lista, 0);
     bellman_ford_especifico(digrafo_lista, 0, 14);
+}
+
+void caminho_minimo_floyd_warshall() {
+    std::cout << "------------------ FLOYD-WARSHALL --------------------------------------" << std::endl << std::endl;
+
+    std::cout << "------------------ Exemplo dos slides ------------------" << std::endl << std::endl;
+    DigrafoMatrizAdj digrafo_floyd_warshall(0);
+    digrafo_floyd_warshall.carregar_de_arquivo("../dados/DIGRAFO_FLOYD_WARSHALL.txt");
+    
+    ResultadoFloydWarshall resultado_exemplo = floyd_warshall(digrafo_floyd_warshall);
+    auto rotulos_digrafo_exemplo = digrafo_floyd_warshall.get_rotulos();
+
+    imprimirMatrizDistancias(resultado_exemplo.dist, rotulos_digrafo_exemplo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado_exemplo.pred, rotulos_digrafo_exemplo);
+
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a A" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminhoExemplo = gerarArvoreCaminhos(0, resultado_exemplo, digrafo_floyd_warshall);
+    
+    std::string arq_dot_exemplo =  "digrafo_exemplo_floyd_warshall.dot";
+    std::string arq_png_exemplo = "digrafo_exemplo_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png_exemplo << "'...\n\n";
+    arvoreRecuperacaoCaminhoExemplo.exportar_para_dot_com_pesos(arq_dot_exemplo);
+    gerar_imagem(arq_dot_exemplo, arq_png_exemplo);
+
+    std::cout << std::endl <<  "------------------ Digrafo do trabalho ------------------" << std::endl << std::endl;
+    DigrafoMatrizAdj digrafo(0);
+    digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
+    
+    ResultadoFloydWarshall resultado = floyd_warshall(digrafo);
+    auto rotulos_digrafo = digrafo.get_rotulos();
+
+    imprimirMatrizDistancias(resultado.dist, rotulos_digrafo);
+    std::cout << std::endl;
+    imprimirMatrizPredecessores(resultado.pred, rotulos_digrafo);
+
+    std::cout << std::endl << "A menor distância de 1 para 15 é: " <<  resultado.dist[0][14] << std::endl;
+    
+    std::cout << std::endl << "Gerando árvore de caminhos mais curtos considerando a raiz igual a 1" << std::endl;
+    DigrafoMatrizAdj arvoreRecuperacaoCaminho = gerarArvoreCaminhos(0, resultado, digrafo);
+    
+    std::string arq_dot =  "digrafo_principal_floyd_warshall.dot";
+    std::string arq_png = "digrafo_principal_floyd_warshall.png";
+    
+    std::cout << "Gerando imagem em '" << arq_png << "'...\n\n";
+    arvoreRecuperacaoCaminho.exportar_para_dot_com_pesos(arq_dot);
+    gerar_imagem(arq_dot, arq_png);
 }
