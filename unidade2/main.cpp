@@ -1,16 +1,4 @@
-#include <map>
-#include <set>
-#include <stack>
-#include <utility> 
-#include <vector>
-#include <algorithm>
 #include <iostream>
-#include "../final/headers/busca-profundidade.h"
-#include "../final/headers/Grafo.h"
-#include "../final/headers/GrafoListaAdj.h"
-#include "../final/headers/GrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoMatrizAdj.h"
-#include "../../final/headers/DigrafoListaAdj.h"
 #include "headers/arvore-minima.h"
 #include "headers/bellmanford.h"
 #include "headers/kruskal.h"
@@ -238,7 +226,7 @@ void caminho_minimo_floyd_warshall() {
     arvoreRecuperacaoCaminhoExemplo.exportar_para_dot_com_pesos(arq_dot_exemplo);
     gerar_imagem(arq_dot_exemplo, arq_png_exemplo);
 
-    std::cout << std::endl <<  "------------------ Digrafo do trabalho ------------------" << std::endl << std::endl;
+    std::cout << std::endl <<  "------------------ Questão do trabalho ------------------" << std::endl << std::endl;
     DigrafoMatrizAdj digrafo(0);
     digrafo.carregar_de_arquivo_numeros("../dados/DIGRAFO_LISTA.txt");
     

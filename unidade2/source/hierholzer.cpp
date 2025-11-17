@@ -87,8 +87,13 @@ void hierholzer_grafo(const GrafoListaAdj& grafo) {
   std::cout << "Resultado: ";
 
   auto rotulos_grafo = grafo.get_rotulos();
+  bool primeiro = true;
   for (int v : L) {
-      std::cout << rotulos_grafo.at(v) << " ";
+      if (!primeiro) {
+          std::cout << " -> ";
+      }
+      std::cout << rotulos_grafo.at(v);
+      primeiro = false;
   }
   std::cout << std::endl;
 }
@@ -187,8 +192,13 @@ void hierholzer_digrafo(const DigrafoListaAdj& digrafo) {
   std::cout << "Resultado: ";
 
   auto rotulos_digrafo = digrafo.get_rotulos();
+  bool primeiro = true;
   for (int v : L) {
-      std::cout << rotulos_digrafo.at(v) << " ";
+      if (!primeiro) {
+          std::cout << " -> ";
+      }
+      std::cout << rotulos_digrafo.at(v);
+      primeiro = false;
   }
   std::cout << std::endl;
 }
