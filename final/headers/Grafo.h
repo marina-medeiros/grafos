@@ -38,7 +38,7 @@ public:
     int get_qtd_arestas() const { return qtd_arestas; }
     const std::vector<std::string>& get_rotulos() const { return rotulos; }
     void set_rotulos(const std::vector<std::string>& novos_rotulos) { rotulos = novos_rotulos; }
-
+    int get_indice_do_rotulo(const std::string& rotulo) const;
     virtual bool is_conexo();
     virtual bool is_bipartido();
     virtual void determinar_articulacoes_blocos_lowpt();
@@ -46,6 +46,8 @@ public:
     void carregar_de_arquivo(const std::string& filename);
     void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;
     virtual void print() const = 0;
+
+    void carregar_de_arquivo_numeros(const std::string& filename);
 };
 
     void gerar_imagem(const std::string& dotfile, const std::string& imgfile);

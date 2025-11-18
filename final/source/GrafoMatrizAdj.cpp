@@ -1,9 +1,12 @@
 #include <iostream>
 #include <queue>
 #include <fstream>
+#include <cstring>
 
 #include "../headers/GrafoListaAdj.h"
 #include "../headers/GrafoMatrizAdj.h"
+
+const int GrafoMatrizAdj::INF = std::numeric_limits<int>::max() / 2;
 
 /**
  * Construtor da classe GrafoMatrizAdj, inicializando o grafo com um número específico de vértices.
@@ -13,7 +16,7 @@
  *  Nenhum.
  */
 GrafoMatrizAdj::GrafoMatrizAdj(int vertices) : Grafo(vertices) {
-    matriz_adj.resize(vertices, std::vector<int>(vertices, 0));
+    matriz_adj.resize(vertices, std::vector<int>(vertices, INF));
 }
 
 /**
@@ -52,7 +55,7 @@ void GrafoMatrizAdj::inserir_vertice(const std::string& rotulo) {
     
     matriz_adj.resize(qtd_vertices);
     for (auto& row : matriz_adj) {
-        row.resize(qtd_vertices, 0);
+        row.resize(qtd_vertices, INF);
     }
 }
 
@@ -72,7 +75,7 @@ void GrafoMatrizAdj::remover_vertice(int u) {
     }
     
     for (int i = 0; i < qtd_vertices; ++i) {
-        if (matriz_adj[u][i] != 0) {
+        if (matriz_adj[u][i] != INF) {
             qtd_arestas--;
         }
     }
@@ -99,7 +102,7 @@ void GrafoMatrizAdj::remover_vertice(int u) {
  */
 void GrafoMatrizAdj::inserir_aresta(int u, int v, int peso) {
     if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
-        if (matriz_adj[u][v] == 0) {
+        if (matriz_adj[u][v] == INF) {
             qtd_arestas++;
         }
         matriz_adj[u][v] = peso;
@@ -119,11 +122,11 @@ void GrafoMatrizAdj::inserir_aresta(int u, int v, int peso) {
  */
 void GrafoMatrizAdj::remover_aresta(int u, int v) {
     if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
-        if (matriz_adj[u][v] != 0) {
+        if (matriz_adj[u][v] != INF) {
             qtd_arestas--;
         }
-        matriz_adj[u][v] = 0;
-        matriz_adj[v][u] = 0;
+        matriz_adj[u][v] = INF;
+        matriz_adj[v][u] = INF;
     }
 }
 
@@ -138,7 +141,7 @@ void GrafoMatrizAdj::remover_aresta(int u, int v) {
  */
 bool GrafoMatrizAdj::existe_aresta(int u, int v) const {
     if (u >= 0 && u < qtd_vertices && v >= 0 && v < qtd_vertices) {
-        return matriz_adj[u][v] != 0;
+        return matriz_adj[u][v] != INF;
     }
     return false;
 }
@@ -155,7 +158,7 @@ std::list<int> GrafoMatrizAdj::get_vizinhos(int v) const {
     std::list<int> vizinhos;
     if (v >= 0 && v < qtd_vertices) {
         for (int j = 0; j < qtd_vertices; ++j) {
-            if (matriz_adj[v][j] != 0) {
+            if (matriz_adj[v][j] != INF) {
                 vizinhos.push_back(j);
             }
         }
@@ -181,14 +184,26 @@ void GrafoMatrizAdj::print() const {
 
     std::cout << "\t";
     for (int i = 0; i < qtd_vertices; ++i) {
-        std::cout << rotulos.at(i) << "\t";
+        if (rotulos.at(i).empty()) {
+            std::cout << i << "\t";
+        }else{
+            std::cout << rotulos.at(i) << "\t";
+        }
     }
     std::cout << std::endl;
 
     for (int i = 0; i < qtd_vertices; ++i) {
-        std::cout << rotulos.at(i) << "\t";
+        if (rotulos.at(i).empty()) {
+            std::cout << i << "\t";
+        }else{
+            std::cout << rotulos.at(i) << "\t";
+        }
         for (int j = 0; j < qtd_vertices; ++j) {
-            std::cout << matriz_adj.at(i).at(j) << "\t";
+            if (matriz_adj.at(i).at(j) == INF) {
+                std::cout << "-\t"; 
+            } else {
+                std::cout << matriz_adj.at(i).at(j) << "\t";
+            }
         }
         std::cout << std::endl;
     }
@@ -208,7 +223,7 @@ GrafoListaAdj GrafoMatrizAdj::converter_para_lista_adj() const {
 
     for (int i = 0; i < qtd_vertices; i++) {
         for (int j = i + 1; j < qtd_vertices; j++) {
-            if (matriz_adj[i][j] != 0) {
+            if (matriz_adj[i][j] != INF) {
                 lista_adj.inserir_aresta(i, j, matriz_adj[i][j]);
             }
         }

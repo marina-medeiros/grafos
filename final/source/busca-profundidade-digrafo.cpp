@@ -14,14 +14,14 @@
  * Usa a lista de adjacência para realizar a busca.
  * 
  * Parâmetros:
- *   grafo - Referência ao digrafo representado por DigrafoListaAdj.
+ *   grafo - Referência ao digrafo.
  *   verticeInicial - Índice do vértice inicial para a DFS.
  * Retorno:
  *   Um par contendo:
  *     - Um mapa onde a chave é o índice do vértice e o valor é o índice do predecessor na árvore DFS.
  *     - Um vetor de pares representando as arestas de retorno (ciclos) encontradas durante a DFS.
  */
-ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int verticeInicial){
+ArvoreBusca busca_profundidade_digrafo_completa(Grafo& grafo, int verticeInicial){
     int qtd_vertices = grafo.get_qtd_vertices();
     std::vector<bool> visitado(qtd_vertices, false);
 
@@ -33,31 +33,29 @@ ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int vert
     int tempo1 = 0;
     int tempo2 = 0;
 
-    std::map<int, std::list<int>> lista_adj = grafo.get_lista_adj();
-
-    std::cout << "\n--- Iniciando Busca em Profundidade de um Digrafo (com análise de arestas) a partir de " << rotulos_grafo[verticeInicial]<< " ---\n";
+    //std::cout << "\n--- Iniciando Busca em Profundidade de um Digrafo (com análise de arestas) a partir de " << rotulos_grafo[verticeInicial]<< " ---\n";
     
-    busca_profundidade_digrafo_rec(verticeInicial, lista_adj, cores, arvore, tempo1, tempo2);
+    busca_profundidade_digrafo_rec(verticeInicial, grafo, cores, arvore, tempo1, tempo2);
    
     for(int i = 0; i < qtd_vertices; i++){
         if(cores[i] == Cor::BRANCO){
-            busca_profundidade_digrafo_rec(i, lista_adj, cores, arvore, tempo1, tempo2);
+            busca_profundidade_digrafo_rec(i, grafo, cores, arvore, tempo1, tempo2);
         }
     }
-    std::cout << "\n--- Fim da Execucao da DFS ---\n\n";
+    //std::cout << "\n--- Fim da Execucao da DFS ---\n\n";
     
     
 
-    std::cout << "----------------------------------------------------------------------\n";
-    std::cout << "Vertice | Predecessor | Tempo Entrada (PE) | Tempo Saida (PS)\n";
-    std::cout << "----------------------------------------------------------------------\n";
-    for(int i = 0; i < qtd_vertices; ++i) {
-        std::cout << std::setw(8) << std::left << rotulos_grafo[i] << "| "
-                  << std::setw(12) << std::left << (arvore.get_predecessores()[i] == -1 ? "Raiz" : rotulos_grafo[arvore.get_predecessores()[i]]) << "| "
-                  << std::setw(19) << std::left << arvore.get_tempo_entrada()[i] << "| "
-                  << std::setw(15) << std::left << arvore.get_tempo_saida()[i] << std::endl;
-    }
-    std::cout << "----------------------------------------------------------------------\n";
+    // std::cout << "----------------------------------------------------------------------\n";
+    // std::cout << "Vertice | Predecessor | Tempo Entrada (PE) | Tempo Saida (PS)\n";
+    // std::cout << "----------------------------------------------------------------------\n";
+    // for(int i = 0; i < qtd_vertices; ++i) {
+    //     std::cout << std::setw(8) << std::left << rotulos_grafo[i] << "| "
+    //               << std::setw(12) << std::left << (arvore.get_predecessores()[i] == -1 ? "Raiz" : rotulos_grafo[arvore.get_predecessores()[i]]) << "| "
+    //               << std::setw(19) << std::left << arvore.get_tempo_entrada()[i] << "| "
+    //               << std::setw(15) << std::left << arvore.get_tempo_saida()[i] << std::endl;
+    // }
+    // std::cout << "----------------------------------------------------------------------\n";
     return arvore;
 }
 
@@ -67,7 +65,7 @@ ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int vert
  * 
  * Parâmetros:
  *   ultimoVertice - Índice do vértice atualmente sendo visitado.
- *   lista_adj - Mapa representando a lista de adjacência do digrafo.
+ *   grago - Referência ao digrafo.
  *   cores - Vetor que mantém o estado de cada vértice (BRANCO, CINZA, PRETO).
  *   arvore - Objeto ArvoreBusca onde a estrutura da árvore DFS é armazenada.
  *   tempo1 - Referência para o contador de tempo de entrada.
@@ -76,7 +74,7 @@ ArvoreBusca busca_profundidade_digrafo_completa(DigrafoListaAdj& grafo, int vert
  *   Nenhum. A função modifica diretamente os parâmetros passados por referência.
  */
 void busca_profundidade_digrafo_rec(int ultimoVertice, 
-                                    std::map<int, std::list<int>>& lista_adj,
+                                    Grafo& grafo,
                                     std::vector<Cor>& cores,
                                     ArvoreBusca& arvore,
                                     int& tempo1, int& tempo2){
@@ -86,13 +84,13 @@ void busca_profundidade_digrafo_rec(int ultimoVertice,
 
     //std::cout << "Visitando vertice " << ultimoVertice << " [PE=" << arvore.get_tempo_entrada()[ultimoVertice] << "]\n";
     
-    for(int vizinho : lista_adj[ultimoVertice]) {
+    for(int vizinho : grafo.get_vizinhos(ultimoVertice)) {
         //std::cout << "  Aresta (" << ultimoVertice  << " -> " << vizinho << "): ";
 
         if (cores[vizinho] == Cor::BRANCO) {
             //std::cout << "ARESTA DE ARVORE\n";
             arvore.adicionar_predecessor(vizinho, ultimoVertice);
-            busca_profundidade_digrafo_rec(vizinho, lista_adj, cores, arvore, tempo1, tempo2);
+            busca_profundidade_digrafo_rec(vizinho, grafo, cores, arvore, tempo1, tempo2);
         }
         else if (cores[vizinho] == Cor::CINZA) {
            // std::cout << "ARESTA DE RETORNO (Ciclo detectado!)\n";

@@ -49,7 +49,6 @@ void menu() {
 }
 
 int main(){
-
     const std::map<std::string, std::string> arquivos = {
         {"1", "GRAFO_0.txt"}, {"grafo_0", "GRAFO_0.txt"},
         {"2", "GRAFO_1.txt"}, {"grafo_1", "GRAFO_1.txt"},
@@ -96,7 +95,6 @@ int main(){
 }
 
 void grafo(std::string txt){
-
     std::string caminho_arquivo = "../dados/" + txt;
     std::string nome_grafo = txt.substr(0, txt.find(".txt"));
 
@@ -340,7 +338,7 @@ void digrafo(std::string txt){
 
     // 20 - Busca em Profundidade (DFS) - Implementação para Digrafo
     std::cout << "\n20 - IMPLEMENTAÇÃO DIGRAFO: BUSCA EM PROFUNDIDADE (DFS)\n";
-    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_lista, 0);
+    auto arvore_dfs_digrafo = busca_profundidade_digrafo_completa(digrafo_matriz, 0);
     exportar_arvore_dfs_para_dot("ARVORE_DFS_"+nome_grafo+".dot", arvore_dfs_digrafo);
     gerar_imagem("ARVORE_DFS_"+nome_grafo+".dot", "ARVORE_DFS_"+nome_grafo+".png");
     

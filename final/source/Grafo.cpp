@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <string>
 #include <cstdlib>
 #include <cstdio>
 
@@ -171,8 +172,9 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     
     this->limpar();
     for (int i = 0; i < num_vertices_arquivo; ++i) {
-        this->inserir_vertice(); 
+        this->inserir_vertice(std::to_string(i)); 
     }
+    this->rotulos.resize(num_vertices_arquivo); 
 
     std::map<std::string, int> mapa_rotulos;
     int proximo_indice = 0;
@@ -184,10 +186,11 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         if (linha.empty()) continue;
 
         std::stringstream ss(linha);
-        std::string rotulo1_str, rotulo2_str;
+        std::string rotulo1_str, rotulo2_str, peso_str;
 
         std::getline(ss, rotulo1_str, ',');
-        std::getline(ss, rotulo2_str);
+        std::getline(ss, rotulo2_str, ',');
+        std::getline(ss, peso_str);
 
         int indice1, indice2;
 
@@ -208,10 +211,61 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
         } else {
             indice2 = mapa_rotulos[rotulo2_str];
         }
-        
-        this->inserir_aresta(indice1, indice2);
+
+        if(!peso_str.empty()){
+            this->inserir_aresta(indice1, indice2, std::stoi(peso_str));
+        }else{
+            this->inserir_aresta(indice1, indice2);
+        }
     }
     
+    arquivo.close();
+}
+
+void Grafo::carregar_de_arquivo_numeros(const std::string& filename){
+    std::ifstream arquivo(filename);
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro: Nao foi possivel abrir o arquivo " << filename << std::endl;
+        return;
+    }
+
+    int num_vertices_arquivo;
+    arquivo >> num_vertices_arquivo;
+    if (arquivo.fail()) {
+        std::cerr << "Erro ao ler o numero de vertices do arquivo." << std::endl;
+        return;
+    }
+    
+    this->limpar();
+    this->rotulos.resize(num_vertices_arquivo); 
+    for (int i = 0; i < num_vertices_arquivo; ++i) {
+        this->inserir_vertice(std::to_string(i)); 
+    }
+
+    std::string linha;
+    std::getline(arquivo, linha);
+
+    while(std::getline(arquivo, linha)){
+        if (linha.empty()) continue;
+
+        std::stringstream ss(linha);
+        std::string rotulo1_str, rotulo2_str, rotulo3_str;
+
+        std::getline(ss, rotulo1_str, ',');
+        std::getline(ss, rotulo2_str, ',');
+        std::getline(ss, rotulo3_str);
+
+        int vertice1 = stoi(rotulo1_str);
+        int vertice2 = stoi(rotulo2_str);
+
+        if(!rotulo3_str.empty()){
+            int peso = stoi(rotulo3_str);
+            this->inserir_aresta(vertice1, vertice2, peso);
+        }else{
+            this->inserir_aresta(vertice1, vertice2);
+        }
+    }
+
     arquivo.close();
 }
 
@@ -238,9 +292,13 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     } else {
         file << "graph G {\n";
     }
-
     for (int i = 0; i < qtd_vertices; i++) {
-        file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
+        //Se der problema, tirar esse "ou"
+        if(rotulos.at(i).empty() || rotulos.at(0) == "0"){
+            file << "    " << i << " [label=\"" << i+1 << "\"];\n";
+        }else{
+            file << "    " << i << " [label=\"" << rotulos.at(i) << "\"];\n";
+        }
     }
     file << "\n";
 
@@ -258,6 +316,22 @@ void Grafo::exportar_para_dot(const std::string& filename, bool eh_digrafo) cons
     file.close();
 }
 
+/**
+ * Retorna o indice daquele rotulo.
+ * 
+ * Parâmetros:
+ *  rotulo - Nome do rotulo.
+ * Retorno:
+ *  Indice do rotulo, ou -1 caso não exista.
+ */
+int Grafo::get_indice_do_rotulo(const std::string& rotulo) const {
+    for (int i = 0; i < this->qtd_vertices; ++i) {
+        if (this->rotulos[i] == rotulo) {
+            return i; 
+        }
+    }
+    return -1; 
+}
 /**
  * Gera uma imagem PNG a partir de um arquivo DOT usando o Graphviz.
  * 

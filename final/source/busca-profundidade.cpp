@@ -8,24 +8,6 @@
 #include "../headers/busca-profundidade.h"
 #include "../headers/GrafoListaAdj.h"
 
-
-/*
-    BuscaProfundidade(Grafo G, vértice V) {
-        Cria pilha vazia P;
-        Empilha (P, v);
-        Enquanto P.tamanho > 0 faça {
-            u = Consulta(P);
-            Se existe aresta uv pertencente ao grafo com v.visitado == 0, então {
-                v.visitado = 1
-                v.predecessor = u
-                Empilha(P, v);
-            } Senão {
-                Desempilha(P)
-            }
-        }
-    }
-*/
-
 /**
  * Realiza a busca em profundidade (DFS) em um grafo a partir de um vértice inicial.
  * Constrói uma árvore de busca. 
@@ -112,22 +94,21 @@ std::pair<std::map<int, int>, std::vector<std::pair<int, int>>> busca_profundida
 
     std::cout << std::endl;
 
+    // std::cout << std::endl;
+    // std::cout << "---------------------\n";
+    // std::cout << "Vértice | Predecessor \n";
+    // std::cout << "---------------------\n";
+    // for(const auto& par : predecessores) {
+    //     std::cout << "| " << rotulos[par.first] << "\t| "
+    //             << (par.second != -1 ? rotulos[par.second] : "Raiz") << "\t  | "
+    //             <<  std::endl;
+    // }
+    // std::cout << "---------------------\n";
 
-    std::cout << std::endl;
-    std::cout << "---------------------\n";
-    std::cout << "Vértice | Predecessor \n";
-    std::cout << "---------------------\n";
-    for(const auto& par : predecessores) {
-        std::cout << "| " << rotulos[par.first] << "\t| "
-                << (par.second != -1 ? rotulos[par.second] : "Raiz") << "\t  | "
-                <<  std::endl;
-    }
-    std::cout << "---------------------\n";
-
-    std::cout << "\nArestas de Retorno Encontradas:" << std::endl;
-    for (const auto& aresta : arestas_retorno) {
-        std::cout << "(" << rotulos[aresta.first] << ", " << rotulos[aresta.second] << ")" << std::endl;
-    }
+    // std::cout << "\nArestas de Retorno Encontradas:" << std::endl;
+    // for (const auto& aresta : arestas_retorno) {
+    //     std::cout << "(" << rotulos[aresta.first] << ", " << rotulos[aresta.second] << ")" << std::endl;
+    // }
 
     return {predecessores, arestas_retorno};
 }
@@ -154,9 +135,7 @@ void busca_profundidade_lista_adj_recursiva_util(int u,
                                                 const std::vector<std::string>& rotulos) {
     visitados[u] = true;
     
-    std::cout << rotulos[u] << " ";
-
-    
+    //std::cout << rotulos[u] << " ";
 
     for (int v : lista_adj[u]) {
         if (!visitados[v]) {
