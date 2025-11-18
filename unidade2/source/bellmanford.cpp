@@ -10,6 +10,15 @@
 
 const int INF = std::numeric_limits<int>::max() / 2;
 
+/**
+ * @brief Função auxiliar estática para imprimir o caminho mínimo recursivamente.
+ *
+ * Percorre o vetor de predecessores de trás para frente e imprime o caminho formatado no console.
+ *
+ * @param vertice_inicial O nó de origem do caminho.
+ * @param vertice_final O nó de destino (ou nó atual da recursão).
+ * @param predecessor Vetor contendo o predecessor de cada nó no caminho.
+ */
 static void imprimir_caminho_recursivo(int vertice_inicial, int vertice_final, const std::vector<int>& predecessor) {
     if (vertice_final == vertice_inicial) {
         std::cout << vertice_inicial+1;
@@ -23,7 +32,21 @@ static void imprimir_caminho_recursivo(int vertice_inicial, int vertice_final, c
     std::cout << " -> " << vertice_final+1;
 }
 
-
+/**
+ * @brief Executa o algoritmo Bellman-Ford para encontrar caminhos mais curtos.
+ *
+ * Calcula as distâncias mais curtas do vértice de origem 's' para todos os outros
+ * vértices, populando os vetores 'distancia' e 'predecessor' 
+ *
+ * Também detecta a presença de ciclos negativos.
+ *
+ * @param grafo O digrafo ponderado que será analisado.
+ * @param s O índice do vértice de origem.
+ * @param distancia Vetor (referência) que será preenchido com as distâncias mínimas.
+ * @param predecessor Vetor (referência) que será preenchido com os predecessores.
+ * @return true caso o algoritmo for concluído com sucesso (sem ciclos negativos).
+ * @return false caso um ciclo de peso negativo for detectado.
+ */
 bool bellman_ford(const DigrafoListaAdjPonderada& grafo, int s, std::vector<int>& distancia, std::vector<int>& predecessor) {
     int V = grafo.get_qtd_vertices();
     distancia.assign(V, INF);
@@ -58,6 +81,17 @@ bool bellman_ford(const DigrafoListaAdjPonderada& grafo, int s, std::vector<int>
     return true; 
 }
 
+/**
+ * @brief Executa Bellman-Ford e imprime os caminhos da origem 's' para todos os vértices.
+ *
+ * Chama a função 'bellman_ford' para preencher os vetores distância e predecessor, 
+ * em seguida, itera por todos os vértices para imprimir o caminho e a distância de 's' até cada um deles.
+ *
+ * Também trata e reporta o caso de um ciclo de peso negativo ser detectado.
+ *
+ * @param grafo O digrafo ponderado que será analisado.
+ * @param s O índice do vértice de origem.
+ */
 void bellman_ford_geral(const DigrafoListaAdjPonderada& grafo, int s) {
 
     int V = grafo.get_qtd_vertices();
@@ -92,6 +126,16 @@ void bellman_ford_geral(const DigrafoListaAdjPonderada& grafo, int s) {
     }
 }
 
+/**
+ * @brief Executa Bellman-Ford e imprime o caminho mais curto entre dois determinados vértices.
+ *
+ * Chama a função 'bellman_ford' para calcular os caminhos, imprimindo apenas o resultado 
+ * (distância e caminho) para o vértice de destino 'd'.
+ *
+ * @param grafo O digrafo ponderado que será analisado.
+ * @param s O índice do vértice de origem.
+ * @param d O índice do vértice de destino.
+ */
 void bellman_ford_especifico(const DigrafoListaAdjPonderada& grafo, int s, int d) {
     int V = grafo.get_qtd_vertices();
 

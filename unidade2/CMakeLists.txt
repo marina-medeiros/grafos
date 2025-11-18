@@ -35,6 +35,7 @@ set(SOURCES
     source/dijkstra.cpp
     source/bellmanford.cpp
     source/floyd-warshall.cpp
+    source/chuliu.cpp
     source/hierholzer.cpp)
 
 # Executável principal
