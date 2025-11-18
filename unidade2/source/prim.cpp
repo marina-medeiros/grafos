@@ -56,10 +56,6 @@ GrafoMatrizAdj prim(const GrafoMatrizAdj& grafoMatrizAdj){
     
     for(int count = 0; count < qnt_vertices; count++){
         int u = findMin(key, in_agm);
-        if (u == -1) {
-            std::cerr << "Aviso (Prim): Grafo desconexo. Interrompendo.\n";
-            break;
-        }
         in_agm[u] = true;
         for(int v = 0; v < qnt_vertices; v++){
             int peso_aresta = grafoMatrizAdj.get_matriz_adj()[u][v];

@@ -60,12 +60,10 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
     std::vector<std::vector<int>> cheapest(qtd_vertices, std::vector<int>(3, -1));
     std::vector<int> parent(qtd_vertices);
     std::vector<int> rank(qtd_vertices, 0);
-
     for (int v = 0; v < qtd_vertices; v++) {
         parent[v] = v;
         rank[v] = 0;
     }
-
     int num_components = qtd_vertices;
     int custo_total = 0;
     bool aresta_encontrada = false;
@@ -78,15 +76,12 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
         for(int i = 0; i < qtd_vertices; i++) {
             cheapest[i] = {-1, -1, INF}; 
         }
-
         for (int u = 0; u < qtd_vertices; u++) {
             for (int v = u + 1; v < qtd_vertices; v++) { 
                 int w = grafoMatrizAdj.get_matriz_adj()[u][v];
-
                 if (w == INF) {
                     continue; 
                 }
-
                 int set1 = find_set(u, parent);
                 int set2 = find_set(v, parent);
 
@@ -101,11 +96,7 @@ GrafoMatrizAdj boruvka(const GrafoMatrizAdj& grafoMatrizAdj) {
                 }
             }
         }
-        if (!aresta_encontrada) {
-            std::cerr << "Aviso (Boruvka): Grafo desconexo. Interrompendo.\n";
-            break;
-        }
-
+        
         for (int i = 0; i < qtd_vertices; i++) {
             if (cheapest[i][2] != -1) {
                 int u = cheapest[i][0];
