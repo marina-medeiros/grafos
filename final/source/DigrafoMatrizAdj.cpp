@@ -5,10 +5,15 @@
 #include "../headers/DigrafoMatrizAdj.h"
 
 /**
- * Construtor da classe DigrafoMatrizAdj, inicializando o grafo com um número específico de vértices.
+ * Descrição:
+ *  Insere ou atualiza a aresta u -> v com o peso informado.
+ *
  * Parâmetros:
- *  vertices - Número inicial de vértices no digrafo.
- * Retorno: 
+ *  u     - Vértice de origem.
+ *  v     - Vértice de destino.
+ *  peso  - Peso da aresta.
+ *
+ * Retorno:
  *  Nenhum.
  */
 void DigrafoMatrizAdj::inserir_aresta(int u, int v, int peso) {
@@ -48,7 +53,7 @@ void DigrafoMatrizAdj::remover_aresta(int u, int v) {
  * Retorno:
  *  Nenhum.
  */
-void DigrafoMatrizAdj::exportar_para_dot_com_pesos(const std::string& filename) const {
+void DigrafoMatrizAdj::exportar_para_dot_com_pesos(const std::string& filename, bool peso_eh_decimal) const {
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Erro ao abrir o arquivo " << filename << std::endl;
@@ -71,7 +76,14 @@ void DigrafoMatrizAdj::exportar_para_dot_com_pesos(const std::string& filename) 
 
     for (int i = 0; i < qtd_vertices; i++) {
         for (int j : get_vizinhos(i)) {
-            file << "  " << i << " -> " << j << "[label=\"" << matriz_adj[i][j] << "\"];\n"; 
+            if (peso_eh_decimal) {
+                double peso_long = static_cast<double>(matriz_adj[i][j]);
+                peso_long /= 10;
+                file << "  " << i << " -> " << j << "[label=\"" << peso_long << "\"];\n"; 
+            } else {
+                file << "  " << i << " -> " << j << "[label=\"" << matriz_adj[i][j] << "\"];\n"; 
+            }
+            
         }
     }
 

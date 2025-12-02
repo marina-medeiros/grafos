@@ -186,7 +186,7 @@ void GrafoMatrizAdj::print() const {
     for (int i = 0; i < qtd_vertices; ++i) {
         if (rotulos.at(i).empty()) {
             std::cout << i << "\t";
-        }else{
+        } else {
             std::cout << rotulos.at(i) << "\t";
         }
     }
@@ -195,7 +195,7 @@ void GrafoMatrizAdj::print() const {
     for (int i = 0; i < qtd_vertices; ++i) {
         if (rotulos.at(i).empty()) {
             std::cout << i << "\t";
-        }else{
+        } else {
             std::cout << rotulos.at(i) << "\t";
         }
         for (int j = 0; j < qtd_vertices; ++j) {

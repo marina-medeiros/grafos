@@ -44,6 +44,7 @@ public:
     virtual void determinar_articulacoes_blocos_lowpt();
 
     void carregar_de_arquivo(const std::string& filename);
+    void carregar_de_arquivo_csv(const std::string& filename, bool peso_eh_decimal = false);
     void exportar_para_dot(const std::string& filename, bool eh_digrafo = false) const;
     virtual void print() const = 0;
 

@@ -222,6 +222,74 @@ void Grafo::carregar_de_arquivo(const std::string& filename) {
     arquivo.close();
 }
 
+/**
+ * Carrega um grafo a partir de um arquivo csv.
+ * O arquivo deve ter o seguinte formato:
+ *   - O elemento da primeira linha e primeira coluna é um texto qualquer.
+ *   - A primeira linha e a primeira coluna contém os rótulos/números dos vértices.
+ *   - Os elementos restantes representam o peso do vértice da linha correspondente até o vértice da coluna correspondente.
+ * 
+ * Parâmetros:
+ *   filename - Nome do arquivo a ser carregado.
+ * Retorno:
+ *   Nenhum.    
+ */
+void Grafo::carregar_de_arquivo_csv(const std::string& filename, bool peso_eh_decimal) {
+    std::ifstream arquivo(filename);
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro: Nao foi possivel abrir o arquivo " << filename << std::endl;
+        return;
+    }
+
+    std::string linha;
+    if (!std::getline(arquivo, linha)) {
+        std::cerr << "Erro: Arquivo csv vazio." << std::endl;
+    }
+
+    std::vector<std::string> rotulos_lidos;
+
+    std::stringstream ss_cabecalho(linha);
+    std::string celula;
+
+    std::getline(ss_cabecalho, celula, ',');
+    while (std::getline(ss_cabecalho, celula, ',')) {
+        if (!celula.empty()) {
+            rotulos_lidos.push_back(celula);
+        }
+    }
+
+    int num_vertices_arquivo = rotulos_lidos.size();
+
+    this->limpar();
+    for (int i = 0; i < num_vertices_arquivo; ++i) {
+        this->inserir_vertice(rotulos_lidos.at(i)); 
+    }
+    this->set_rotulos(rotulos_lidos);
+
+    int indice_linha = 0;
+    while (std::getline(arquivo, linha)) {
+        std::stringstream ss_linha(linha);
+        std::string rotulo_linha;
+        std::string peso_str;
+
+        // Apenas para descartar o rótulo da primeira coluna
+        std::getline(ss_linha, rotulo_linha, ',');
+
+        int indice_coluna = 0;
+        while (std::getline(ss_linha, peso_str, ',')) {
+            if (!peso_str.empty()) {
+                double peso = std::stod(peso_str);
+                if (peso_eh_decimal) peso *= 10;
+                this->inserir_aresta(indice_linha, indice_coluna, static_cast<int>(std::round(peso)));
+            }
+            indice_coluna++;
+        }
+        indice_linha++;
+    }
+
+    arquivo.close();
+}
+
 void Grafo::carregar_de_arquivo_numeros(const std::string& filename){
     std::ifstream arquivo(filename);
     if (!arquivo.is_open()) {
