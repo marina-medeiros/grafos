@@ -27,7 +27,9 @@ set(SOURCES
     ../final/source/DigrafoListaAdj.cpp
     ../final/source/DigrafoListaAdjPonderada.cpp
     ../final/source/DigrafoMatrizInc.cpp
-    ../final/source/DigrafoMatrizAdj.cpp)
+    ../final/source/DigrafoMatrizAdj.cpp
+    source/insercao-mais-barata.cpp
+    source/vizinho-mais-proximo.cpp)
 
 # Executável principal
 add_executable(main
