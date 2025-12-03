@@ -2,7 +2,7 @@
 #include "../../final/headers/DigrafoMatrizAdj.h"
 #include "../headers/insercao-mais-barata.h"
 #include "../headers/vizinho-mais-proximo.h"
-
+#include "../headers/buscas-locais.h"
 
 void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, bool peso_eh_decimal = false) {
     std::cout << "\nAnálise do " << nome_arquivo << std::endl;

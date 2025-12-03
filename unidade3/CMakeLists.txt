@@ -28,6 +28,7 @@ set(SOURCES
     ../final/source/DigrafoListaAdjPonderada.cpp
     ../final/source/DigrafoMatrizInc.cpp
     ../final/source/DigrafoMatrizAdj.cpp
+    source/buscas-locais.cpp
     source/insercao-mais-barata.cpp
     source/vizinho-mais-proximo.cpp)
 
