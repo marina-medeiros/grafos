@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <limits>
+#include <vector>
+#include <iostream>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 
 double calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
@@ -39,6 +41,28 @@ std::pair<std::vector<int>, int> swap(std::pair<std::vector<int>, int> solucao, 
     return nova_solucao;
 }
 
+std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao, int vertice, int shift_pos, const DigrafoMatrizAdj &grafo){
+    std::pair<std::vector<int>, int> nova_solucao = solucao;
+    auto& v = nova_solucao.first;
+
+    if (vertice < 0 || vertice >= (int)v.size()) return solucao;
+
+    int nova_pos = shift_pos;
+    int elem = v[vertice];
+
+    v.erase(v.begin() + vertice);
+
+    if (nova_pos > vertice){
+        nova_pos--;
+    }
+
+    v.insert(v.begin() + nova_pos, elem);
+
+    nova_solucao.second = calcula_custo(nova_solucao.first, grafo);
+
+    return nova_solucao;
+}
+
 std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, const DigrafoMatrizAdj &grafo){
     bool melhoria = true;
     std::vector<std::pair<std::vector<int>, int>> solucoes_geradas;
@@ -69,4 +93,6 @@ std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> so
 
         }
     }
+
+    return solucao; //so para tirar o warning
 }
