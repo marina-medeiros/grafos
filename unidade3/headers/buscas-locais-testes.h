@@ -5,6 +5,7 @@
 #include <utility>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 
+void testes_buscas_locais();
 // Funções de teste para heurísticas
 void testar_swap(const DigrafoMatrizAdj &grafo, std::pair<std::vector<int>, int> solucao);
 void testar_shift(const DigrafoMatrizAdj &grafo, std::pair<std::vector<int>, int> solucao);

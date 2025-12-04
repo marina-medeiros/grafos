@@ -4,6 +4,23 @@
 
 using namespace std;
 
+void testes_buscas_locais(){
+  DigrafoMatrizAdj grafo(0);
+  grafo.carregar_de_arquivo_csv("../dados/testes.csv", true);
+
+  std::vector<int> ordem = {0, 1, 2, 3, 4};
+  double custo = calcula_custo(ordem, grafo);
+  std::pair<std::vector<int>, int> solucao(ordem, custo);
+
+  testar_swap(grafo, solucao);
+  testar_shift(grafo, solucao);
+  testar_invert(grafo, solucao);
+
+  testar_vizinhanca_swap(grafo, solucao);
+  testar_vizinhanca_shift(grafo, solucao);
+  testar_vizinhanca_invert(grafo, solucao);
+}
+
 void imprimir_solucao_testes(const pair<vector<int>, int> &sol) {
     cout << "Ordem: ";
     for (auto v : sol.first) cout << v << " ";
