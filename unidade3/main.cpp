@@ -34,6 +34,26 @@ void imprimir_resultado(const std::string& nome_algoritmo,
     std::cout << " ]\n" << std::endl;
 }
 
+void imprimir_busca_local(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    std::cout << "----------------------------------------------------------" << std::endl;
+    std::cout << "Solucoes encontradas a partir da busca local: " << std::endl;
+    std::cout << "------------ Metodo 'first improvement': ------------" << std::endl;
+    std::cout << ">>> Heuristica SWAP': " << std::endl;
+    imprimir_solucao(busca_local(solucao, 1, 1, grafo));
+    std::cout << ">>> Heuristica SHIFT': : " << std::endl;
+    imprimir_solucao(busca_local(solucao, 1, 2, grafo));
+    std::cout << ">>> Heuristica INVERT': : " << std::endl;
+    imprimir_solucao(busca_local(solucao, 1, 3, grafo));
+    std::cout << "------------ Metodo 'best improvement': ------------" << std::endl;
+    std::cout << ">>> Heuristica SWAP': " << std::endl;
+    imprimir_solucao(busca_local(solucao, 2, 1, grafo));
+    std::cout << ">>> Heuristica SHIFT': : " << std::endl;
+    imprimir_solucao(busca_local(solucao, 2, 2, grafo));
+    std::cout << ">>> Heuristica INVERT': : " << std::endl;
+    imprimir_solucao(busca_local(solucao, 2, 3, grafo));
+    std::cout << "----------------------------------------------------------" << std::endl;
+}
+
 int main() {
   DigrafoMatrizAdj grafo(0);
   grafo.carregar_de_arquivo_csv("../dados/testes.csv", true);
@@ -55,32 +75,40 @@ int main() {
   analisar_digrafo(digrafo_problema1, "problema_1", true);
   auto res_vizinho1 = vizinho_mais_proximo(digrafo_problema1, 0);
   imprimir_resultado("Vizinho Mais Próximo", res_vizinho1, true);
+  imprimir_busca_local(res_vizinho1, digrafo_problema1); /////////////
   auto res_insercao1 = insercao_mais_barata(digrafo_problema1, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao1, true);
+  imprimir_busca_local(res_insercao1, digrafo_problema1); /////////////
 
   DigrafoMatrizAdj digrafo_problema2(0);
   digrafo_problema2.carregar_de_arquivo_csv("../dados/PROBLEMA_2.csv");
   analisar_digrafo(digrafo_problema2, "problema_2");
   auto res_vizinho2 = vizinho_mais_proximo(digrafo_problema2, 0);
   imprimir_resultado("Vizinho Mais Próximo", res_vizinho2, false);
+  imprimir_busca_local(res_vizinho2, digrafo_problema2); /////////////
   auto res_insercao2 = insercao_mais_barata(digrafo_problema2, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao2, false);
+  imprimir_busca_local(res_insercao2, digrafo_problema2); /////////////
 
   DigrafoMatrizAdj digrafo_problema3(0);
   digrafo_problema3.carregar_de_arquivo_csv("../dados/PROBLEMA_3.csv", true);
   analisar_digrafo(digrafo_problema3, "problema_3", true);
   auto res_vizinho3 = vizinho_mais_proximo(digrafo_problema3, 0);
   imprimir_resultado("Vizinho Mais Próximo", res_vizinho3, true);
+  imprimir_busca_local(res_vizinho3, digrafo_problema3); /////////////
   auto res_insercao3 = insercao_mais_barata(digrafo_problema3, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao3, true);
+  imprimir_busca_local(res_insercao3, digrafo_problema3); /////////////
 
   DigrafoMatrizAdj digrafo_problema4(0);
   digrafo_problema4.carregar_de_arquivo_csv("../dados/PROBLEMA_4.csv");
   analisar_digrafo(digrafo_problema4, "problema_4");
   auto res_vizinho4 = vizinho_mais_proximo(digrafo_problema4, 0);
   imprimir_resultado("Vizinho Mais Próximo", res_vizinho4, false);
+  imprimir_busca_local(res_vizinho4, digrafo_problema4); /////////////
   auto res_insercao4 = insercao_mais_barata(digrafo_problema4, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao4, false);
+  imprimir_busca_local(res_insercao4, digrafo_problema4); /////////////
 
   DigrafoMatrizAdj digrafo_problema5(0);
   digrafo_problema5.carregar_de_arquivo_csv("../dados/PROBLEMA_5.csv", true);

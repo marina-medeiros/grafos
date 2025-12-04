@@ -112,6 +112,13 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_invert(std::pair<std::v
     return vizinhanca;
 }
 
+void imprimir_solucao(const std::pair<std::vector<int>, int> &sol) {
+    std::cout << "Ordem: ";
+    for (auto v : sol.first) std::cout << v << " ";
+    std::cout << " | Custo = " << sol.second << std::endl;
+}
+
+
 std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, int heuristica, const DigrafoMatrizAdj &grafo){
     bool melhoria = true;
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
