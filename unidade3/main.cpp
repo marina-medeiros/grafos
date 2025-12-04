@@ -3,6 +3,7 @@
 #include "../headers/insercao-mais-barata.h"
 #include "../headers/vizinho-mais-proximo.h"
 #include "../headers/buscas-locais.h"
+#include "../headers/buscas-locais-testes.h"
 
 void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, bool peso_eh_decimal = false) {
     std::cout << "\nAnálise do " << nome_arquivo << std::endl;
@@ -34,6 +35,21 @@ void imprimir_resultado(const std::string& nome_algoritmo,
 }
 
 int main() {
+  DigrafoMatrizAdj grafo(0);
+  grafo.carregar_de_arquivo_csv("../dados/testes.csv", true);
+
+  std::vector<int> ordem = {0, 1, 2, 3, 4};
+  double custo = calcula_custo(ordem, grafo);
+  std::pair<std::vector<int>, int> solucao(ordem, custo);
+
+  testar_swap(grafo, solucao);
+  testar_shift(grafo, solucao);
+  testar_invert(grafo, solucao);
+
+  testar_vizinhanca_swap(grafo, solucao);
+  testar_vizinhanca_shift(grafo, solucao);
+  testar_vizinhanca_invert(grafo, solucao);
+  
   DigrafoMatrizAdj digrafo_problema1(0);
   digrafo_problema1.carregar_de_arquivo_csv("../dados/PROBLEMA_1.csv", true);
   analisar_digrafo(digrafo_problema1, "problema_1", true);

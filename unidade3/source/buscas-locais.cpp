@@ -123,6 +123,8 @@ std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> so
         default: break;
     }
 
+    vizinhanca.insert(vizinhanca.begin(), solucao);
+
     while(melhoria){
         melhoria = false;
         if(tipo_busca == 1){ //first_imp
