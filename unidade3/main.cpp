@@ -50,79 +50,6 @@ int main() {
   auto res_insercao2 = insercao_mais_barata(digrafo_problema2, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao2, false);
 
-//////////////////////
-    int aux = 0;
-    std::cout << "SWAP" << std::endl;
-    for(int ii = 0; ii < digrafo_problema2.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < digrafo_problema2.get_qtd_vertices(); jj++){
-            if(ii == jj){
-                continue;
-            }
-            auto nova_solucao = swap(res_insercao2, ii, jj, digrafo_problema2);
-
-            std::cout << "Ordem dos vértices: " << std::endl;
-            for(int ii = 0; ii < int((nova_solucao.first).size()); ii++){
-                std::cout << (nova_solucao.first)[ii] << " - ";
-            }
-            std::cout << std::endl;
-            aux++;
-            if(aux == 10){
-                goto fim_swap;
-            }
-            std::cout << "Peso da solução: "  << nova_solucao.second << std::endl;
-        }
-    }
-    fim_swap:
-    std::cout << "-----------------------------" << std::endl;
-    std::cout << "SHIFT" << std::endl;
-    int aux2 = 0;
-    for(int ii = 0; ii < digrafo_problema2.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < digrafo_problema2.get_qtd_vertices(); jj++){
-            if(ii == jj){
-                continue;
-            }
-            auto nova_solucao = shift(res_insercao2, ii, jj, digrafo_problema2);
-
-            std::cout << "Ordem dos vértices: " << std::endl;
-            for(int ii = 0; ii < int((nova_solucao.first).size()); ii++){
-                std::cout << (nova_solucao.first)[ii] << " - ";
-            }
-            std::cout << std::endl;
-            aux2++;
-            if(aux2 == 10){
-                goto fim_shift;
-            }
-            std::cout << "Peso da solução: "  << nova_solucao.second << std::endl;
-        }
-    }
-    fim_shift:
-    std::cout << "-----------------------------" << std::endl;
-    std::cout << "INVERT" << std::endl;
-    aux2 = 0;
-    for(int ii = 0; ii < digrafo_problema2.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < digrafo_problema2.get_qtd_vertices(); jj++){
-            if(ii == jj){
-                continue;
-            }
-            auto nova_solucao = invert(res_insercao2, digrafo_problema2);
-
-            std::cout << "Ordem dos vértices: " << std::endl;
-            for(int ii = 0; ii < int((nova_solucao.first).size()); ii++){
-                std::cout << (nova_solucao.first)[ii] << " - ";
-            }
-            std::cout << std::endl;
-            aux2++;
-            if(aux2 == 10){
-                goto fim_invert;
-            }
-            std::cout << "Peso da solução: "  << nova_solucao.second << std::endl;
-        }
-    }
-    fim_invert:
-    aux++;
-
-////////////////////
-/*
   DigrafoMatrizAdj digrafo_problema3(0);
   digrafo_problema3.carregar_de_arquivo_csv("../dados/PROBLEMA_3.csv", true);
   analisar_digrafo(digrafo_problema3, "problema_3", true);
@@ -202,5 +129,4 @@ int main() {
   imprimir_resultado("Vizinho Mais Próximo", res_vizinho12, false);
   auto res_insercao12 = insercao_mais_barata(digrafo_problema12, 0);
   imprimir_resultado("Inserção Mais Barata", res_insercao12, false);
-  */
 }
