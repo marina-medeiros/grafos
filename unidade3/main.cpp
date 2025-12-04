@@ -54,26 +54,6 @@ void imprimir_busca_local(std::pair<std::vector<int>, int> solucao, const Digraf
     std::cout << "----------------------------------------------------------" << std::endl;
 }
 
-void imprimir_busca_local(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
-    std::cout << "----------------------------------------------------------" << std::endl;
-    std::cout << "Solucoes encontradas a partir da busca local: " << std::endl;
-    std::cout << "------------ Metodo 'first improvement': ------------" << std::endl;
-    std::cout << ">>> Heuristica SWAP': " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 1, grafo));
-    std::cout << ">>> Heuristica SHIFT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 2, grafo));
-    std::cout << ">>> Heuristica INVERT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 3, grafo));
-    std::cout << "------------ Metodo 'best improvement': ------------" << std::endl;
-    std::cout << ">>> Heuristica SWAP': " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 1, grafo));
-    std::cout << ">>> Heuristica SHIFT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 2, grafo));
-    std::cout << ">>> Heuristica INVERT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 3, grafo));
-    std::cout << "----------------------------------------------------------" << std::endl;
-}
-
 void testes_buscas_locais(){
   DigrafoMatrizAdj grafo(0);
   grafo.carregar_de_arquivo_csv("../dados/testes.csv", true);
