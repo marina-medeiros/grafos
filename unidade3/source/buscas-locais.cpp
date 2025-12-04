@@ -16,20 +16,6 @@ double calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &gr
     return custo;
 }
 
-std::vector<std::pair<std::vector<int>, int>> vizinhanca_swap(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
-    std::vector<std::pair<std::vector<int>, int>> vizinhanca;
-    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < grafo.get_qtd_vertices()-1; jj++){
-            std::pair<std::vector<int>, int> nova_solucao = solucao;
-            std::swap(nova_solucao.first[ii], nova_solucao.first[jj]);
-            nova_solucao.second = calcula_custo(nova_solucao.first, grafo);
-
-            vizinhanca.push_back(nova_solucao);
-        }
-    }
-
-    return vizinhanca;
-}
 
 std::pair<std::vector<int>, int> swap(std::pair<std::vector<int>, int> solucao, int vertice, int swap_pos, const DigrafoMatrizAdj &grafo){
     std::pair<std::vector<int>, int> nova_solucao = solucao;
@@ -38,6 +24,22 @@ std::pair<std::vector<int>, int> swap(std::pair<std::vector<int>, int> solucao, 
 
     return nova_solucao;
 }
+
+
+std::vector<std::pair<std::vector<int>, int>> vizinhanca_swap(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    std::vector<std::pair<std::vector<int>, int>> vizinhanca;
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices()-1; jj++){
+            if(ii == jj){
+                continue;
+            }
+            vizinhanca.push_back(swap(solucao, ii, jj, grafo));
+        }
+    }
+
+    return vizinhanca;
+}
+
 
 std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao, int vertice, int shift_pos, const DigrafoMatrizAdj &grafo){
     std::pair<std::vector<int>, int> nova_solucao = solucao;
@@ -59,6 +61,20 @@ std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao,
     nova_solucao.second = calcula_custo(nova_solucao.first, grafo);
 
     return nova_solucao;
+}
+
+std::vector<std::pair<std::vector<int>, int>> vizinhanca_shift(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    std::vector<std::pair<std::vector<int>, int>> vizinhanca;
+    for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices()-1; jj++){
+            if(ii == jj){
+                continue;
+            }
+            vizinhanca.push_back(shift(solucao, ii, jj, grafo));
+        }
+    }
+
+    return vizinhanca;
 }
 
 std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
@@ -85,36 +101,52 @@ std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao
     return nova_solucao;
 }
 
-std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, const DigrafoMatrizAdj &grafo){
-    bool melhoria = true;
-    std::vector<std::pair<std::vector<int>, int>> solucoes_geradas;
-    while(melhoria){
-        melhoria = false;
-        if(tipo_busca == 1){ //first_imp
-            int vertice = 0; // vertice a ser trocado
-            int swap_pos = 0; // posição de destino do vértice a ser trocado
-            std::pair<std::vector<int>, int> nova_sol = swap(solucao, vertice, swap_pos, grafo);
-
-            swap_pos++;
-            if(swap_pos == grafo.get_qtd_vertices()-1){
-                swap_pos == 0;
-                vertice++;
-            }
-
-            solucoes_geradas.push_back(nova_sol);
-
-            if(nova_sol.second < solucao.second){ // se o custo for menor
-                solucao = nova_sol;
-                melhoria = true;
-                break; // rever!
-            }
-                
-        }
-        else if(tipo_busca == 2){ //best_imp
-            std::pair<std::vector<int>, int> melhor_sol = solucao;
-
+std::vector<std::pair<std::vector<int>, int>> vizinhanca_invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    std::vector<std::pair<std::vector<int>, int>> vizinhanca;
+    for(int ii = 0; ii < grafo.get_qtd_vertices()/2; ii++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices()/2; jj++){
+            vizinhanca.push_back(invert(solucao, grafo));
         }
     }
 
-    return solucao; //so para tirar o warning
+    return vizinhanca;
+}
+
+std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, int heuristica, const DigrafoMatrizAdj &grafo){
+    bool melhoria = true;
+    std::vector<std::pair<std::vector<int>, int>> vizinhanca;
+
+    switch (heuristica){
+        case 1: vizinhanca = vizinhanca_swap(solucao, grafo); break;
+        case 2: vizinhanca = vizinhanca_shift(solucao, grafo); break;
+        case 3: vizinhanca = vizinhanca_invert(solucao, grafo); break;
+        default: break;
+    }
+
+    while(melhoria){
+        melhoria = false;
+        if(tipo_busca == 1){ //first_imp
+            for(auto sol : vizinhanca){
+                if(sol.second < solucao.second){
+                    solucao = sol;
+                    melhoria = true;
+                    break; 
+                }
+            }    
+        }
+        else if(tipo_busca == 2){ //best_imp
+            std::pair<std::vector<int>, int> melhor_sol = solucao;
+            for(auto sol : vizinhanca){
+                if(sol.second < melhor_sol.second){
+                    melhor_sol = sol;
+                }
+            }
+            if(melhor_sol.second < solucao.second){
+                solucao = melhor_sol;
+                melhoria = true;
+            }
+        }
+    }
+
+    return solucao;
 }
