@@ -34,7 +34,7 @@ void imprimir_resultado(const std::string& nome_algoritmo,
     std::cout << " ]\n" << std::endl;
 }
 
-int main() {
+void testes_buscas_locais(){
   DigrafoMatrizAdj grafo(0);
   grafo.carregar_de_arquivo_csv("../dados/testes.csv", true);
 
@@ -49,7 +49,9 @@ int main() {
   testar_vizinhanca_swap(grafo, solucao);
   testar_vizinhanca_shift(grafo, solucao);
   testar_vizinhanca_invert(grafo, solucao);
-  
+}
+
+int main() {  
   DigrafoMatrizAdj digrafo_problema1(0);
   digrafo_problema1.carregar_de_arquivo_csv("../dados/PROBLEMA_1.csv", true);
   analisar_digrafo(digrafo_problema1, "problema_1", true);

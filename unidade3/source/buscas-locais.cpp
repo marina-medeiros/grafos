@@ -52,10 +52,6 @@ std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao,
 
     v.erase(v.begin() + vertice);
 
-    // if (nova_pos > vertice){
-    //     nova_pos--;
-    // }
-
     v.insert(v.begin() + nova_pos, elem);
 
     nova_solucao.second = calcula_custo(nova_solucao.first, grafo);
