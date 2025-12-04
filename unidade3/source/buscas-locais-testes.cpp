@@ -19,7 +19,7 @@ void testar_swap(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) 
     imprimir_solucao(solucao);
 
     for (int i = 0; i < grafo.get_qtd_vertices(); i++) {
-        for (int j = i + 1; j < grafo.get_qtd_vertices(); j++) {
+        for (int j = i; j < grafo.get_qtd_vertices(); j++) {
             auto r = swap(solucao, i, j, grafo);
             cout << "swap(" << i << ", " << j << "): ";
             imprimir_solucao(r);
