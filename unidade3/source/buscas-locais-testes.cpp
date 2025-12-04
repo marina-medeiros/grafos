@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void imprimir_solucao(const pair<vector<int>, int> &sol) {
+void imprimir_solucao_testes(const pair<vector<int>, int> &sol) {
     cout << "Ordem: ";
     for (auto v : sol.first) cout << v << " ";
     cout << " | Custo = " << sol.second << endl;
@@ -16,40 +16,40 @@ void imprimir_solucao(const pair<vector<int>, int> &sol) {
 
 void testar_swap(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando SWAP ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     for (int i = 0; i < grafo.get_qtd_vertices(); i++) {
         for (int j = i; j < grafo.get_qtd_vertices(); j++) {
             auto r = swap(solucao, i, j, grafo);
             cout << "swap(" << i << ", " << j << "): ";
-            imprimir_solucao(r);
+            imprimir_solucao_testes(r);
         }
     }
 }
 
 void testar_shift(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando SHIFT ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     for (int i = 0; i < grafo.get_qtd_vertices(); i++) {
         for (int j = 0; j < grafo.get_qtd_vertices(); j++) {
             if (i == j) continue;
             auto r = shift(solucao, i, j, grafo);
             cout << "shift(" << i << " -> " << j << "): ";
-            imprimir_solucao(r);
+            imprimir_solucao_testes(r);
         }
     }
 }
 
 void testar_invert(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando INVERT ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     // Apenas 10 inversões aleatórias
     for (int k = 0; k < 10; k++) {
         auto r = invert(solucao, grafo);
         cout << "invert " << k+1 << ": ";
-        imprimir_solucao(r);
+        imprimir_solucao_testes(r);
     }
 }
 
@@ -59,39 +59,39 @@ void testar_invert(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao
 
 void testar_vizinhanca_swap(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando VIZINHANÇA SWAP ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     auto viz = vizinhanca_swap(solucao, grafo);
 
     int k = 0;
     for (auto &s : viz) {
         cout << "#" << k++ << ": ";
-        imprimir_solucao(s);
+        imprimir_solucao_testes(s);
     }
 }
 
 void testar_vizinhanca_shift(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando VIZINHANÇA SHIFT ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     auto viz = vizinhanca_shift(solucao, grafo);
 
     int k = 0;
     for (auto &s : viz) {
         cout << "#" << k++ << ": ";
-        imprimir_solucao(s);
+        imprimir_solucao_testes(s);
     }
 }
 
 void testar_vizinhanca_invert(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao) {
     cout << "\n=== Testando VIZINHANÇA INVERT ===\n";
-    imprimir_solucao(solucao);
+    imprimir_solucao_testes(solucao);
 
     auto viz = vizinhanca_invert(solucao, grafo);
 
     int k = 0;
     for (auto &s : viz) {
         cout << "#" << k++ << ": ";
-        imprimir_solucao(s);
+        imprimir_solucao_testes(s);
     }
 }
