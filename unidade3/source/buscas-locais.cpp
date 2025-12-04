@@ -29,7 +29,7 @@ std::pair<std::vector<int>, int> swap(std::pair<std::vector<int>, int> solucao, 
 std::vector<std::pair<std::vector<int>, int>> vizinhanca_swap(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < grafo.get_qtd_vertices()-1; jj++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
             if(ii == jj){
                 continue;
             }
@@ -52,9 +52,9 @@ std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao,
 
     v.erase(v.begin() + vertice);
 
-    if (nova_pos > vertice){
-        nova_pos--;
-    }
+    // if (nova_pos > vertice){
+    //     nova_pos--;
+    // }
 
     v.insert(v.begin() + nova_pos, elem);
 
@@ -66,7 +66,7 @@ std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao,
 std::vector<std::pair<std::vector<int>, int>> vizinhanca_shift(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
     for(int ii = 0; ii < grafo.get_qtd_vertices(); ii++){
-        for(int jj = 0; jj < grafo.get_qtd_vertices()-1; jj++){
+        for(int jj = 0; jj < grafo.get_qtd_vertices(); jj++){
             if(ii == jj){
                 continue;
             }
