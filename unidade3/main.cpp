@@ -96,6 +96,29 @@ int main() {
         }
     }
     fim_shift:
+    std::cout << "-----------------------------" << std::endl;
+    std::cout << "INVERT" << std::endl;
+    aux2 = 0;
+    for(int ii = 0; ii < digrafo_problema2.get_qtd_vertices(); ii++){
+        for(int jj = 0; jj < digrafo_problema2.get_qtd_vertices(); jj++){
+            if(ii == jj){
+                continue;
+            }
+            auto nova_solucao = invert(res_insercao2, digrafo_problema2);
+
+            std::cout << "Ordem dos vértices: " << std::endl;
+            for(int ii = 0; ii < int((nova_solucao.first).size()); ii++){
+                std::cout << (nova_solucao.first)[ii] << " - ";
+            }
+            std::cout << std::endl;
+            aux2++;
+            if(aux2 == 10){
+                goto fim_invert;
+            }
+            std::cout << "Peso da solução: "  << nova_solucao.second << std::endl;
+        }
+    }
+    fim_invert:
     aux++;
 
 ////////////////////

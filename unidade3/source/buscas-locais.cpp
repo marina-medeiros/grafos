@@ -2,6 +2,7 @@
 #include <limits>
 #include <vector>
 #include <iostream>
+#include <random>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 
 double calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
@@ -30,9 +31,6 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_swap(std::pair<std::vec
     return vizinhanca;
 }
 
-
-// retorna uma solução
-// couter < vector.len
 std::pair<std::vector<int>, int> swap(std::pair<std::vector<int>, int> solucao, int vertice, int swap_pos, const DigrafoMatrizAdj &grafo){
     std::pair<std::vector<int>, int> nova_solucao = solucao;
     std::swap(nova_solucao.first[swap_pos], nova_solucao.first[vertice]);
@@ -59,6 +57,30 @@ std::pair<std::vector<int>, int> shift(std::pair<std::vector<int>, int> solucao,
     v.insert(v.begin() + nova_pos, elem);
 
     nova_solucao.second = calcula_custo(nova_solucao.first, grafo);
+
+    return nova_solucao;
+}
+
+std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    std::pair<std::vector<int>, int> nova_solucao = solucao;
+    auto& v = nova_solucao.first;
+
+    int n = v.size();
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, n - 1);
+    int i = 0;
+    int j = 0;
+
+    while(i == j || i > j){
+        i = dist(gen);
+        j = dist(gen);
+        if (i > j) std::swap(i, j);
+    }
+
+    std::reverse(v.begin() + i, v.begin() + j + 1);
+    nova_solucao.second = calcula_custo(v, grafo);
 
     return nova_solucao;
 }
