@@ -8,11 +8,9 @@
 void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, bool peso_eh_decimal = false) {
     std::cout << "\nAnálise do " << nome_arquivo << std::endl;
 
-    // Testa os algoritmos
     std::cout << "Total de Vertices: " << grafo.get_qtd_vertices() << std::endl;
     std::cout << "Total de Arestas: " << grafo.get_qtd_arestas() << std::endl;
         
-    // Gera a imagem de visualização   
     std::string arq_dot =  nome_arquivo + ".dot";
     
     grafo.exportar_para_dot_com_pesos(arq_dot, peso_eh_decimal);
@@ -20,6 +18,7 @@ void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, 
 
 void imprimir_resultado(const std::string& nome_algoritmo, 
                         const std::pair<std::vector<int>, int>& resultado, 
+                        std::vector<std::string>& rotulos,
                         bool peso_eh_decimal) {
     std::cout << "  >> Algoritmo: " << nome_algoritmo << std::endl;
     
@@ -28,25 +27,30 @@ void imprimir_resultado(const std::string& nome_algoritmo,
     std::cout << "     Custo Total: " << custo_formatado << std::endl;
     std::cout << "     Rota: [ ";
     for (size_t i = 0; i < resultado.first.size(); ++i) {
-        std::cout << resultado.first[i];
+        std::cout << rotulos.at(resultado.first[i]);
         if (i < resultado.first.size() - 1) std::cout << " -> ";
     }
     std::cout << " ]\n" << std::endl;
 }
 
-void processar_problema(const std::string& caminho_csv, const std::string& nome_problema, bool imprimir_csv){
+void processar_problema(const std::string& caminho_csv, const std::string& nome_problema, bool peso_eh_decimal) {
     DigrafoMatrizAdj digrafo(0);
-    digrafo.carregar_de_arquivo_csv(caminho_csv, imprimir_csv);
+    digrafo.carregar_de_arquivo_csv(caminho_csv, peso_eh_decimal);
+    auto rotulos = digrafo.get_rotulos();
 
-    analisar_digrafo(digrafo, nome_problema, imprimir_csv);
+    analisar_digrafo(digrafo, nome_problema, peso_eh_decimal);
 
     auto res_vizinho = vizinho_mais_proximo(digrafo, 0);
-    imprimir_resultado("Vizinho Mais Próximo", res_vizinho, imprimir_csv);
-    imprimir_busca_local(res_vizinho, digrafo);
+    imprimir_resultado("Vizinho Mais Próximo", res_vizinho, rotulos, peso_eh_decimal);
+    auto res_vizinho_sem_ultimo = res_vizinho;
+    res_vizinho_sem_ultimo.first.pop_back();
+    imprimir_busca_local(res_vizinho_sem_ultimo, digrafo);
 
     auto res_insercao = insercao_mais_barata(digrafo, 0);
-    imprimir_resultado("Inserção Mais Barata", res_insercao, imprimir_csv);
-    imprimir_busca_local(res_insercao, digrafo);
+    imprimir_resultado("Inserção Mais Barata", res_insercao, rotulos, peso_eh_decimal);
+    auto res_insercao_sem_ultimo = res_insercao;
+    res_insercao_sem_ultimo.first.pop_back();
+    imprimir_busca_local(res_insercao_sem_ultimo, digrafo);
     std::cout << "#####################################################################################################################" << std::endl;
 }
 

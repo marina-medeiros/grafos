@@ -7,12 +7,19 @@
 
 double calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
     double custo = 0;
-    std::vector<std::vector<int>> matriz_adj = grafo.get_matriz_adj();
-    for(int ii = 0; ii < int(ordem_vertices.size()) - 1; ii++){
+    std::vector<std::vector<int>> pesos = grafo.get_matriz_adj();
+    int num_vertices = ordem_vertices.size();
+
+    for (int ii = 0; ii < num_vertices - 1; ii++) {
         int v1 = ordem_vertices[ii];
-        int v2 = ordem_vertices[ii+1];
-        custo += matriz_adj[v1][v2];
+        int v2 = ordem_vertices[ii + 1];
+        custo += pesos[v1][v2];
     }
+
+    int ultimo = ordem_vertices[num_vertices - 1];
+    int primeiro = ordem_vertices[0];
+    custo += pesos[ultimo][primeiro];
+
     return custo;
 }
 
@@ -108,13 +115,23 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_invert(std::pair<std::v
     return vizinhanca;
 }
 
-void imprimir_solucao(const std::pair<std::vector<int>, int> &sol) {
+void imprimir_solucao(const std::pair<std::vector<int>, int> &sol, std::vector<std::string> &rotulos) {
     std::cout << "Ordem: ";
-    for (auto v : sol.first) std::cout << v << " ";
+    for (auto v : sol.first) std::cout << rotulos.at(v) << " ";
+    std::cout << rotulos.at(sol.first[0]);
     std::cout << " | Custo = " << sol.second << std::endl;
 }
 
 
+/**
+ * Aplica uma Busca Local para tentar reduzir o custo da solução fornecida.
+ * * @param solucao Par contendo {vetor_caminho, custo_total}. 
+ * Importante: O vetor deve conter apenas vértices únicos (não repita o inicial no fim).
+ * @param tipo_busca Estratégia de aceitação: 1 = First Improvement, 2 = Best Improvement.
+ * @param heuristica Movimento usado: 1 = Swap, 2 = Shift, 3 = Invert.
+ * @param grafo O digrafo contendo a matriz de pesos.
+ * @return std::pair<std::vector<int>, int> A solução otimizada (ou a original, se não houver melhoria).
+ */
 std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, int heuristica, const DigrafoMatrizAdj &grafo){
     bool melhoria = true;
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
@@ -155,21 +172,23 @@ std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> so
 }
 
 void imprimir_busca_local(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+    auto rotulos = grafo.get_rotulos();
+
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Solucoes encontradas a partir da busca local: " << std::endl;
     std::cout << "------------ Metodo 'first improvement': ------------" << std::endl;
     std::cout << ">>> Heuristica SWAP': " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 1, grafo));
+    imprimir_solucao(busca_local(solucao, 1, 1, grafo), rotulos);
     std::cout << ">>> Heuristica SHIFT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 2, grafo));
+    imprimir_solucao(busca_local(solucao, 1, 2, grafo), rotulos);
     std::cout << ">>> Heuristica INVERT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 1, 3, grafo));
+    imprimir_solucao(busca_local(solucao, 1, 3, grafo), rotulos);
     std::cout << "------------ Metodo 'best improvement': ------------" << std::endl;
     std::cout << ">>> Heuristica SWAP': " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 1, grafo));
+    imprimir_solucao(busca_local(solucao, 2, 1, grafo), rotulos);
     std::cout << ">>> Heuristica SHIFT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 2, grafo));
+    imprimir_solucao(busca_local(solucao, 2, 2, grafo), rotulos);
     std::cout << ">>> Heuristica INVERT': : " << std::endl;
-    imprimir_solucao(busca_local(solucao, 2, 3, grafo));
+    imprimir_solucao(busca_local(solucao, 2, 3, grafo), rotulos);
     std::cout << "----------------------------------------------------------" << std::endl << std::endl;
 }

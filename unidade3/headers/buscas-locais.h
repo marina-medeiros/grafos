@@ -14,7 +14,7 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_swap(std::pair<std::vec
 std::vector<std::pair<std::vector<int>, int>> vizinhanca_shift(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo);
 std::vector<std::pair<std::vector<int>, int>> vizinhanca_invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo);
 
-void imprimir_solucao(const std::pair<std::vector<int>, int> &sol);
+void imprimir_solucao(const std::pair<std::vector<int>, int> &sol, std::vector<std::string> &rotulos);
 void imprimir_busca_local(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo);
 
 #endif
