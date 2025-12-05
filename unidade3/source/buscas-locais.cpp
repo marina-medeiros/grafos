@@ -5,8 +5,8 @@
 #include <random>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 
-double calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
-    double custo = 0;
+int calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
+    int custo = 0;
     std::vector<std::vector<int>> pesos = grafo.get_matriz_adj();
     int num_vertices = ordem_vertices.size();
 
@@ -125,8 +125,7 @@ void imprimir_solucao(const std::pair<std::vector<int>, int> &sol, std::vector<s
 
 /**
  * Aplica uma Busca Local para tentar reduzir o custo da solução fornecida.
- * * @param solucao Par contendo {vetor_caminho, custo_total}. 
- * Importante: O vetor deve conter apenas vértices únicos (não repita o inicial no fim).
+ * @param solucao Par contendo {vetor_caminho, custo_total}. 
  * @param tipo_busca Estratégia de aceitação: 1 = First Improvement, 2 = Best Improvement.
  * @param heuristica Movimento usado: 1 = Swap, 2 = Shift, 3 = Invert.
  * @param grafo O digrafo contendo a matriz de pesos.
@@ -135,6 +134,10 @@ void imprimir_solucao(const std::pair<std::vector<int>, int> &sol, std::vector<s
 std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> solucao, int tipo_busca, int heuristica, const DigrafoMatrizAdj &grafo){
     bool melhoria = true;
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
+
+    if (solucao.first.size() > grafo.get_qtd_vertices()) {
+        solucao.first.pop_back();
+    }
 
     switch (heuristica){
         case 1: vizinhanca = vizinhanca_swap(solucao, grafo); break;

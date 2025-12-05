@@ -4,6 +4,7 @@
 #include "../headers/vizinho-mais-proximo.h"
 #include "../headers/buscas-locais.h"
 #include "../headers/buscas-locais-testes.h"
+#include "../headers/algoritmo-genetico.h"
 
 void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, bool peso_eh_decimal = false) {
     std::cout << "\nAnálise do " << nome_arquivo << std::endl;
@@ -42,31 +43,41 @@ void processar_problema(const std::string& caminho_csv, const std::string& nome_
 
     auto res_vizinho = vizinho_mais_proximo(digrafo, 0);
     imprimir_resultado("Vizinho Mais Próximo", res_vizinho, rotulos, peso_eh_decimal);
-    auto res_vizinho_sem_ultimo = res_vizinho;
-    res_vizinho_sem_ultimo.first.pop_back();
-    imprimir_busca_local(res_vizinho_sem_ultimo, digrafo);
+    imprimir_busca_local(res_vizinho, digrafo);
 
     auto res_insercao = insercao_mais_barata(digrafo, 0);
     imprimir_resultado("Inserção Mais Barata", res_insercao, rotulos, peso_eh_decimal);
-    auto res_insercao_sem_ultimo = res_insercao;
-    res_insercao_sem_ultimo.first.pop_back();
-    imprimir_busca_local(res_insercao_sem_ultimo, digrafo);
+    imprimir_busca_local(res_insercao, digrafo);
     std::cout << "#####################################################################################################################" << std::endl;
 }
 
 int main() {
-    processar_problema("../dados/PROBLEMA_1.csv",  "problema_1",  true);
-    processar_problema("../dados/PROBLEMA_2.csv",  "problema_2",  false);
-    processar_problema("../dados/PROBLEMA_3.csv",  "problema_3",  true);
-    processar_problema("../dados/PROBLEMA_4.csv",  "problema_4",  false);
-    processar_problema("../dados/PROBLEMA_5.csv",  "problema_5",  true);
-    processar_problema("../dados/PROBLEMA_6.csv",  "problema_6",  false);
-    processar_problema("../dados/PROBLEMA_7.csv",  "problema_7",  true);
-    processar_problema("../dados/PROBLEMA_8.csv",  "problema_8",  false);
-    processar_problema("../dados/PROBLEMA_9.csv",  "problema_9",  true);
-    processar_problema("../dados/PROBLEMA_10.csv", "problema_10", false);
-    processar_problema("../dados/PROBLEMA_11.csv", "problema_11", true);
-    processar_problema("../dados/PROBLEMA_12.csv", "problema_12", false);
+    // processar_problema("../dados/PROBLEMA_1.csv",  "problema_1",  true);
+    // processar_problema("../dados/PROBLEMA_2.csv",  "problema_2",  false);
+    // processar_problema("../dados/PROBLEMA_3.csv",  "problema_3",  true);
+    // processar_problema("../dados/PROBLEMA_4.csv",  "problema_4",  false);
+    // processar_problema("../dados/PROBLEMA_5.csv",  "problema_5",  true);
+    // processar_problema("../dados/PROBLEMA_6.csv",  "problema_6",  false);
+    // processar_problema("../dados/PROBLEMA_7.csv",  "problema_7",  true);
+    // processar_problema("../dados/PROBLEMA_8.csv",  "problema_8",  false);
+    // processar_problema("../dados/PROBLEMA_9.csv",  "problema_9",  true);
+    // processar_problema("../dados/PROBLEMA_10.csv", "problema_10", false);
+    // processar_problema("../dados/PROBLEMA_11.csv", "problema_11", true);
+    // processar_problema("../dados/PROBLEMA_12.csv", "problema_12", false);
+
+    DigrafoMatrizAdj digrafo(0);
+    digrafo.carregar_de_arquivo_csv("../dados/PROBLEMA_12.csv", false);
+    AlgoritmoGenetico ag(digrafo);
+
+    ag.gerar_e_avaliar_populacao_inicial();
+    auto populacao = ag.get_populacao();
+
+    for (auto par : populacao) {
+        for (int v : par.first) {
+            std::cout << v << " ";
+        }
+        std::cout << "Custo = " << par.second << std::endl;
+    }
 
     return 0;
 }
