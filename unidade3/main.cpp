@@ -70,8 +70,9 @@ int main() {
     AlgoritmoGenetico ag(digrafo);
 
     ag.gerar_e_avaliar_populacao_inicial();
-    auto populacao = ag.get_populacao();
+    ag.selecao_populacao(AlgoritmoGenetico::ELITISMO);
 
+    auto populacao = ag.get_populacao();
     for (auto par : populacao) {
         for (int v : par.first) {
             std::cout << v << " ";

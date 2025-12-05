@@ -20,9 +20,68 @@ int AlgoritmoGenetico::calcula_custo(std::vector<int> ordem_vertices) {
     return custo;
 }
 
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_aleatoria(int num_selecionados) {
+  std::vector<std::pair<std::vector<int>, int>> selecionados;
+  selecionados.reserve(num_selecionados);
+
+  std::vector<int> indices(populacao.size());
+  for (int i = 0; i < int(populacao.size()); i++) {
+    indices[i] = i;
+  }
+  std::shuffle(indices.begin(), indices.end(), gerador_aleatorio);
+
+  for (int i = 0; i < num_selecionados; i++) {
+    selecionados.push_back(populacao[indices[i]]);
+  }
+
+  return selecionados;
+}
+
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio(int num_selecionados) {
+  std::vector<std::pair<std::vector<int>, int>> selecionados;
+  selecionados.reserve(num_selecionados);
+
+  std::vector<int> indices(populacao.size());
+  for (int i = 0; i < int(populacao.size()); i++) {
+    indices[i] = i;
+  }
+  std::shuffle(indices.begin(), indices.end(), gerador_aleatorio);
+
+  for (int i = 1; i < num_selecionados; i++) {
+    int indice_competidor1 = indices[i-1];
+    int custo_competidor1 = populacao[indice_competidor1].second;
+
+    int indice_competidor2 = indices[i];
+    int custo_competidor2 = populacao[indice_competidor2].second;
+
+    if (custo_competidor1 <= custo_competidor2) {
+      selecionados.push_back(populacao[indice_competidor1]);
+    } else {
+      selecionados.push_back(populacao[indice_competidor2]);
+    }
+  }
+
+  return selecionados;
+}
+
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_elitismo(int num_selecionados) {
+  std::vector<std::pair<std::vector<int>, int>> temp_populacao = populacao;
+
+
+  auto comparar_por_custo = [](const std::pair<std::vector<int>, int>& a, const std::pair<std::vector<int>, int>& b) {
+    return a.second < b.second;
+  };
+
+  std::partial_sort(temp_populacao.begin(), temp_populacao.begin() + num_selecionados, temp_populacao.end(), comparar_por_custo);
+
+  std::vector<std::pair<std::vector<int>, int>> selecionados(temp_populacao.begin(), temp_populacao.begin() + num_selecionados);
+
+  return selecionados;
+}
+
 void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao) {
   if (tamanho_populacao < 2) {
-    std::cerr << "O tamanho mínimo da população é 2." << std::endl;
+    std::cerr << "Erro: O tamanho mínimo da população é 2" << std::endl;
     return;
   }
 
@@ -49,4 +108,26 @@ void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao)
       populacao.push_back({vertices_base, custo});
     }
   }
+}
+
+void AlgoritmoGenetico::selecao_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
+  if (num_selecionados > int(populacao.size())) {
+    std::cerr << "Erro: O número de soluções selecionadas não deve ser maior do que o tamanho da população" << std::endl;
+    return;
+  }
+
+  switch (tipo_selecao) {
+    case ALEATORIA:
+      populacao = selecao_aleatoria(num_selecionados);
+      break;
+    case TORNEIO:
+      populacao = selecao_torneio(num_selecionados);
+      break;
+    case ELITISMO:
+      populacao = selecao_elitismo(num_selecionados);
+      break;
+    default:
+        std::cerr << "Erro: Tipo de seleção inválido" << std::endl;
+        return;
+    }
 }
