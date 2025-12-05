@@ -65,18 +65,94 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio
 }
 
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_elitismo(int num_selecionados) {
-  std::vector<std::pair<std::vector<int>, int>> temp_populacao = populacao;
-
+  std::vector<std::pair<std::vector<int>, int>> populacao_temp = populacao;
 
   auto comparar_por_custo = [](const std::pair<std::vector<int>, int>& a, const std::pair<std::vector<int>, int>& b) {
     return a.second < b.second;
   };
 
-  std::partial_sort(temp_populacao.begin(), temp_populacao.begin() + num_selecionados, temp_populacao.end(), comparar_por_custo);
+  std::partial_sort(populacao_temp.begin(), populacao_temp.begin() + num_selecionados, populacao_temp.end(), comparar_por_custo);
 
-  std::vector<std::pair<std::vector<int>, int>> selecionados(temp_populacao.begin(), temp_populacao.begin() + num_selecionados);
+  std::vector<std::pair<std::vector<int>, int>> selecionados(populacao_temp.begin(), populacao_temp.begin() + num_selecionados);
 
   return selecionados;
+}
+
+std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_1x_reparado(
+  const std::pair<std::vector<int>, int>& pai1,
+  const std::pair<std::vector<int>, int>& pai2
+) {
+  int num_vertices = pai1.first.size();
+  std::vector<int> filho = pai1.first;
+
+  std::uniform_int_distribution<> distribuicao(1, num_vertices - 2);
+  int ponto_corte = distribuicao(gerador_aleatorio);
+
+  for (int i = ponto_corte; i < num_vertices; i++) {
+    filho[i] = pai2.first[i];
+  }
+
+  std::vector<int> contagem(num_vertices, 0);
+  std::vector<int> vertices_que_faltam;
+  std::vector<int> pos_duplicadas;
+
+  for (int i = 0; i < num_vertices; i++) {
+    contagem[filho[i]]++;
+  }
+
+  for (int vertice = 0; vertice < num_vertices; vertice++) {
+    if (contagem[vertice] == 0) vertices_que_faltam.push_back(vertice);
+  }
+
+  for (int i = 0; i < num_vertices; i++) {
+    int c = filho[i];
+    if (contagem[c] > 1) {
+      contagem[c]--;
+      pos_duplicadas.push_back(i);
+    }
+  }
+
+  std::shuffle(pos_duplicadas.begin(), pos_duplicadas.end(), gerador_aleatorio);
+  for (int i = 0; i < int(pos_duplicadas.size()); i++) {
+    filho[pos_duplicadas[i]] = vertices_que_faltam[i];
+  }
+
+  return {filho, calcula_custo(filho)};
+}
+
+std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_ox(
+  const std::pair<std::vector<int>, int>& pai1,
+  const std::pair<std::vector<int>, int>& pai2
+) {
+  int num_vertices = pai1.first.size();
+  std::vector<int> filho(num_vertices, -1);
+
+  std::uniform_int_distribution<> distribuicao(1, num_vertices - 2);
+  int ponto_corte1 = distribuicao(gerador_aleatorio);
+  int ponto_corte2 = distribuicao(gerador_aleatorio);
+
+  if (ponto_corte1 > ponto_corte2) std::swap(ponto_corte1, ponto_corte2);
+
+  std::vector<bool> visitados(num_vertices, false);
+  for (int i = ponto_corte1; i <= ponto_corte2; i++) {
+    int vertice = pai1.first[i];
+    filho[i] = vertice;
+    visitados[vertice] = true;
+  }
+
+  int pos_filho = (ponto_corte2 + 1) % num_vertices;
+  int pos_pai2 = (ponto_corte2 + 1) % num_vertices;
+
+  for (int i = 0; i < num_vertices; i++) {
+    int vertice = pai2.first[pos_pai2];
+    if (!visitados[vertice]) {
+      filho[pos_filho] = vertice;
+      pos_filho = (pos_filho + 1) % num_vertices;
+    }
+    pos_pai2 = (pos_pai2 + 1) % num_vertices;
+  }
+
+  return {filho, calcula_custo(filho)};
 }
 
 void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao) {
@@ -110,7 +186,7 @@ void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao)
   }
 }
 
-void AlgoritmoGenetico::selecao_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
+void AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
   if (num_selecionados > int(populacao.size())) {
     std::cerr << "Erro: O número de soluções selecionadas não deve ser maior do que o tamanho da população" << std::endl;
     return;
@@ -130,4 +206,8 @@ void AlgoritmoGenetico::selecao_populacao(TipoSelecao tipo_selecao, int num_sele
         std::cerr << "Erro: Tipo de seleção inválido" << std::endl;
         return;
     }
+}
+
+void AlgoritmoGenetico::realizar_cruzamento(TipoCruzamento tipo_cruzamento, double taxa_reproducao) {
+  //TODO
 }
