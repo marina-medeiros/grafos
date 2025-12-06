@@ -20,23 +20,6 @@ int AlgoritmoGenetico::calcula_custo(std::vector<int> ordem_vertices) {
     return custo;
 }
 
-std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_aleatoria(int num_selecionados) {
-  std::vector<std::pair<std::vector<int>, int>> selecionados;
-  selecionados.reserve(num_selecionados);
-
-  std::vector<int> indices(populacao.size());
-  for (int i = 0; i < int(populacao.size()); i++) {
-    indices[i] = i;
-  }
-  std::shuffle(indices.begin(), indices.end(), gerador_aleatorio);
-
-  for (int i = 0; i < num_selecionados; i++) {
-    selecionados.push_back(populacao[indices[i]]);
-  }
-
-  return selecionados;
-}
-
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio(int num_selecionados) {
   std::vector<std::pair<std::vector<int>, int>> selecionados;
   selecionados.reserve(num_selecionados);
@@ -74,6 +57,23 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_elitism
   std::partial_sort(populacao_temp.begin(), populacao_temp.begin() + num_selecionados, populacao_temp.end(), comparar_por_custo);
 
   std::vector<std::pair<std::vector<int>, int>> selecionados(populacao_temp.begin(), populacao_temp.begin() + num_selecionados);
+
+  return selecionados;
+}
+
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_aleatoria(int num_selecionados) {
+  std::vector<std::pair<std::vector<int>, int>> selecionados;
+  selecionados.reserve(num_selecionados);
+
+  std::vector<int> indices(populacao.size());
+  for (int i = 0; i < int(populacao.size()); i++) {
+    indices[i] = i;
+  }
+  std::shuffle(indices.begin(), indices.end(), gerador_aleatorio);
+
+  for (int i = 0; i < num_selecionados; i++) {
+    selecionados.push_back(populacao[indices[i]]);
+  }
 
   return selecionados;
 }
@@ -193,18 +193,15 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_popu
   }
 
   switch (tipo_selecao) {
-    case ALEATORIA:
-      return selecao_aleatoria(num_selecionados);
-      break;
     case TORNEIO:
       return selecao_torneio(num_selecionados);
-      break;
     case ELITISMO:
       return selecao_elitismo(num_selecionados);
-      break;
+    case ALEATORIA:
+      return selecao_aleatoria(num_selecionados);
     default:
         std::cerr << "Erro: Tipo de seleção inválido" << std::endl;
-        return;
+        return {};
     }
 }
 
@@ -271,4 +268,21 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::aplicar_mutacao
       filho.second = calcula_custo(filho.first);
     }
   }
+}
+
+void AlgoritmoGenetico::renovar_populacao(std::vector<std::pair<std::vector<int>, int>>& filhos, TipoRenovacao tipo_renovacao) {
+  int tamanho_original_populacao = populacao.size();
+
+  auto v = populacao;
+  v.insert(v.end(), filhos.begin(), filhos.end());
+
+  switch (tipo_renovacao) {
+    case TORNEIO:
+      populacao = selecao_torneio(tamanho_original_populacao);
+    case ELITISMO:
+      populacao =  selecao_elitismo(tamanho_original_populacao);
+    default:
+        std::cerr << "Erro: Tipo de renovação inválido" << std::endl;
+        return;
+    }
 }
