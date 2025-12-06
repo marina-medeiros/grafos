@@ -20,6 +20,18 @@ int AlgoritmoGenetico::calcula_custo(std::vector<int> ordem_vertices) {
     return custo;
 }
 
+std::pair<std::vector<int>, int> AlgoritmoGenetico::obter_melhor_solucao() {
+  if (populacao.empty()) return {};
+
+  auto comparar_por_custo = [](const std::pair<std::vector<int>, int>& a, const std::pair<std::vector<int>, int>& b) {
+    return a.second < b.second;
+  };
+
+  auto melhor_elemento = std::min_element(populacao.begin(), populacao.end(), comparar_por_custo);
+
+  return *melhor_elemento;
+}
+
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio(int num_selecionados) {
   std::vector<std::pair<std::vector<int>, int>> selecionados;
   selecionados.reserve(num_selecionados);
@@ -186,18 +198,18 @@ void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao)
   }
 }
 
-std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_populacao(int num_selecionados, TipoSelecao tipo_selecao) {
   if (num_selecionados > int(populacao.size())) {
     std::cerr << "Erro: O número de soluções selecionadas não deve ser maior do que o tamanho da população" << std::endl;
-    return;
+    return {};
   }
 
   switch (tipo_selecao) {
-    case TORNEIO:
+    case TipoSelecao::TORNEIO:
       return selecao_torneio(num_selecionados);
-    case ELITISMO:
+    case TipoSelecao::ELITISMO:
       return selecao_elitismo(num_selecionados);
-    case ALEATORIA:
+    case TipoSelecao::ALEATORIA:
       return selecao_aleatoria(num_selecionados);
     default:
         std::cerr << "Erro: Tipo de seleção inválido" << std::endl;
@@ -207,16 +219,21 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_popu
 
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzamento(
   std::vector<std::pair<std::vector<int>, int>>& pais,
-  TipoCruzamento tipo_cruzamento,
-  double taxa_reproducao
+  double taxa_reproducao,
+  TipoCruzamento tipo_cruzamento
 ) {
   int num_pais = pais.size();
   std::vector<std::pair<std::vector<int>, int>> filhos;
   filhos.reserve(num_pais);
 
-  std::uniform_int_distribution<> distribuicao_probabilistica(0.0, 1.0);
+  std::uniform_real_distribution<double> distribuicao_probabilistica(0.0, 1.0);
 
   for (int i = 0; i < num_pais; i += 2) {
+    if (i + 1 >= num_pais) {
+      filhos.push_back(pais[i]);
+      break;
+    }
+
     const auto& pai1 = pais[i];
     const auto& pai2 = pais[i + 1];
 
@@ -224,11 +241,11 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzam
       std::pair<std::vector<int>, int> filho1, filho2;
 
       switch (tipo_cruzamento) {
-        case UM_X:
+        case TipoCruzamento::UM_X:
           filho1 = cruzamento_1x_reparado(pai1, pai2);
           filho2 = cruzamento_1x_reparado(pai2, pai1);
           break;
-        case OX:
+        case TipoCruzamento::OX:
           filho1 = cruzamento_ox(pai1, pai2);
           filho2 = cruzamento_ox(pai2, pai1);
           break;
@@ -246,7 +263,7 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzam
   return filhos;
 }
 
-std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::aplicar_mutacao(
+void AlgoritmoGenetico::aplicar_mutacao(
   std::vector<std::pair<std::vector<int>, int>>& filhos,
   double taxa_mutacao
 ) {
@@ -273,16 +290,54 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::aplicar_mutacao
 void AlgoritmoGenetico::renovar_populacao(std::vector<std::pair<std::vector<int>, int>>& filhos, TipoRenovacao tipo_renovacao) {
   int tamanho_original_populacao = populacao.size();
 
-  auto v = populacao;
-  v.insert(v.end(), filhos.begin(), filhos.end());
+  populacao.insert(populacao.end(), filhos.begin(), filhos.end());
 
   switch (tipo_renovacao) {
-    case TORNEIO:
+    case TipoRenovacao::TORNEIO:
       populacao = selecao_torneio(tamanho_original_populacao);
-    case ELITISMO:
+      break;
+    case TipoRenovacao::ELITISMO:
       populacao =  selecao_elitismo(tamanho_original_populacao);
+      break;
     default:
         std::cerr << "Erro: Tipo de renovação inválido" << std::endl;
         return;
     }
+}
+
+std::pair<std::vector<int>, int> AlgoritmoGenetico::executar_algoritmo(
+  int tamanho_populacao, double taxa_reproducao, double taxa_mutacao, int num_geracoes,
+  int num_selecionados_para_cruzamento, int max_geracoes_sem_melhoria,
+  TipoSelecao tipo_selecao, TipoCruzamento tipo_cruzamento, TipoRenovacao tipo_renovacao
+) {
+  // Etapas (1) Início e (2) Fitness
+  gerar_e_avaliar_populacao_inicial(tamanho_populacao);
+
+  std::pair<std::vector<int>, int> melhor_solucao_global = obter_melhor_solucao();
+
+  int geracao_atual = 0;
+  int geracoes_sem_melhoria = 0;
+
+  while (geracao_atual < num_geracoes && geracoes_sem_melhoria < max_geracoes_sem_melhoria) {
+    geracao_atual++;
+
+    // Etapa (3) Nova Geração
+    auto pais = selecionar_populacao(num_selecionados_para_cruzamento, tipo_selecao);
+    auto filhos = realizar_cruzamento(pais, taxa_reproducao, tipo_cruzamento);
+    aplicar_mutacao(filhos, taxa_mutacao);
+
+    // Etapa(4) Renovação
+    renovar_populacao(filhos, tipo_renovacao);
+
+    auto melhor_da_geracao = obter_melhor_solucao();
+
+    if (melhor_da_geracao.second < melhor_solucao_global.second) {
+      melhor_solucao_global = melhor_da_geracao;
+      geracoes_sem_melhoria = 0;
+    } else {
+      geracoes_sem_melhoria++;
+    }
+  }
+
+  return melhor_solucao_global;
 }

@@ -66,19 +66,24 @@ int main() {
     // processar_problema("../dados/PROBLEMA_12.csv", "problema_12", false);
 
     DigrafoMatrizAdj digrafo(0);
-    digrafo.carregar_de_arquivo_csv("../dados/PROBLEMA_12.csv", false);
+    digrafo.carregar_de_arquivo_csv("../dados/PROBLEMA_1.csv", true);
+    auto rotulos = digrafo.get_rotulos();
     AlgoritmoGenetico ag(digrafo);
 
-    ag.gerar_e_avaliar_populacao_inicial();
-    ag.selecionar_populacao(AlgoritmoGenetico::ELITISMO);
+    auto solucao = ag.executar_algoritmo(
+    500, // tamanho_populacao
+    0.85, // taxa_reproducao
+    0.05, // taxa_mutacao
+    1000, // num_geracoes
+    450, // num_selecionados_para_cruzamento
+    50, // max_geracoes_sem_melhoria
+    AlgoritmoGenetico::TipoSelecao::ALEATORIA,
+    AlgoritmoGenetico::TipoCruzamento::OX,
+    AlgoritmoGenetico::TipoRenovacao::ELITISMO);
 
-    auto populacao = ag.get_populacao();
-    for (auto par : populacao) {
-        for (int v : par.first) {
-            std::cout << v << " ";
-        }
-        std::cout << "Custo = " << par.second << std::endl;
-    }
+
+    solucao.first.push_back(solucao.first[0]);
+    imprimir_resultado("AG", solucao, rotulos, true);
 
     return 0;
 }
