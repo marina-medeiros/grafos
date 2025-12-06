@@ -70,7 +70,7 @@ int main() {
     AlgoritmoGenetico ag(digrafo);
 
     ag.gerar_e_avaliar_populacao_inicial();
-    ag.selecao_populacao(AlgoritmoGenetico::ELITISMO);
+    ag.selecionar_populacao(AlgoritmoGenetico::ELITISMO);
 
     auto populacao = ag.get_populacao();
     for (auto par : populacao) {

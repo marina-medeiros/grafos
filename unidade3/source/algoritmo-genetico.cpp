@@ -186,7 +186,7 @@ void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao)
   }
 }
 
-void AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados) {
   if (num_selecionados > int(populacao.size())) {
     std::cerr << "Erro: O número de soluções selecionadas não deve ser maior do que o tamanho da população" << std::endl;
     return;
@@ -194,13 +194,13 @@ void AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_s
 
   switch (tipo_selecao) {
     case ALEATORIA:
-      populacao = selecao_aleatoria(num_selecionados);
+      return selecao_aleatoria(num_selecionados);
       break;
     case TORNEIO:
-      populacao = selecao_torneio(num_selecionados);
+      return selecao_torneio(num_selecionados);
       break;
     case ELITISMO:
-      populacao = selecao_elitismo(num_selecionados);
+      return selecao_elitismo(num_selecionados);
       break;
     default:
         std::cerr << "Erro: Tipo de seleção inválido" << std::endl;
@@ -208,6 +208,67 @@ void AlgoritmoGenetico::selecionar_populacao(TipoSelecao tipo_selecao, int num_s
     }
 }
 
-void AlgoritmoGenetico::realizar_cruzamento(TipoCruzamento tipo_cruzamento, double taxa_reproducao) {
-  //TODO
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzamento(
+  std::vector<std::pair<std::vector<int>, int>>& pais,
+  TipoCruzamento tipo_cruzamento,
+  double taxa_reproducao
+) {
+  int num_pais = pais.size();
+  std::vector<std::pair<std::vector<int>, int>> filhos;
+  filhos.reserve(num_pais);
+
+  std::uniform_int_distribution<> distribuicao_probabilistica(0.0, 1.0);
+
+  for (int i = 0; i < num_pais; i += 2) {
+    const auto& pai1 = pais[i];
+    const auto& pai2 = pais[i + 1];
+
+    if (distribuicao_probabilistica(gerador_aleatorio) < taxa_reproducao) {
+      std::pair<std::vector<int>, int> filho1, filho2;
+
+      switch (tipo_cruzamento) {
+        case UM_X:
+          filho1 = cruzamento_1x_reparado(pai1, pai2);
+          filho2 = cruzamento_1x_reparado(pai2, pai1);
+          break;
+        case OX:
+          filho1 = cruzamento_ox(pai1, pai2);
+          filho2 = cruzamento_ox(pai2, pai1);
+          break;
+        default:
+          filho1 = pai1;
+          filho2 = pai2;
+          break;
+      }
+
+      filhos.push_back(filho1);
+      filhos.push_back(filho2);
+    }
+  }
+
+  return filhos;
+}
+
+std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::aplicar_mutacao(
+  std::vector<std::pair<std::vector<int>, int>>& filhos,
+  double taxa_mutacao
+) {
+  std::uniform_int_distribution<> distribuicao_probabilistica(0.0, 1.0);
+
+  for (auto& filho: filhos) {
+    if (distribuicao_probabilistica(gerador_aleatorio) < taxa_mutacao) {
+      int num_vertices = filho.first.size();
+      std::uniform_int_distribution<> distribuicao_posicao(0, num_vertices - 1);
+
+      int pos1 = distribuicao_posicao(gerador_aleatorio);
+      int pos2 = distribuicao_posicao(gerador_aleatorio);
+
+      while (pos1 == pos2) {
+        pos2 = distribuicao_posicao(gerador_aleatorio);
+      }
+
+      std::swap(filho.first[pos1], filho.first[pos2]);
+      filho.second = calcula_custo(filho.first);
+    }
+  }
 }

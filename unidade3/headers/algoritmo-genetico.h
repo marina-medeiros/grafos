@@ -10,6 +10,7 @@ class AlgoritmoGenetico {
   private:
     const DigrafoMatrizAdj& grafo;
     std::vector<std::pair<std::vector<int>, int>> populacao;
+    std::vector<std::pair<std::vector<int>, int>> populacao_para_cruzamento;
     std::mt19937 gerador_aleatorio;
 
     int calcula_custo(std::vector<int> caminho);
@@ -30,12 +31,14 @@ class AlgoritmoGenetico {
 
     // Etapa (3.1) Seleção
     enum TipoSelecao { ALEATORIA = 1, TORNEIO = 2, ELITISMO = 3 };
-    void selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados = 100);
+    std::vector<std::pair<std::vector<int>, int>> selecionar_populacao(TipoSelecao tipo_selecao, int num_selecionados = 100);
 
     // Etapa (3.2) Cruzamento
     enum TipoCruzamento { UM_X = 1, OX = 2 };
-    void realizar_cruzamento(TipoCruzamento tipo_cruzamento, double taxa_reproducao);
+    std::vector<std::pair<std::vector<int>, int>> realizar_cruzamento(std::vector<std::pair<std::vector<int>, int>>& selecionados, TipoCruzamento tipo_cruzamento, double taxa_reproducao);
 
+    // Etapa (3.3) Mutação
+    std::vector<std::pair<std::vector<int>, int>> aplicar_mutacao(std::vector<std::pair<std::vector<int>, int>>& filhos, double taxa_mutacao);
 
     const std::vector<std::pair<std::vector<int>, int>>& get_populacao() const {
       return populacao;
