@@ -1,10 +1,17 @@
 #include <iostream>
+#include <string>
+#include <chrono>
+#include <numeric>
+#include <vector>
+#include <utility>
+#include <fstream>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 #include "../headers/insercao-mais-barata.h"
 #include "../headers/vizinho-mais-proximo.h"
 #include "../headers/buscas-locais.h"
 #include "../headers/buscas-locais-testes.h"
 #include "../headers/algoritmo-genetico.h"
+#include "../headers/algoritmo-memetico.h"
 
 void analisar_digrafo(DigrafoMatrizAdj& grafo, const std::string& nome_arquivo, bool peso_eh_decimal = false) {
     std::cout << "\nAnálise do " << nome_arquivo << std::endl;
@@ -51,39 +58,166 @@ void processar_problema(const std::string& caminho_csv, const std::string& nome_
     std::cout << "#####################################################################################################################" << std::endl;
 }
 
+struct Estatisticas {
+    double melhor_valor;
+    double media_valor;
+    double tempo_medio_ms;
+    std::pair<std::vector<int>, int> melhor_solucao;
+};
+
+void imprimir_resultado2(const std::string& nome_algoritmo, 
+                        const std::pair<std::vector<int>, int>& resultado, 
+                        std::vector<std::string>& rotulos,
+                        bool peso_eh_decimal) {
+    
+    double custo_formatado = peso_eh_decimal ? (resultado.second / 10.0) : resultado.second;
+    
+    std::cout << " >> " << nome_algoritmo << " | Custo: " << custo_formatado << std::endl;
+}
+
+Estatisticas executar_bateria_testes(
+    DigrafoMatrizAdj& grafo, 
+    bool usar_memetico, 
+    bool peso_eh_decimal,
+    const std::string& nome_instancia) {
+    std::vector<double> custos;
+    std::vector<long long> tempos;
+    std::pair<std::vector<int>, int> melhor_global = {{}, 999999999};
+
+    std::cout << "\n--- Iniciando Bateria de 20 Execucoes: " 
+              << (usar_memetico ? "MEMETICO" : "GENETICO") 
+              << " [" << nome_instancia << "] ---\n";
+    
+    int POP_SIZE = 500;
+    double TAXA_REP = 0.85;
+    double TAXA_MUT = 0.05;
+    int MAX_GEN = 1000;
+    int ELITE_COUNT = 450;
+    int PATIENCE = 50;
+
+    if(usar_memetico) {
+        POP_SIZE = 200;
+        TAXA_REP = 0.85;
+        TAXA_MUT = 0.05;
+        MAX_GEN = 500;
+        ELITE_COUNT = 190;
+        PATIENCE = 50;
+    }
+
+    for (int i = 0; i < 20; ++i) {
+        auto inicio = std::chrono::high_resolution_clock::now();
+        
+        std::pair<std::vector<int>, int> solucao;
+
+        if (usar_memetico) {
+            AlgoritmoMemetico am(grafo);
+            solucao = am.executar_com_busca_local(
+                POP_SIZE, TAXA_REP, TAXA_MUT, MAX_GEN, ELITE_COUNT, PATIENCE,
+                AlgoritmoGenetico::TipoSelecao::ALEATORIA,
+                AlgoritmoGenetico::TipoCruzamento::OX,
+                AlgoritmoGenetico::TipoRenovacao::ELITISMO,
+                1, 
+                1  
+            );
+        } else {
+            AlgoritmoGenetico ag(grafo);
+            solucao = ag.executar_algoritmo(
+                POP_SIZE, TAXA_REP, TAXA_MUT, MAX_GEN, ELITE_COUNT, PATIENCE,
+                AlgoritmoGenetico::TipoSelecao::ALEATORIA,
+                AlgoritmoGenetico::TipoCruzamento::OX,
+                AlgoritmoGenetico::TipoRenovacao::ELITISMO
+            );
+        }
+
+        auto fim = std::chrono::high_resolution_clock::now();
+        auto duracao = std::chrono::duration_cast<std::chrono::milliseconds>(fim - inicio).count();
+ 
+        double custo_real = peso_eh_decimal ? (solucao.second / 10.0) : solucao.second;
+        
+        custos.push_back(custo_real);
+        tempos.push_back(duracao);
+
+        if (solucao.second < melhor_global.second) {
+            melhor_global = solucao;
+        }
+
+        std::cout << "Exec " << (i+1) << ": " << custo_real << " (" << duracao << "ms)" << std::endl;
+    }
+
+    double soma_custos = std::accumulate(custos.begin(), custos.end(), 0.0);
+    double soma_tempos = std::accumulate(tempos.begin(), tempos.end(), 0.0);
+    
+    if (melhor_global.first.empty()) melhor_global.second = 0; 
+
+    Estatisticas stats;
+    stats.melhor_valor = peso_eh_decimal ? (melhor_global.second / 10.0) : melhor_global.second;
+    stats.media_valor = soma_custos / 20.0;
+    stats.tempo_medio_ms = soma_tempos / 20.0;
+    stats.melhor_solucao = melhor_global;
+
+    return stats;
+}
+
 int main() {
-    // processar_problema("../dados/PROBLEMA_1.csv",  "problema_1",  true);
-    // processar_problema("../dados/PROBLEMA_2.csv",  "problema_2",  false);
-    // processar_problema("../dados/PROBLEMA_3.csv",  "problema_3",  true);
-    // processar_problema("../dados/PROBLEMA_4.csv",  "problema_4",  false);
-    // processar_problema("../dados/PROBLEMA_5.csv",  "problema_5",  true);
-    // processar_problema("../dados/PROBLEMA_6.csv",  "problema_6",  false);
-    // processar_problema("../dados/PROBLEMA_7.csv",  "problema_7",  true);
-    // processar_problema("../dados/PROBLEMA_8.csv",  "problema_8",  false);
-    // processar_problema("../dados/PROBLEMA_9.csv",  "problema_9",  true);
-    // processar_problema("../dados/PROBLEMA_10.csv", "problema_10", false);
-    // processar_problema("../dados/PROBLEMA_11.csv", "problema_11", true);
-    // processar_problema("../dados/PROBLEMA_12.csv", "problema_12", false);
+     
 
-    DigrafoMatrizAdj digrafo(0);
-    digrafo.carregar_de_arquivo_csv("../dados/PROBLEMA_1.csv", true);
-    auto rotulos = digrafo.get_rotulos();
-    AlgoritmoGenetico ag(digrafo);
+    struct Instancia {
+        std::string caminho;
+        std::string nome;
+        bool decimal;
+    };
 
-    auto solucao = ag.executar_algoritmo(
-    500, // tamanho_populacao
-    0.85, // taxa_reproducao
-    0.05, // taxa_mutacao
-    1000, // num_geracoes
-    450, // num_selecionados_para_cruzamento
-    50, // max_geracoes_sem_melhoria
-    AlgoritmoGenetico::TipoSelecao::ALEATORIA,
-    AlgoritmoGenetico::TipoCruzamento::OX,
-    AlgoritmoGenetico::TipoRenovacao::ELITISMO);
+    std::vector<Instancia> problemas = {
+        {"../dados/PROBLEMA_1.csv", "Problema 1", true},
+        // {"../dados/PROBLEMA_2.csv", "problema_2", false},
+        // {"../dados/PROBLEMA_3.csv", "problema_3", true},
+        // {"../dados/PROBLEMA_4.csv", "problema_4", false},
+        // {"../dados/PROBLEMA_5.csv", "problema_5", true},
+        // {"../dados/PROBLEMA_6.csv", "problema_6", false},
+        // {"../dados/PROBLEMA_7.csv", "problema_7", true},
+        // {"../dados/PROBLEMA_8.csv", "problema_8", false},
+        // {"../dados/PROBLEMA_9.csv", "problema_9", true},
+        // {"../dados/PROBLEMA_10.csv", "problema_10", false},
+        // {"../dados/PROBLEMA_11.csv", "problema_11", true},
+        // {"../dados/PROBLEMA_12.csv", "problema_12", false}
+    };
 
+    std::ofstream arquivo_saida("resultados_finais.txt");
+    if (!arquivo_saida.is_open()) {
+        std::cerr << "Erro ao abrir arquivo de saida!" << std::endl;
+        return 1;
+    }
 
-    solucao.first.push_back(solucao.first[0]);
-    imprimir_resultado("AG", solucao, rotulos, true);
+    arquivo_saida << "Instancia | Algoritmo | Melhor | Media | Tempo(ms)\n";
+    arquivo_saida << "--------------------------------------------------\n";
+
+    for (const auto& prob : problemas) {
+        DigrafoMatrizAdj digrafo(0);
+        digrafo.carregar_de_arquivo_csv(prob.caminho, prob.decimal);
+        
+        Estatisticas statsAG = executar_bateria_testes(digrafo, false, prob.decimal, prob.nome);
+
+        arquivo_saida << prob.nome << " | Genetico | " 
+                      << statsAG.melhor_valor << " | " 
+                      << statsAG.media_valor << " | " 
+                      << statsAG.tempo_medio_ms << "\n";
+
+        Estatisticas statsAM = executar_bateria_testes(digrafo, true, prob.decimal, prob.nome);
+
+        arquivo_saida << prob.nome << " | Memetico | " 
+                      << statsAM.melhor_valor << " | " 
+                      << statsAM.media_valor << " | " 
+                      << statsAM.tempo_medio_ms << "\n";
+        
+        arquivo_saida << "--------------------------------------------------\n";
+        
+        arquivo_saida.flush(); 
+        arquivo_saida.flush(); 
+    }
+
+    arquivo_saida.close();
+    std::cout << "\nProcessamento finalizado. Verifique 'resultados_finais.txt'." << std::endl;
 
     return 0;
 }
+

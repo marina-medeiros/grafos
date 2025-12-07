@@ -32,7 +32,8 @@ set(SOURCES
     source/buscas-locais-testes.cpp
     source/insercao-mais-barata.cpp
     source/vizinho-mais-proximo.cpp
-    source/algoritmo-genetico.cpp)
+    source/algoritmo-genetico.cpp
+    source/algoritmo-memetico.cpp)
 
 # Executável principal
 add_executable(main

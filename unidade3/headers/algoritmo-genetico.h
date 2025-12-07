@@ -7,7 +7,7 @@
 #include <random>
 
 class AlgoritmoGenetico {
-  private:
+  protected:
     const DigrafoMatrizAdj& grafo;
     std::vector<std::pair<std::vector<int>, int>> populacao;
     std::mt19937 gerador_aleatorio;
