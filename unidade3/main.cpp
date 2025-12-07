@@ -4,6 +4,7 @@
 #include <numeric>
 #include <vector>
 #include <utility>
+#include <iomanip>
 #include <fstream>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 #include "../headers/insercao-mais-barata.h"
@@ -95,14 +96,6 @@ Estatisticas executar_bateria_testes(
     int ELITE_COUNT = 450;
     int PATIENCE = 50;
 
-    if(usar_memetico) {
-        POP_SIZE = 200;
-        TAXA_REP = 0.85;
-        TAXA_MUT = 0.05;
-        MAX_GEN = 500;
-        ELITE_COUNT = 190;
-        PATIENCE = 50;
-    }
 
     for (int i = 0; i < 20; ++i) {
         auto inicio = std::chrono::high_resolution_clock::now();
@@ -115,10 +108,7 @@ Estatisticas executar_bateria_testes(
                 POP_SIZE, TAXA_REP, TAXA_MUT, MAX_GEN, ELITE_COUNT, PATIENCE,
                 AlgoritmoGenetico::TipoSelecao::ALEATORIA,
                 AlgoritmoGenetico::TipoCruzamento::OX,
-                AlgoritmoGenetico::TipoRenovacao::ELITISMO,
-                1, 
-                1  
-            );
+                AlgoritmoGenetico::TipoRenovacao::ELITISMO);
         } else {
             AlgoritmoGenetico ag(grafo);
             solucao = ag.executar_algoritmo(
@@ -169,17 +159,17 @@ int main() {
 
     std::vector<Instancia> problemas = {
         {"../dados/PROBLEMA_1.csv", "Problema 1", true},
-        // {"../dados/PROBLEMA_2.csv", "problema_2", false},
-        // {"../dados/PROBLEMA_3.csv", "problema_3", true},
-        // {"../dados/PROBLEMA_4.csv", "problema_4", false},
-        // {"../dados/PROBLEMA_5.csv", "problema_5", true},
-        // {"../dados/PROBLEMA_6.csv", "problema_6", false},
-        // {"../dados/PROBLEMA_7.csv", "problema_7", true},
-        // {"../dados/PROBLEMA_8.csv", "problema_8", false},
-        // {"../dados/PROBLEMA_9.csv", "problema_9", true},
-        // {"../dados/PROBLEMA_10.csv", "problema_10", false},
-        // {"../dados/PROBLEMA_11.csv", "problema_11", true},
-        // {"../dados/PROBLEMA_12.csv", "problema_12", false}
+        {"../dados/PROBLEMA_2.csv", "problema_2", false},
+        {"../dados/PROBLEMA_3.csv", "problema_3", true},
+        {"../dados/PROBLEMA_4.csv", "problema_4", false},
+        {"../dados/PROBLEMA_5.csv", "problema_5", true},
+        {"../dados/PROBLEMA_6.csv", "problema_6", false},
+        {"../dados/PROBLEMA_7.csv", "problema_7", true},
+        {"../dados/PROBLEMA_8.csv", "problema_8", false},
+        {"../dados/PROBLEMA_9.csv", "problema_9", true},
+        {"../dados/PROBLEMA_10.csv", "problema_10", false},
+        {"../dados/PROBLEMA_11.csv", "problema_11", true},
+        {"../dados/PROBLEMA_12.csv", "problema_12", false}
     };
 
     std::ofstream arquivo_saida("resultados_finais.txt");
@@ -188,8 +178,15 @@ int main() {
         return 1;
     }
 
-    arquivo_saida << "Instancia | Algoritmo | Melhor | Media | Tempo(ms)\n";
-    arquivo_saida << "--------------------------------------------------\n";
+    arquivo_saida << std::left;
+
+    arquivo_saida << std::setw(15) << "Instancia" << " | "
+                  << std::setw(12) << "Algoritmo" << " | "
+                  << std::setw(15) << "Melhor"    << " | "
+                  << std::setw(15) << "Media"     << " | "
+                  << std::setw(12) << "Tempo(ms)" << "\n";
+
+    arquivo_saida << std::string(82, '-') << "\n";
 
     for (const auto& prob : problemas) {
         DigrafoMatrizAdj digrafo(0);
@@ -197,19 +194,25 @@ int main() {
         
         Estatisticas statsAG = executar_bateria_testes(digrafo, false, prob.decimal, prob.nome);
 
-        arquivo_saida << prob.nome << " | Genetico | " 
-                      << statsAG.melhor_valor << " | " 
-                      << statsAG.media_valor << " | " 
-                      << statsAG.tempo_medio_ms << "\n";
+        arquivo_saida << std::left << std::setw(15) << prob.nome << " | "
+                      << std::setw(12) << "Genetico" << " | "
+                      << std::right
+                      << std::fixed << std::setprecision(2) 
+                      << std::setw(15) << statsAG.melhor_valor << " | "
+                      << std::setw(15) << statsAG.media_valor << " | "
+                      << std::setw(12) << statsAG.tempo_medio_ms << "\n";
 
         Estatisticas statsAM = executar_bateria_testes(digrafo, true, prob.decimal, prob.nome);
 
-        arquivo_saida << prob.nome << " | Memetico | " 
-                      << statsAM.melhor_valor << " | " 
-                      << statsAM.media_valor << " | " 
-                      << statsAM.tempo_medio_ms << "\n";
+        arquivo_saida << std::left << std::setw(15) << prob.nome << " | "
+                      << std::setw(12) << "Memetico" << " | "
+                      << std::right 
+                      << std::fixed << std::setprecision(2)
+                      << std::setw(15) << statsAM.melhor_valor << " | "
+                      << std::setw(15) << statsAM.media_valor << " | "
+                      << std::setw(12) << statsAM.tempo_medio_ms << "\n";
         
-        arquivo_saida << "--------------------------------------------------\n";
+        arquivo_saida << std::string(82, '-') << "\n";
         
         arquivo_saida.flush(); 
         arquivo_saida.flush(); 
