@@ -2,7 +2,6 @@
 #include <limits>
 #include <vector>
 #include <iostream>
-#include <random>
 #include "../../final/headers/DigrafoMatrizAdj.h"
 
 int calcula_custo(std::vector<int> ordem_vertices, const DigrafoMatrizAdj &grafo){
@@ -80,25 +79,14 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_shift(std::pair<std::ve
     return vizinhanca;
 }
 
-std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
+std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao, int i, int j, const DigrafoMatrizAdj &grafo){
     std::pair<std::vector<int>, int> nova_solucao = solucao;
     auto& v = nova_solucao.first;
-
-    int n = v.size();
-
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0, n - 1);
-    int i = 0;
-    int j = 0;
-
-    while(i == j || i > j){
-        i = dist(gen);
-        j = dist(gen);
-        if (i > j) std::swap(i, j);
+    
+    if (i < j) {
+        std::reverse(v.begin() + i, v.begin() + j + 1);
     }
 
-    std::reverse(v.begin() + i, v.begin() + j + 1);
     nova_solucao.second = calcula_custo(v, grafo);
 
     return nova_solucao;
@@ -106,9 +94,9 @@ std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao
 
 std::vector<std::pair<std::vector<int>, int>> vizinhanca_invert(std::pair<std::vector<int>, int> solucao, const DigrafoMatrizAdj &grafo){
     std::vector<std::pair<std::vector<int>, int>> vizinhanca;
-    for(int ii = 0; ii < grafo.get_qtd_vertices()/2; ii++){
-        for(int jj = 0; jj < grafo.get_qtd_vertices()/2; jj++){
-            vizinhanca.push_back(invert(solucao, grafo));
+    for(int ii = 0; ii < solucao.first.size() - 1; ii++){
+        for(int jj = ii + 1; jj < solucao.first.size(); jj++){
+            vizinhanca.push_back(invert(solucao, ii, jj, grafo));
         }
     }
 

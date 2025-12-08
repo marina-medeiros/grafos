@@ -62,11 +62,12 @@ void testar_invert(const DigrafoMatrizAdj &grafo, pair<vector<int>, int> solucao
     cout << "\n=== Testando INVERT ===\n";
     imprimir_solucao_testes(solucao);
 
-    // Apenas 10 inversões aleatórias
-    for (int k = 0; k < 10; k++) {
-        auto r = invert(solucao, grafo);
-        cout << "invert " << k+1 << ": ";
-        imprimir_solucao_testes(r);
+    for (int j = 0; j < solucao.first.size(); j++) {
+        for (int k = j + 1; k < solucao.first.size(); k++) {
+            auto r = invert(solucao, j, k, grafo);
+            cout << "invert " << k+1 << ": ";
+            imprimir_solucao_testes(r);
+        }
     }
 }
 
