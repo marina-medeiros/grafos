@@ -200,7 +200,7 @@ std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> so
 
     while(melhoria){
         melhoria = false;
-        if(tipo_busca == 1){ //first_imp
+        if(tipo_busca == 1){ // first_imp
             for(auto sol : vizinhanca){
                 if(sol.second < solucao.second){
                     solucao = sol;
@@ -209,7 +209,7 @@ std::pair<std::vector<int>, int> busca_local(std::pair<std::vector<int>, int> so
                 }
             }    
         }
-        else if(tipo_busca == 2){ //best_imp
+        else if(tipo_busca == 2){ // best_imp
             std::pair<std::vector<int>, int> melhor_sol = solucao;
             for(auto sol : vizinhanca){
                 if(sol.second < melhor_sol.second){
