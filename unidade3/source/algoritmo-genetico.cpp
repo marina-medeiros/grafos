@@ -2,6 +2,13 @@
 #include "../headers/algoritmo-genetico.h"
 #include <algorithm>
 
+/**
+ * @brief Calcula o custo total de uma solução (ordem de vértices).
+ * A soma é feita considerando o peso das arestas entre vértices consecutivos na ordem.
+ * @param ordem_vertices Vetor representando a ordem visitada dos vértices.
+ * @return double Custo total da ordem.
+ * 
+ */
 int AlgoritmoGenetico::calcula_custo(std::vector<int> ordem_vertices) {
     int custo = 0;
     int num_vertices = ordem_vertices.size();
@@ -20,6 +27,10 @@ int AlgoritmoGenetico::calcula_custo(std::vector<int> ordem_vertices) {
     return custo;
 }
 
+/**
+ * @brief Obtém a melhor solução da população atual.
+ * @return std::pair<std::vector<int>, int> Melhor solução (ordem de vértices e custo).
+ */
 std::pair<std::vector<int>, int> AlgoritmoGenetico::obter_melhor_solucao() {
   if (populacao.empty()) return {};
 
@@ -32,6 +43,12 @@ std::pair<std::vector<int>, int> AlgoritmoGenetico::obter_melhor_solucao() {
   return *melhor_elemento;
 }
 
+/**
+ * @brief Realiza a seleção por torneio.
+ * Seleciona pares de soluções aleatoriamente e escolhe a melhor entre elas.
+ * @param num_selecionados Número de soluções a serem selecionadas.
+ * @return std::vector<std::pair<std::vector<int>, int>> Soluções selecionadas.
+ */
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio(int num_selecionados) {
   std::vector<std::pair<std::vector<int>, int>> selecionados;
   selecionados.reserve(num_selecionados);
@@ -59,6 +76,12 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_torneio
   return selecionados;
 }
 
+/**
+ * @brief Realiza a seleção por elitismo.
+ * Ordena a população pelo custo e seleciona as melhores soluções.
+ * @param num_selecionados Número de soluções a serem selecionadas.
+ * @return std::vector<std::pair<std::vector<int>, int>> Soluções selecionadas.
+ */
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_elitismo(int num_selecionados) {
   std::vector<std::pair<std::vector<int>, int>> populacao_temp = populacao;
 
@@ -73,6 +96,11 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_elitism
   return selecionados;
 }
 
+/**
+ * @brief Realiza a seleção aleatória de soluções.
+ * @param num_selecionados Número de soluções a serem selecionadas.
+ * @return std::vector<std::pair<std::vector<int>, int>> Soluções selecionadas.
+ */
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_aleatoria(int num_selecionados) {
   std::vector<std::pair<std::vector<int>, int>> selecionados;
   selecionados.reserve(num_selecionados);
@@ -90,6 +118,14 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecao_aleator
   return selecionados;
 }
 
+/**
+ * @brief Realiza o cruzamento 1-point com reparo.
+ * Seleciona um ponto de corte e combina os genes dos pais, reparando duplicatas
+ * para garantir que todos os vértices estejam presentes na solução filha.
+ * @param pai1 Primeira solução pai.
+ * @param pai2 Segunda solução pai.
+ * @return std::pair<std::vector<int>, int> Solução filha resultante do cruzamento.
+ */
 std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_1x_reparado(
   const std::pair<std::vector<int>, int>& pai1,
   const std::pair<std::vector<int>, int>& pai2
@@ -132,6 +168,13 @@ std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_1x_reparado(
   return {filho, calcula_custo(filho)};
 }
 
+/**
+ * @brief Realiza o cruzamento Order Crossover (OX).
+ * Seleciona dois pontos de corte e preserva a ordem dos vértices dos pais.
+ * @param pai1 Primeira solução pai.
+ * @param pai2 Segunda solução pai.
+ * @return std::pair<std::vector<int>, int> Solução filha resultante do cruzamento.
+ */
 std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_ox(
   const std::pair<std::vector<int>, int>& pai1,
   const std::pair<std::vector<int>, int>& pai2
@@ -167,6 +210,11 @@ std::pair<std::vector<int>, int> AlgoritmoGenetico::cruzamento_ox(
   return {filho, calcula_custo(filho)};
 }
 
+/**
+ * @brief Gera e avalia a população inicial do algoritmo genético.
+ * Inclui soluções geradas pelas heurísticas Vizinho Mais Próximo e Inserção Mais Barata, além de soluções aleatórias.
+ * @param tamanho_populacao Tamanho desejado da população inicial.
+ */
 void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao) {
   if (tamanho_populacao < 2) {
     std::cerr << "Erro: O tamanho mínimo da população é 2" << std::endl;
@@ -198,6 +246,12 @@ void AlgoritmoGenetico::gerar_e_avaliar_populacao_inicial(int tamanho_populacao)
   }
 }
 
+/**
+ * @brief Seleciona uma subpopulação com base no tipo de seleção especificado.
+ * @param num_selecionados Número de soluções a serem selecionadas.
+ * @param tipo_selecao Tipo de seleção a ser utilizada (TORNEIO, ELITISMO, ALEATORIA).
+ * @return std::vector<std::pair<std::vector<int>, int>> Soluções selecionadas.
+ */
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_populacao(int num_selecionados, TipoSelecao tipo_selecao) {
   if (num_selecionados > int(populacao.size())) {
     std::cerr << "Erro: O número de soluções selecionadas não deve ser maior do que o tamanho da população" << std::endl;
@@ -217,6 +271,13 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::selecionar_popu
     }
 }
 
+/**
+ * @brief Realiza o cruzamento entre pares de soluções selecionadas.
+ * @param pais Vetor de soluções selecionadas para cruzamento.
+ * @param taxa_reproducao Probabilidade de cruzamento entre cada par de soluções.
+ * @param tipo_cruzamento Tipo de cruzamento a ser utilizado (UM_X, OX).
+ * @return std::vector<std::pair<std::vector<int>, int>> Soluções filhas resultantes do cruzamento.
+ */
 std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzamento(
   std::vector<std::pair<std::vector<int>, int>>& pais,
   double taxa_reproducao,
@@ -263,6 +324,12 @@ std::vector<std::pair<std::vector<int>, int>> AlgoritmoGenetico::realizar_cruzam
   return filhos;
 }
 
+/**
+ * @brief Aplica mutação nas soluções filhas com base na taxa de mutação.
+ * A mutação é realizada trocando dois vértices aleatoriamente na solução.
+ * @param filhos Vetor de soluções filhas a serem mutadas.
+ * @param taxa_mutacao Probabilidade de mutação para cada solução filha.
+ */
 void AlgoritmoGenetico::aplicar_mutacao(
   std::vector<std::pair<std::vector<int>, int>>& filhos,
   double taxa_mutacao
@@ -287,6 +354,12 @@ void AlgoritmoGenetico::aplicar_mutacao(
   }
 }
 
+/**
+ * @brief Renova a população combinando a população atual com os filhos gerados.
+ * Seleciona as melhores soluções com base no tipo de renovação especificado.
+ * @param filhos Vetor de soluções filhas geradas.
+ * @param tipo_renovacao Tipo de renovação a ser utilizada (TORNEIO, ELITISMO).
+ */
 void AlgoritmoGenetico::renovar_populacao(std::vector<std::pair<std::vector<int>, int>>& filhos, TipoRenovacao tipo_renovacao) {
   int tamanho_original_populacao = populacao.size();
 
@@ -305,6 +378,20 @@ void AlgoritmoGenetico::renovar_populacao(std::vector<std::pair<std::vector<int>
     }
 }
 
+/**
+ * @brief Executa o algoritmo genético completo.
+ * Inclui etapas de geração inicial, seleção, cruzamento, mutação e renovação.
+ * @param tamanho_populacao Tamanho da população inicial.
+ * @param taxa_reproducao Taxa de reprodução (cruzamento).
+ * @param taxa_mutacao Taxa de mutação.
+ * @param num_geracoes Número máximo de gerações a serem executadas.
+ * @param num_selecionados_para_cruzamento Número de soluções selecionadas para cruzamento.
+ * @param max_geracoes_sem_melhoria Número máximo de gerações sem melhoria antes de parar.
+ * @param tipo_selecao Tipo de seleção a ser utilizada (TORNEIO, ELITISMO, ALEATORIA).
+ * @param tipo_cruzamento Tipo de cruzamento a ser utilizado (UM_X, OX).
+ * @param tipo_renovacao Tipo de renovação a ser utilizada (TORNEIO, ELITISMO).
+ * @return std::pair<std::vector<int>, int> Melhor solução encontrada (ordem de vértices e custo).
+ */
 std::pair<std::vector<int>, int> AlgoritmoGenetico::executar_algoritmo(
   int tamanho_populacao, double taxa_reproducao, double taxa_mutacao, int num_geracoes,
   int num_selecionados_para_cruzamento, int max_geracoes_sem_melhoria,
