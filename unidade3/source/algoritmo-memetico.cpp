@@ -47,7 +47,7 @@ std::pair<std::vector<int>, int> AlgoritmoMemetico::executar_com_busca_local(int
         if (melhor_da_geracao.second < melhor_solucao_global.second) {
             melhor_solucao_global = melhor_da_geracao;
             geracoes_sem_melhoria = 0;
-            std::cout << "Melhoria na geracao " << geracao_atual << ": " << melhor_solucao_global.second << std::endl;
+            //std::cout << "Melhoria na geracao " << geracao_atual << ": " << melhor_solucao_global.second << std::endl;
         } else {
             geracoes_sem_melhoria++;
         }

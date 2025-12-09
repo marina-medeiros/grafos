@@ -66,14 +66,72 @@ struct Estatisticas {
     std::pair<std::vector<int>, int> melhor_solucao;
 };
 
-void imprimir_resultado2(const std::string& nome_algoritmo, 
-                        const std::pair<std::vector<int>, int>& resultado, 
-                        std::vector<std::string>& rotulos,
-                        bool peso_eh_decimal) {
+
+void rodar_heuristicas_deterministicas_sep(DigrafoMatrizAdj& grafo, const std::string& nome_prob, bool decimal, std::ofstream& arquivo) {
+    double div = decimal ? 10.0 : 1.0;
+
+    auto inicio_vp = std::chrono::high_resolution_clock::now();
     
-    double custo_formatado = peso_eh_decimal ? (resultado.second / 10.0) : resultado.second;
+    auto solucao_vp = vizinho_mais_proximo(grafo, 0); 
+    solucao_vp = busca_local(solucao_vp, 2, 1, grafo); 
     
-    std::cout << " >> " << nome_algoritmo << " | Custo: " << custo_formatado << std::endl;
+    auto fim_vp = std::chrono::high_resolution_clock::now();
+    long long tempo_vp = std::chrono::duration_cast<std::chrono::milliseconds>(fim_vp - inicio_vp).count();
+
+    auto inicio_ib = std::chrono::high_resolution_clock::now();
+    
+    auto solucao_ib = insercao_mais_barata(grafo, 0); 
+    solucao_ib = busca_local(solucao_ib, 2, 1, grafo);
+    
+    auto fim_ib = std::chrono::high_resolution_clock::now();
+    long long tempo_ib = std::chrono::duration_cast<std::chrono::milliseconds>(fim_ib - inicio_ib).count();
+
+    arquivo << std::left  << std::setw(15) << nome_prob << " | "
+            << std::left  << std::setw(20) << "Vizinho+2Opt" << " | "
+            << std::right << std::setw(12) << (solucao_vp.second / div) << " | "
+            << std::right << std::setw(10) << tempo_vp << "\n";
+
+    arquivo << std::left  << std::setw(15) << nome_prob << " | "
+            << std::left  << std::setw(20) << "Insercao+2Opt" << " | "
+            << std::right << std::setw(12) << (solucao_ib.second / div) << " | "
+            << std::right << std::setw(10) << tempo_ib << "\n";
+            
+    arquivo << std::string(67, '-') << "\n";
+    arquivo.flush();
+}
+
+void imprimir_linha_tabela(std::ofstream& arquivo, 
+                           const std::string& instancia, 
+                           const std::string& algoritmo, 
+                           double melhor, 
+                           double media, 
+                           long long tempo) {
+    
+    arquivo << std::left  << std::setw(15) << instancia << " | "
+            << std::left  << std::setw(20) << algoritmo << " | "
+            << std::right << std::setw(12) << melhor    << " | "
+            << std::right << std::setw(12) << media     << " | "
+            << std::right << std::setw(10) << tempo     << "\n";
+}
+
+void rodar_heuristicas_deterministicas(DigrafoMatrizAdj& grafo, const std::string& nome_prob, bool decimal, std::ofstream& arquivo) {
+    double div = decimal ? 10.0 : 1.0;
+
+    auto inicio_vp = std::chrono::high_resolution_clock::now();
+    auto solucao_vp = vizinho_mais_proximo(grafo, 0); 
+    solucao_vp = busca_local(solucao_vp, 2, 1, grafo); 
+    auto fim_vp = std::chrono::high_resolution_clock::now();
+    long long tempo_vp = std::chrono::duration_cast<std::chrono::milliseconds>(fim_vp - inicio_vp).count();
+
+    imprimir_linha_tabela(arquivo, nome_prob, "Vizinho+2Opt", solucao_vp.second / div, solucao_vp.second / div, tempo_vp);
+
+    auto inicio_ib = std::chrono::high_resolution_clock::now();
+    auto solucao_ib = insercao_mais_barata(grafo, 0); 
+    solucao_ib = busca_local(solucao_ib, 2, 1, grafo);
+    auto fim_ib = std::chrono::high_resolution_clock::now();
+    long long tempo_ib = std::chrono::duration_cast<std::chrono::milliseconds>(fim_ib - inicio_ib).count();
+
+    imprimir_linha_tabela(arquivo, nome_prob, "Insercao+2Opt", solucao_ib.second / div, solucao_ib.second / div, tempo_ib);
 }
 
 Estatisticas executar_bateria_testes(
@@ -172,54 +230,78 @@ int main() {
         {"../dados/PROBLEMA_12.csv", "problema_12", false}
     };
 
-    std::ofstream arquivo_saida("resultados_finais.txt");
-    if (!arquivo_saida.is_open()) {
-        std::cerr << "Erro ao abrir arquivo de saida!" << std::endl;
+    std::ofstream arquivo_evolutivo("resultados_evolutivos.txt");
+    std::ofstream arquivo_heuristicas("resultados_heuristicas.txt");
+    std::ofstream arquivo_final("resultados_finais.txt");
+    if (!arquivo_evolutivo.is_open()|| !arquivo_heuristicas.is_open() || !arquivo_final.is_open()) {
+        std::cerr << "Erro ao abrir arquivos de saida!" << std::endl;
         return 1;
     }
 
-    arquivo_saida << std::left;
+    arquivo_evolutivo << std::left;
 
-    arquivo_saida << std::setw(15) << "Instancia" << " | "
-                  << std::setw(12) << "Algoritmo" << " | "
-                  << std::setw(15) << "Melhor"    << " | "
-                  << std::setw(15) << "Media"     << " | "
-                  << std::setw(12) << "Tempo(ms)" << "\n";
+    arquivo_evolutivo << std::setw(15) << "Instancia" << " | "
+                      << std::setw(12) << "Algoritmo" << " | "
+                      << std::setw(15) << "Melhor"    << " | "
+                      << std::setw(15) << "Media"     << " | "
+                      << std::setw(12) << "Tempo(ms)" << "\n";
 
-    arquivo_saida << std::string(82, '-') << "\n";
+    arquivo_evolutivo << std::string(82, '-') << "\n";
+    arquivo_evolutivo << std::fixed << std::setprecision(2);
+
+    arquivo_heuristicas << std::left  << std::setw(15) << "Instancia" << " | "
+                        << std::left  << std::setw(20) << "Heuristica" << " | "
+                        << std::right << std::setw(12) << "Custo"      << " | "
+                        << std::right << std::setw(10) << "Tempo(ms)"  << "\n";
+    arquivo_heuristicas << std::string(67, '-') << "\n";
+    arquivo_heuristicas << std::fixed << std::setprecision(2);
+
+    arquivo_final << std::left  << std::setw(15) << "Instancia" << " | "
+            << std::left  << std::setw(20) << "Algoritmo" << " | "
+            << std::right << std::setw(12) << "Melhor"    << " | "
+            << std::right << std::setw(12) << "Media"     << " | "
+            << std::right << std::setw(10) << "Tempo(ms)" << "\n";
+    
+    arquivo_final << std::string(82, '-') << "\n";
+    arquivo_final << std::fixed << std::setprecision(2);
 
     for (const auto& prob : problemas) {
         DigrafoMatrizAdj digrafo(0);
         digrafo.carregar_de_arquivo_csv(prob.caminho, prob.decimal);
+        double div = prob.decimal ? 10.0 : 1.0;
+
+        rodar_heuristicas_deterministicas_sep(digrafo, prob.nome, prob.decimal, arquivo_heuristicas);
+        rodar_heuristicas_deterministicas(digrafo, prob.nome, prob.decimal, arquivo_final);
         
         Estatisticas statsAG = executar_bateria_testes(digrafo, false, prob.decimal, prob.nome);
-
-        arquivo_saida << std::left << std::setw(15) << prob.nome << " | "
-                      << std::setw(12) << "Genetico" << " | "
-                      << std::right
-                      << std::fixed << std::setprecision(2) 
-                      << std::setw(15) << statsAG.melhor_valor << " | "
-                      << std::setw(15) << statsAG.media_valor << " | "
-                      << std::setw(12) << statsAG.tempo_medio_ms << "\n";
+        imprimir_linha_tabela(arquivo_final, prob.nome, "Genetico", 
+                              statsAG.melhor_valor / div, 
+                              statsAG.media_valor / div, 
+                              statsAG.tempo_medio_ms);
+        imprimir_linha_tabela(arquivo_evolutivo, prob.nome, "Genetico", 
+                              statsAG.melhor_valor / div, 
+                              statsAG.media_valor / div, 
+                              statsAG.tempo_medio_ms);
 
         Estatisticas statsAM = executar_bateria_testes(digrafo, true, prob.decimal, prob.nome);
-
-        arquivo_saida << std::left << std::setw(15) << prob.nome << " | "
-                      << std::setw(12) << "Memetico" << " | "
-                      << std::right 
-                      << std::fixed << std::setprecision(2)
-                      << std::setw(15) << statsAM.melhor_valor << " | "
-                      << std::setw(15) << statsAM.media_valor << " | "
-                      << std::setw(12) << statsAM.tempo_medio_ms << "\n";
+        imprimir_linha_tabela(arquivo_final, prob.nome, "Memetico", 
+                              statsAM.melhor_valor / div, 
+                              statsAM.media_valor / div, 
+                              statsAM.tempo_medio_ms);
+        imprimir_linha_tabela(arquivo_evolutivo, prob.nome, "Genetico", 
+                              statsAG.melhor_valor / div, 
+                              statsAG.media_valor / div, 
+                              statsAG.tempo_medio_ms);
         
-        arquivo_saida << std::string(82, '-') << "\n";
+        arquivo_final << std::string(82, '-') << "\n";
         
-        arquivo_saida.flush(); 
-        arquivo_saida.flush(); 
+        arquivo_final.flush(); 
     }
 
-    arquivo_saida.close();
-    std::cout << "\nProcessamento finalizado. Verifique 'resultados_finais.txt'." << std::endl;
+    arquivo_evolutivo.close();
+    arquivo_heuristicas.close();
+    arquivo_final.close();
+    std::cout << "\nProcessamento finalizado. Verifique 'resultados_evolutivos.txt' e 'resultados_heuristicas.txt' e 'resultados_finais'." << std::endl;
 
     return 0;
 }
