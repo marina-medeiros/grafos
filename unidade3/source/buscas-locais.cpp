@@ -123,7 +123,7 @@ std::vector<std::pair<std::vector<int>, int>> vizinhanca_shift(std::pair<std::ve
 /**
  * @brief Executa a operação INVERT (2-opt parcial), invertendo um segmento aleatório.
  *
- * Seleciona aleatoriamente duas posições i e j, com i < j, e inverte o trecho entre elas.
+ * Seleciona duas posições i e j, com i < j, e inverte o trecho entre elas.
  *
  * @param solucao Solução base.
  * @param grafo Grafo para cálculo de custo.
@@ -143,7 +143,7 @@ std::pair<std::vector<int>, int> invert(std::pair<std::vector<int>, int> solucao
 }
 
 /**
- * @brief Gera uma vizinhança aleatória baseada em múltiplas execuções da heurística INVERT.
+ * @brief Gera uma vizinhança baseada em múltiplas execuções da heurística INVERT.
  *
  * @param solucao Solução inicial.
  * @param grafo Grafo para cálculo dos custos.
