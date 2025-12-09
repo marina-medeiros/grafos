@@ -123,7 +123,7 @@ void rodar_heuristicas_deterministicas(DigrafoMatrizAdj& grafo, const std::strin
     auto fim_vp = std::chrono::high_resolution_clock::now();
     long long tempo_vp = std::chrono::duration_cast<std::chrono::milliseconds>(fim_vp - inicio_vp).count();
 
-    imprimir_linha_tabela(arquivo, nome_prob, "Vizinho+2Opt", solucao_vp.second / div, solucao_vp.second / div, tempo_vp);
+    imprimir_linha_tabela(arquivo, nome_prob, "Vizinho+Shfit", solucao_vp.second / div, solucao_vp.second / div, tempo_vp);
 
     auto inicio_ib = std::chrono::high_resolution_clock::now();
     auto solucao_ib = insercao_mais_barata(grafo, 0); 
@@ -131,7 +131,7 @@ void rodar_heuristicas_deterministicas(DigrafoMatrizAdj& grafo, const std::strin
     auto fim_ib = std::chrono::high_resolution_clock::now();
     long long tempo_ib = std::chrono::duration_cast<std::chrono::milliseconds>(fim_ib - inicio_ib).count();
 
-    imprimir_linha_tabela(arquivo, nome_prob, "Insercao+2Opt", solucao_ib.second / div, solucao_ib.second / div, tempo_ib);
+    imprimir_linha_tabela(arquivo, nome_prob, "Insercao+Shift", solucao_ib.second / div, solucao_ib.second / div, tempo_ib);
 }
 
 Estatisticas executar_bateria_testes(
@@ -241,10 +241,10 @@ int main() {
     arquivo_evolutivo << std::left;
 
     arquivo_evolutivo << std::setw(15) << "Instancia" << " | "
-                      << std::setw(12) << "Algoritmo" << " | "
-                      << std::setw(15) << "Melhor"    << " | "
-                      << std::setw(15) << "Media"     << " | "
-                      << std::setw(12) << "Tempo(ms)" << "\n";
+                      << std::setw(20) << "Algoritmo" << " | "
+                      << std::setw(12) << "Melhor"    << " | "
+                      << std::setw(12) << "Media"     << " | "
+                      << std::setw(10) << "Tempo(ms)" << "\n";
 
     arquivo_evolutivo << std::string(82, '-') << "\n";
     arquivo_evolutivo << std::fixed << std::setprecision(2);
@@ -275,22 +275,22 @@ int main() {
         
         Estatisticas statsAG = executar_bateria_testes(digrafo, false, prob.decimal, prob.nome);
         imprimir_linha_tabela(arquivo_final, prob.nome, "Genetico", 
-                              statsAG.melhor_valor / div, 
-                              statsAG.media_valor / div, 
+                              statsAG.melhor_valor, 
+                              statsAG.media_valor, 
                               statsAG.tempo_medio_ms);
         imprimir_linha_tabela(arquivo_evolutivo, prob.nome, "Genetico", 
-                              statsAG.melhor_valor / div, 
-                              statsAG.media_valor / div, 
+                              statsAG.melhor_valor, 
+                              statsAG.media_valor, 
                               statsAG.tempo_medio_ms);
 
         Estatisticas statsAM = executar_bateria_testes(digrafo, true, prob.decimal, prob.nome);
         imprimir_linha_tabela(arquivo_final, prob.nome, "Memetico", 
-                              statsAM.melhor_valor / div, 
-                              statsAM.media_valor / div, 
+                              statsAM.melhor_valor, 
+                              statsAM.media_valor, 
                               statsAM.tempo_medio_ms);
-        imprimir_linha_tabela(arquivo_evolutivo, prob.nome, "Genetico", 
-                              statsAG.melhor_valor / div, 
-                              statsAG.media_valor / div, 
+        imprimir_linha_tabela(arquivo_evolutivo, prob.nome, "Memetico", 
+                              statsAG.melhor_valor, 
+                              statsAG.media_valor, 
                               statsAG.tempo_medio_ms);
         
         arquivo_final << std::string(82, '-') << "\n";
